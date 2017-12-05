@@ -45,7 +45,7 @@ float
 nessi_pso_bound (const float x, const float xmin, const float xmax);
 
 void
-nessi_init_swarm (const int nindv, const int npts, const int npar,
+nessi_pso_init (const int nindv, const int npts, const int npar,
 		  const float modinit[npts][npar][2],
 		  float q[nindv][npts][npar]);
 
