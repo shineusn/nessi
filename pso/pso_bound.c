@@ -1,4 +1,4 @@
-/* nessi_pso.h
+/* pso/nessi_init_swarm.c
  * 
  * Copyright (C) 2017 Damien Pageot
  * 
@@ -16,37 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NESSI_PSO_H__
-#define __NESSI_PSO_H__
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_rng.h>
-#include <sys/time.h>
-
-#include <complex.h>
-#include <fftw3.h>
+#include <nessi_pso.h>
 
 /*
-   - randgsl()
-   - randpar()
-   - nessi_init_swarm()
- */
- 
-float 
-nessi_randgsl ();
+ initswarm()
+   Check parameter space boundaries
 
-float 
-nessi_randpar (const float pmin, const float pmax);
+ Inputs:
+   - x: value to be tested
+   - xmin, xmax: minimum and maximum values
+
+ Return:
+   - x if xmin < x < xmax
+   - xmin if x < xmin
+   - xmax if x > xmax
+ */
 
 float
-psobound (const float x, const float xmin, const float xmax);
-
-void
-nessi_init_swarm (const int nindv, const int npts, const int npar,
-		  const float modinit[npts][npar][2],
-		  float q[nindv][npts][npar]);
- 
-#endif /* __NESSI_PSO_H_ */
+psobound (const float x, const float xmin, const float xmax)
+{
+    if(x < xmin)
+      {
+	return xmin;
+      }
+    else{
+      if(x > xmax)
+	{
+	  return xmax;
+	}
+      else
+	{
+	  return x;
+	}
+    }
+}
