@@ -8,7 +8,7 @@ LIB = -lgsl
 
 all: libpso
 
-libpso: randgsl.o randpar.o pso_bound.o init_swarm.o
+libpso: randgsl.o randpar.o pso_updt.o pso_bound.o init_swarm.o
 	$(CC) -std=c11 -shared -Wl,-soname,libpso.so.1 -Ofast -o libpso.so $^ -lgsl
 
 %.o: pso/%.c

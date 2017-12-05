@@ -42,11 +42,18 @@ float
 nessi_randpar (const float pmin, const float pmax);
 
 float
-psobound (const float x, const float xmin, const float xmax);
+nessi_pso_bound (const float x, const float xmin, const float xmax);
 
 void
 nessi_init_swarm (const int nindv, const int npts, const int npar,
 		  const float modinit[npts][npar][2],
 		  float q[nindv][npts][npar]);
- 
+
+void
+nessi_pso_updt (const int nindv, const int npts, const int npar,
+	  const float ql[nindv][npts][npar],
+	  const float qg[npts][npar], const float modinit[npts][npar][2],
+	  const float c0, const float c1, const float c2, const int constrict,
+		float q[nindv][npts][npar], float v[nindv][npts][npar]);
+
 #endif /* __NESSI_PSO_H_ */

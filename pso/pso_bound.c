@@ -1,4 +1,4 @@
-/* pso/nessi_init_swarm.c
+/* pso/pso_bound.c
  * 
  * Copyright (C) 2017 Damien Pageot
  * 
@@ -33,7 +33,7 @@
  */
 
 float
-psobound (const float x, const float xmin, const float xmax)
+nessi_pso_bound (const float x, const float xmin, const float xmax)
 {
     if(x < xmin)
       {
