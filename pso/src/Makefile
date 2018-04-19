@@ -2,6 +2,7 @@ CC = gcc-6
 #LIB = -lgsl -lgslcblas
 
 RDM = $(shell python -c "import numpy, os; print os.path.dirname(numpy.random.__file__)")
+PYT = $(shell locate -0 '*/Python.h' | xargs -0 -n1 dirname)
 
 DEPS = \
 	randgsl.o \
@@ -14,7 +15,7 @@ pso.so: $(DEPS)
 	$(CC) -std=c11 -shared -Wl,-soname,pso.so.1 -Ofast -o pso.so $^
 
 %.o: %.c
-	$(CC) -std=c11 -c -fpic $< -I./ -I$(RDM) -I/usr/include/python2.7/ -L$(RDM) -l:mtrand.so
+	$(CC) -std=c11 -c -fpic $< -I./ -I$(RDM) -I$(PYT) -L$(RDM) -l:mtrand.so
 
 install: pso.so
 	cp pso.so ../libpso.so
