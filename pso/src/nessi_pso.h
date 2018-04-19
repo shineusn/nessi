@@ -22,10 +22,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <tgmath.h>
+/*
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_rng.h>
 #include <sys/time.h>
-
+*/
+#include <randomkit.h>
 #include <complex.h>
 #include <fftw3.h>
 

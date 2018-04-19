@@ -6,6 +6,8 @@ import os
 # >> Loading PSO shared library
 clibpso = C.cdll.LoadLibrary(os.path.abspath("libpso.so"))
 
+# >> nessi_pso_init
 clibpso.nessi_pso_init.argtypes = [C.c_int, C.c_int, C.c_int,
                                    ndpointer(dtype=np.float32, ndim=3, flags='C_CONTIGUOUS'),
                                    ndpointer(dtype=np.float32, ndim=3, flags='C_CONTIGUOUS')]
+
