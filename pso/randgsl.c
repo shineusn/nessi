@@ -1,6 +1,6 @@
 /* pso/nessi_randgsl.c
  * 
- * Copyright (C) 2017 Damien Pageot
+ * Copyright (C) 2017, 2018 Damien Pageot
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

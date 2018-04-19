@@ -1,6 +1,6 @@
 /* pso/nessi_pso_updt.c
  * 
- * Copyright (C) 2017 Damien Pageot
+ * Copyright (C) 2017, 2018 Damien Pageot
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,13 +35,13 @@
 void
 nessi_pso_updt (const int nindv, const int npts, const int npar,
 	  const float ql[nindv][npts][npar],
-	  const float qg[npts][npar], const float modinit[npts][npar][2],
+	  const float qg[npts][npar], const float modinit[npts][npar][3],
 	  const float c0, const float c1, const float c2, const int constrict,
 	  float q[nindv][npts][npar], float v[nindv][npts][npar])
 {
     float cp = 0., cg = 0.;
     float r1 = 0., r2 = 0.;
-
+    
     /* Inertia or constriction */
     if (constrict == 0)
       {
@@ -76,6 +76,15 @@ nessi_pso_updt (const int nindv, const int npts, const int npar,
                 v[indv][ipts][ipar] = c0*v[indv][ipts][ipar]+
 		  cp*r1*(ql[indv][ipts][ipar]-q[indv][ipts][ipar])+
 		  cg*r2*(qg[ipts][ipar]-q[indv][ipts][ipar]);
+
+		/* Check particle velocity */
+		/* If absolute value of v is greater than vmax */
+		if (abs(v[indv][ipts][ipar])>modinit[ipts][ipar][2])
+		  {
+		    v[indv][ipts][ipar] =
+		      copysign (modinit[ipts][ipar][2],
+				v[indv][ipts][ipar]);
+		  }
 		
                 /* Update particle position */
                 q[indv][ipts][ipar] += v[indv][ipts][ipar];

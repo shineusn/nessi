@@ -23,10 +23,7 @@
    - lib/libpso.so
  */
 #include <pso/nessi_pso.h>
-
-/* Finite-differences time domain 2D seismic modeling
-   - lib/libfdtd.so
- */
-#include <fdtd/nessi_fdtd.h>
+#include <grd/nessi_grd.h>
+#include <dsp/nessi_dsp.h>
 
 #endif /* __NESSI_H_ */

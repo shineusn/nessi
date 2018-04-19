@@ -1,6 +1,6 @@
-/* nessi_fdtd.h
+/* pso/nessi_grd_vrn.c
  * 
- * Copyright (C) 2017 Damien Pageot
+ * Copyright (C) 2017, 2018 Damien Pageot
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,25 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NESSI_FDTD_H__
-#define __NESSI_FDTD_H__
+#include <nessi_dsp.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_rng.h>
-#include <sys/time.h>
+float
+nessi_dsp_phase(const float w,const float d, const float v)
+{
 
-#include <complex.h>
-#include <fftw3.h>
-
-void
-nessi_fdtd_dxforward (const int n1, const int n2,
-		      const float f[n1][n2], float d[n1][n2]);
-
-void
-nessi_fdtd_dxbackward (const int n1, const int n2,
-		       const float f[n1][n2], float d[n1][n2]);
-
-#endif /* __NESSI_FDTD_H_ */
+  
+  return 2.*4.*atan(1.)*w*d/v;
+  
+}

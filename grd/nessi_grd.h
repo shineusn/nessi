@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __NESSI_PSO_H__
-#define __NESSI_PSO_H__
+#ifndef __NESSI_GRD_H__
+#define __NESSI_GRD_H__
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <tgmath.h>
+#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_rng.h>
 #include <sys/time.h>
@@ -30,30 +30,34 @@
 #include <fftw3.h>
 
 /*
-   - randgsl()
-   - randpar()
-   - nessi_init_swarm()
+   - nessi_grd_vrn()
+   - nessi_grd_idw()
+   - nessi_grd_ds1()
+   - nessi_grd_ds2()
  */
- 
-float 
-nessi_randgsl ();
-
-float 
-nessi_randpar (const float pmin, const float pmax);
-
-float
-nessi_pso_bound (const float x, const float xmin, const float xmax);
 
 void
-nessi_pso_init (const int nindv, const int npts, const int npar,
-		  const float modinit[npts][npar][3],
-		  float q[nindv][npts][npar]);
+nessi_grd_vrn(const int npts, const int npar,
+	      const float q[npts][npar],
+	      const int n1, const int n2, const float dh,
+	      float model[n1][n2][4]);
 
 void
-nessi_pso_updt (const int nindv, const int npts, const int npar,
-	  const float ql[nindv][npts][npar],
-	  const float qg[npts][npar], const float modinit[npts][npar][3],
-	  const float c0, const float c1, const float c2, const int constrict,
-		float q[nindv][npts][npar], float v[nindv][npts][npar]);
+nessi_grd_idw(const int npts, const int npar,
+	      const float q[npts][npar],
+	      const int n1, const int n2, const float dh,
+	      const int pw, float model[n1][n2][4]);
 
-#endif /* __NESSI_PSO_H_ */
+void
+nessi_grd_ds1(const int npts, const int npar,
+	      const float q[npts][npar],
+	      const int n1, const int n2, const float dh,
+	      float model[n1][n2][4]);
+
+void
+nessi_grd_ds2(const int npts, const int npar,
+	      const float q[npts][npar],
+	      const int n1, const int n2, const float dh,
+	      float model[n1][n2][4]);
+
+#endif /* __NESSI_GRD_H_ */

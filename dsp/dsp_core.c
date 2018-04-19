@@ -1,4 +1,4 @@
-/* pso/nessi_pso_init.c
+/* pso/nessi_grd_vrn.c
  * 
  * Copyright (C) 2017, 2018 Damien Pageot
  * 
@@ -16,28 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <nessi_pso.h>
+#include <nessi_dsp.h>
 
-/*
- initswarm()
-   Initialize particle positions with respect to parameter space boundaries
+// * Minimum between two integers
+int
+imin(const int a, const int b){if(a>b){return b;}else{return a;}}
 
- Inputs:
+// * Maximum between two integers
+int
+imax(const int a, const int b){if(a<b){return b;}else{return a;}}
 
- Return:
- */
+// * Init 1D complex array to (0.+i0)
 void
-nessi_pso_init (const int nindv, const int npts, const int npar,
-		  const float modinit[npts][npar][3],
-		  float q[nindv][npts][npar])
-{
-    for(unsigned int indv=0; indv<nindv; indv++){
-        for(unsigned int ipts=0; ipts<npts; ipts++){
-            for(unsigned int ipar=0; ipar<npar; ipar++){
-                q[indv][ipts][ipar] = nessi_randpar(modinit[ipts][ipar][0],
-						    modinit[ipts][ipar][1]);
-            }
-        }
-    }   
-    return;
+init1d_c( int n, float complex tab[n] ){
+    for(int i=0; i<n; i++){tab[i] = (0. + 0. * _Complex_I) ;}
 }

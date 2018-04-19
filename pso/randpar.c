@@ -1,6 +1,6 @@
 /* pso/nessi_randpar.c
  * 
- * Copyright (C) 2017 Damien Pageot
+ * Copyright (C) 2017, 2018 Damien Pageot
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
    random value between minimum and maximum values
  */
 float 
-randpar (const float pmin, const float pmax)
+nessi_randpar (const float pmin, const float pmax)
 {
   return pmin+nessi_randgsl()*(pmax-pmin);
 }

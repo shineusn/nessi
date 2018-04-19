@@ -1,4 +1,4 @@
-/* pso/nessi_pso_init.c
+/* pso/nessi_grd_vrn.c
  * 
  * Copyright (C) 2017, 2018 Damien Pageot
  * 
@@ -16,28 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <nessi_pso.h>
+#include <nessi_dsp.h>
 
-/*
- initswarm()
-   Initialize particle positions with respect to parameter space boundaries
-
- Inputs:
-
- Return:
- */
-void
-nessi_pso_init (const int nindv, const int npts, const int npar,
-		  const float modinit[npts][npar][3],
-		  float q[nindv][npts][npar])
+float
+nessi_dsp_gauss (int iv, int iw, int nv, int nw, int
+       igvmin, int igvmax, int igwmin, int igwmax,
+       float gv[nv][nw], float gw[nv][nw],
+       float sgv, float sgw, float disp[nv][nw] )
 {
-    for(unsigned int indv=0; indv<nindv; indv++){
-        for(unsigned int ipts=0; ipts<npts; ipts++){
-            for(unsigned int ipar=0; ipar<npar; ipar++){
-                q[indv][ipts][ipar] = nessi_randpar(modinit[ipts][ipar][0],
-						    modinit[ipts][ipar][1]);
-            }
+
+  int igv, igw ;
+  float ev, ew, G ;
+  float num=0, den=0 ;
+  
+  for( igw=(igwmin-1); igw<igwmax-1; igw++)
+    {
+      for( igv=igvmin-1; igv<igvmax-1; igv++ )
+        {
+	  ew = -0.5 * pow( ( gw[igv][igw] - gw[1][iw] ), 2 ) / ( sgw * sgw ) ;
+	  ev = -0.5 * pow( ( gv[igv][igw] - gv[iv][1] ), 2 ) / ( sgv * sgv ) ;
+	  G = exp( ew ) * exp( ev ) ;
+	  num += fabs( disp[igv][igw] ) * G ;
+	  den += G ;
         }
-    }   
-    return;
+    }
+  return (num/den) ;
+  
 }
