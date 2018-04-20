@@ -19,7 +19,7 @@
 #include <nessi_pso.h>
 
 float
-nessi_randgsl(){
+nessi_randrk(){
   rk_state state;
   unsigned long seed = 1, random_value;
   

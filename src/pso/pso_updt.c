@@ -64,12 +64,12 @@ nessi_pso_updt (const int nindv, const int npts, const int npar,
             for (unsigned int ipar=0; ipar<npar; ipar++)
 	      {
                 /* Trial */
-                r1 = nessi_randgsl();
-		r2 = nessi_randgsl();
+                r1 = nessi_randrk();
+		r2 = nessi_randrk();
                 while (r1 == r2)
 		  {
-		    r1 = nessi_randgsl();
-		    r2 = nessi_randgsl();
+		    r1 = nessi_randrk();
+		    r2 = nessi_randrk();
 		  }
 		
                 /* Update particle velocity */
