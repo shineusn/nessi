@@ -1,5 +1,4 @@
 CC = gcc-6
-#LIB = -lgsl -lgslcblas
 
 RDM = $(shell python -c "import numpy, os; print os.path.dirname(numpy.random.__file__)")
 PYT = $(shell locate -0 '*/Python.h' | xargs -0 -n1 dirname)
@@ -19,7 +18,7 @@ pso.so: $(DEPS)
 	$(CC) -std=c11 -c -fpic $< -I./ -I$(RDM) -I$(PYT) -L$(RDM) -l:mtrand.x86_64-linux-gnu.so
 
 install: pso.so
-	cp pso.so ../../lib/libpso.so
+	cp pso.so ../libpso.so
 
 clean:
-	rm -f *.o pso.so ../../lib/libpso.so
+	rm -f *.o pso.so ../libpso.so

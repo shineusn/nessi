@@ -8,9 +8,7 @@ from __future__ import (absolute_import,
                         print_function,
                         unicode_literals)
 
-#from future.builtins import *
-
-from .readpspace import readpspace
+from .psowrap import Swarm
 
 if __name__ == '__main__':
     import doctest
