@@ -19,16 +19,17 @@
 #include <nessi_grd.h>
 
 void
-nessi_grd_ds1(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_ds1(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      float model[n1][n2][4])
+	      float model[n1][n2])
 {
   int i1, i2, i2a, i2b, i1a, i1b, ipts, imin, ir, i1min, i1max, i2min, i2max;
   float x, z, xa, za, xb, zb;
   float d, dmin, v0, v1, v2, v3, n;
-  float vrn[n1][n2][4];
-  float cp[n1][n2][4], np[n1][n2];
+  float vrn[n1][n2];
+  float cp[n1][n2], np[n1][n2];
   
   // VORONOI
   for(i2=0; i2<n2; i2++){
@@ -37,24 +38,18 @@ nessi_grd_ds1(const int npts, const int npar,
       z = (float)(i1)*dh;
       dmin = 0.;
       for(ipts=0; ipts<npts; ipts++){
-	d = sqrt((x-q[ipts][0])*(x-q[ipts][0])+(z-q[ipts][1])*(z-q[ipts][1]));
+	d = sqrt((x-xp[ipts])*(x-xp[ipts])+(z-zp[ipts])*(z-zp[ipts]));
 	if(ipts == 0){dmin = d; imin = ipts;}
 	else{if(d < dmin){dmin = d; imin=ipts;}}
       }
-      vrn[i1][i2][1] = q[imin][2];
-      vrn[i1][i2][2] = q[imin][3];
-      vrn[i1][i2][3] = q[imin][4];
-      vrn[i1][i2][0] = 2.*q[imin][2];
+      vrn[i1][i2] = val[imin];
     }
   }
 
   // SIBSON
   for(i1a=0; i1a<n1; i1a++){
     for(i2a=0; i2a<n2; i2a++){
-      cp[i1a][i2a][0] = 0.;
-      cp[i1a][i2a][1] = 0.;
-      cp[i1a][i2a][2] = 0.;
-      cp[i1a][i2a][3] = 0.;
+      cp[i1a][i2a] = 0.;
       np[i1a][i2a] = 0.;
     }
   }
@@ -65,7 +60,7 @@ nessi_grd_ds1(const int npts, const int npar,
       za = (float)(i1a)*dh;
       dmin = 0.;
       for(ipts=0; ipts<npts; ipts++){
-	d = sqrt((xa-q[ipts][0])*(xa-q[ipts][0])+(za-q[ipts][1])*(za-q[ipts][1]));
+	d = sqrt((xa-xp[ipts])*(xa-xp[ipts])+(za-zp[ipts])*(za-zp[ipts]));
 	if(ipts == 0){dmin = d; imin = ipts;}
 	else{if(d < dmin){dmin = d; imin=ipts;}}
       }
@@ -84,10 +79,7 @@ nessi_grd_ds1(const int npts, const int npar,
 	  zb = (float)(i1b)*dh;
 	  d = sqrt((xa-xb)*(xa-xb)+(za-zb)*(za-zb));
 	  if(d <= dmin){
-	    cp[i1b][i2b][0] += vrn[i1a][i2a][0];
-	    cp[i1b][i2b][1] += vrn[i1a][i2a][1];
-	    cp[i1b][i2b][2] += vrn[i1a][i2a][2];
-	    cp[i1b][i2b][3] += vrn[i1a][i2a][3];
+	    cp[i1b][i2b] += vrn[i1a][i2a];
 	    np[i1b][i2b] += 1.;
 	  }  
 	}
@@ -96,10 +88,7 @@ nessi_grd_ds1(const int npts, const int npar,
   }
   for(i1a=0; i1a<n1; i1a++){
     for(i2a=0; i2a<n2; i2a++){
-      model[i1a][i2a][0] = cp[i1a][i2a][0]/np[i1a][i2a];
-      model[i1a][i2a][1] = cp[i1a][i2a][1]/np[i1a][i2a];
-      model[i1a][i2a][2] = cp[i1a][i2a][2]/np[i1a][i2a];
-      model[i1a][i2a][3] = cp[i1a][i2a][3]/np[i1a][i2a];
+      model[i1a][i2a] = cp[i1a][i2a]/np[i1a][i2a];
     }
   }
   

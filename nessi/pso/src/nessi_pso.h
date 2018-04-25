@@ -22,7 +22,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <tgmath.h>
-#include <randomkit.h>
+//#include <randomkit.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_rng.h>
+#include <sys/time.h>
 
 /*
    - randgsl()
@@ -31,7 +34,7 @@
  */
  
 float 
-nessi_randrk ();
+nessi_randgsl ();
 
 float 
 nessi_randpar (const float pmin, const float pmax);

@@ -1,4 +1,4 @@
-/* pso/nessi_grd_vrn.c
+/* pso/nessi_randgsl.c
  * 
  * Copyright (C) 2017, 2018 Damien Pageot
  * 
@@ -16,34 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <nessi_grd.h>
+#include <nessi_pso.h>
 
-void
-nessi_grd_vrn(const int npts,
-	      const float xp[npts], const float zp[npts],
-	      const float val[npts],
-	      const int n1, const int n2, const float dh,
-	      float model[n1][n2])
-{
-  int i1, i2, ipts, imin;
-  float x, z;
-  float d, dmin;
-    
-  for(i2=0; i2<n2; i2++){
-    for(i1=0; i1<n1; i1++){
-      x = (float)(i2)*dh;
-      z = (float)(i1)*dh;
-      dmin = 0.;
-      for(ipts=0; ipts<npts; ipts++){
-	d = sqrt((x-xp[ipts])*(x-xp[ipts])			\
-		 +(z-zp[ipts])*(z-zp[ipts]));
-	if(ipts == 0){dmin = d; imin = ipts;}
-	else{if(d < dmin){dmin = d; imin=ipts;}}
-      }
-      model[i1][i2] = val[imin];
-    }
-  }
-    
-  return;
-  
+float
+nessi_randgsl(){
+  // Random number function based on the GNU Scientific Library
+  // Returns a random float between 0 and 1, exclusive; e.g., (0,1)
+  const gsl_rng_type * T;
+  gsl_rng * r;
+  gsl_rng_env_setup();
+  struct timeval tv; // Seed generation based on time
+  gettimeofday(&tv,0);
+  unsigned long mySeed = tv.tv_sec + tv.tv_usec;
+  T = gsl_rng_default; // Generator setup
+  r = gsl_rng_alloc (T);
+  gsl_rng_set(r, mySeed);
+  double u = gsl_rng_uniform(r); // Generate it!
+  gsl_rng_free (r);
+  return (float)u;
 }

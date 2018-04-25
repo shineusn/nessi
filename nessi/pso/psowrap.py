@@ -91,19 +91,19 @@ class Swarm():
         """
         
         # Initilize the swarm (current particles)
-        self.current = zeros((self.nindv, self.npts, self.npar), dtype=float32)
+        self.current = zeros((self.nindv, self.npts, self.npar), dtype=float32, order='C')
 
         # Initialize particles velocity
-        self.velocity = zeros((self.nindv, self.npts, self.npar), dtype=float32)
+        self.velocity = zeros((self.nindv, self.npts, self.npar), dtype=float32, order='C')
         
         # Initialize particles history (pbest)
-        self.pbest = zeros((self.nindv, self.npts, self.npar), dtype=float32)
+        self.pbest = zeros((self.nindv, self.npts, self.npar), dtype=float32, order='C')
 
         # Initialize swarm global best particle (gbest)
-        self.gbest = zeros((self.npts, self.npar), dtype=float32)
+        self.gbest = zeros((self.npts, self.npar), dtype=float32, order='C')
 
         # Initialize particles misfit/fit
-        self.misfit = zeros((self.nindv), dtype=float32)
+        self.misfit = zeros((self.nindv), dtype=float32, order='C')
         
         # Initialize first generation of particles
         self.clibpso.nessi_pso_init(self.nindv, self.npts, self.npar,

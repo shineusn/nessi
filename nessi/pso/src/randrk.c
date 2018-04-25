@@ -21,9 +21,10 @@
 float
 nessi_randrk(){
   rk_state state;
-  unsigned long seed = 1, random_value;
+  unsigned long seed = 1;
+  double random_value;
   
   rk_seed(seed, &state); // Initialize the RNG
-  random_value = rk_random(&state); // Generate random values in [0..RK_MAX]
+  random_value = rk_double(&state); // Generate random values in [0..RK_MAX]
   return (float)random_value;
 }

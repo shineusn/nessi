@@ -37,27 +37,31 @@
  */
 
 void
-nessi_grd_vrn(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_vrn(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      float model[n1][n2][4]);
+	      float model[n1][n2]);
 
 void
-nessi_grd_idw(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_idw(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      const int pw, float model[n1][n2][4]);
+	      const int pw, float model[n1][n2]);
 
 void
-nessi_grd_ds1(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_ds1(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      float model[n1][n2][4]);
+	      float model[n1][n2]);
 
 void
-nessi_grd_ds2(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_ds2(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      float model[n1][n2][4]);
+	      float model[n1][n2]);
 
 #endif /* __NESSI_GRD_H_ */

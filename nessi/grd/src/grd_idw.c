@@ -19,44 +19,38 @@
 #include <nessi_grd.h>
 
 void
-nessi_grd_idw(const int npts, const int npar,
-	      const float q[npts][npar],
+nessi_grd_idw(const int npts,
+	      const float xp[npts], const float zp[npts],
+	      const float val[npts],
 	      const int n1, const int n2, const float dh,
-	      const int pw, float model[n1][n2][4])
+	      const int pw, float model[n1][n2])
 {
-  int i1, i2, ipts, ipar;
+  int i1, i2, ipts;
   float x, z, x2, z2, w, d;
   float den;
-  float num[npar];
+  float num;
 
   for(i2=0; i2<n2; i2++){
     x = ((float)i2)*dh;
     for(i1=0; i1<n1; i1++){
       z = ((float)i1)*dh;
-      for(ipar=0; ipar<npar; ipar++){num[ipar]=0.;}
+      num = 0.;
       den = 0.;
       for(ipts=0; ipts<npts; ipts++){
-	x2 = pow(x-q[ipts][0], 2);
-	z2 = pow(z-q[ipts][1], 2);
+	x2 = pow(x-xp[ipts], 2);
+	z2 = pow(z-zp[ipts], 2);
 	d = sqrt(x2+z2);
 	if(pow(d, pw) > 0.){
 	  w = 1./pow(d, pw);
-	  num[1] = num[1] + w*q[ipts][2];
-	  num[2] = num[2] + w*q[ipts][3];
-	  num[3] = num[3] + w*q[ipts][4];
+	  num = num + w*val[ipts];
 	  den = den + w;
 	}
 	else{
-	  num[1] = q[ipts][2];
-	  num[2] = q[ipts][3];
-	  num[3] = q[ipts][4];
+	  num = val[ipts];
 	  den = 1.;
 	}
       }
-      model[i1][i2][1]=num[1]/den;
-      model[i1][i2][2]=num[2]/den;
-      model[i1][i2][3]=num[3]/den;
-      model[i1][i2][0] = 2.*model[i1][i2][1];
+      model[i1][i2]=num/den;
     }
   }
   return;

@@ -32,5 +32,5 @@
 float 
 nessi_randpar (const float pmin, const float pmax)
 {
-  return pmin+nessi_randrk()*(pmax-pmin);
+  return pmin+nessi_randgsl()*(pmax-pmin);
 }
