@@ -40,16 +40,16 @@ float
 nessi_dsp_phase(const float w,const float d, const float v);
 
 void
-nessi_dsp_masw(int nv, int nw, int n1c, int ns,
+nessi_dsp_masw (int nv, int nw, int n1c, int ns,
 	       int nr, int iwmin, float v[nv], float w[nw],
 	       float dist[ns][nr], float complex dobsc[n1c][nr],
 	       float disp[nv][nw]);
 
 float
-nessi_dsp_gauss (int iv, int iw, int nv, int nw, int
-       igvmin, int igvmax, int igwmin, int igwmax,
-       float gv[nv][nw], float gw[nv][nw],
-       float sgv, float sgw, float disp[nv][nw] );
+nessi_dsp_gauss (int iv, int iw, int nv, int nw,
+		 int igvmin, int igvmax, int igwmin, int igwmax,
+		 float gv[nv][nw], float gw[nv][nw],
+		 float sgv, float sgw, float disp[nv][nw] );
 
 void
 nessi_dsp_gsmooth( int nv, int nw, float dv, float dw,
