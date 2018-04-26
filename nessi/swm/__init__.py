@@ -8,7 +8,11 @@ from __future__ import (absolute_import,
                         print_function,
                         unicode_literals)
 
-from .swmwrap import modext, modbuo, modlame
+from .swmwrap import modext
+from .swmwrap import modbuo
+from .swmwrap import modlame
+from .swmwrap import acqpos
+from .swmwrap import pmlmod
 
 if __name__ == '__main__':
     import doctest

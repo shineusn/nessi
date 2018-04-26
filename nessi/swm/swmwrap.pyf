@@ -3,6 +3,15 @@
 
 python module swmwrap ! in 
     interface  ! in :swmwrap
+        subroutine acqpos(n1,n2,npml,dh,nrec,acq,recpos) ! in :swmwrap:src/swm_acqpos.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            integer intent(in) :: npml
+            real(kind=4) intent(in) :: dh
+            integer, optional,intent(in),check(shape(acq,0)==nrec),depend(acq) :: nrec=shape(acq,0)
+            real(kind=4) dimension(nrec,2),intent(in) :: acq
+            integer dimension(nrec,2),intent(out),depend(nrec) :: recpos
+        end subroutine acqpos
         subroutine modbuo(n1e,n2e,roe,bux,buz) ! in :swmwrap:src/swm_modbuo.f90
             integer, optional,intent(in),check(shape(roe,0)==n1e),depend(roe) :: n1e=shape(roe,0)
             integer, optional,intent(in),check(shape(roe,1)==n2e),depend(roe) :: n2e=shape(roe,1)
@@ -17,6 +26,37 @@ python module swmwrap ! in
             real(kind=4) dimension(n1,n2),intent(in) :: v
             real(kind=4) dimension(n1+2*nsp,n2+2*nsp),intent(out),depend(n1,nsp,n2,nsp) :: ve
         end subroutine modext
+        subroutine modlame(n1e,n2e,vpe,vse,roe,mu0,mue,lb0,lbmu) ! in :swmwrap:src/swm_modlame.f90
+            integer, optional,intent(in),check(shape(vpe,0)==n1e),depend(vpe) :: n1e=shape(vpe,0)
+            integer, optional,intent(in),check(shape(vpe,1)==n2e),depend(vpe) :: n2e=shape(vpe,1)
+            real(kind=4) dimension(n1e,n2e),intent(in) :: vpe
+            real(kind=4) dimension(n1e,n2e),intent(in),depend(n1e,n2e) :: vse
+            real(kind=4) dimension(n1e,n2e),intent(in),depend(n1e,n2e) :: roe
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: mu0
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: mue
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lb0
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lbmu
+        end subroutine modlame
+        subroutine modread(fname,n1,n2,v) ! in :swmwrap:src/swm_modread.f90
+            character*(*) intent(in) :: fname
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: v
+        end subroutine modread
+        subroutine pmlmod(n1,n2,h,isurf,npml,apml,ppml,vpe,pmlx0,pmlx1,pmlz0,pmlz1) ! in :swmwrap:src/swm_pmlmod.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            real(kind=4) intent(in) :: h
+            integer intent(in) :: isurf
+            integer intent(in) :: npml
+            real(kind=4) intent(in) :: apml
+            integer intent(in) :: ppml
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: vpe
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlx0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlx1
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz1
+        end subroutine pmlmod
     end interface 
 end python module swmwrap
 
