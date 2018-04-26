@@ -19,8 +19,7 @@
 #include <nessi_swm.h>
 
 void
-nessi_swm_modext (const int n1, const int n2, const int npml,
-		  float v[n1][n2], float ve[n1+2*npml][n2+2*npml])
+nessi_swm_modext (int n1, int n2, int npml, float v[n1][n2], float ve[n1+2*npml][n2+2*npml])
 {
   int i1, i2, ipml;
 

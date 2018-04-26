@@ -1,0 +1,24 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module swmwrap ! in 
+    interface  ! in :swmwrap
+        subroutine modbuo(n1e,n2e,roe,bux,buz) ! in :swmwrap:src/swm_modbuo.f90
+            integer, optional,intent(in),check(shape(roe,0)==n1e),depend(roe) :: n1e=shape(roe,0)
+            integer, optional,intent(in),check(shape(roe,1)==n2e),depend(roe) :: n2e=shape(roe,1)
+            real(kind=4) dimension(n1e,n2e),intent(in) :: roe
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: bux
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: buz
+        end subroutine modbuo
+        subroutine modext(n1,n2,nsp,v,ve) ! in :swmwrap:src/swm_modext.f90
+            integer, optional,intent(in),check(shape(v,0)==n1),depend(v) :: n1=shape(v,0)
+            integer, optional,intent(in),check(shape(v,1)==n2),depend(v) :: n2=shape(v,1)
+            integer intent(in) :: nsp
+            real(kind=4) dimension(n1,n2),intent(in) :: v
+            real(kind=4) dimension(n1+2*nsp,n2+2*nsp),intent(out),depend(n1,nsp,n2,nsp) :: ve
+        end subroutine modext
+    end interface 
+end python module swmwrap
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

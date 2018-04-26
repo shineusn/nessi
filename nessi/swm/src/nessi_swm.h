@@ -29,6 +29,6 @@
  */
 
 void
-nessi_swm_modext ();
+nessi_swm_modext (int n1, int n2, int npml, float v[n1][n2], float ve[n1+2*npml][n2+2*npml]);
 
 #endif /* __NESSI_PSO_H_ */
