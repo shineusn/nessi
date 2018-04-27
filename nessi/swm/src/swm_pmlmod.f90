@@ -54,3 +54,31 @@ subroutine pmlmod (n1, n2, h, isurf, npml, apml, ppml, vpe, pmlx0, pmlx1, pmlz0,
   pmlz1(:, :) = pmlz1(:, :)/2.
 
 end subroutine pmlmod
+
+
+subroutine dirichlet(n1e, n2e, uxx, uxz, uzx, uzz)
+  ! implement Dirichlet boundary conditions on the four edges of the grid
+  integer, intent(in) :: n1e, n2e
+  real(4), dimension(n1e,n2e), intent(inout) :: uxx, uxz, uzx, uzz
+
+  uxx(1, :) = 0.
+  uxx(n1e, :)= 0.
+  uxx(:, 1) = 0.
+  uxx(:, n2e)= 0.
+
+  uxz(1, :) = 0.
+  uxz(n1e, :)= 0.
+  uxz(:, 1) = 0.
+  uxz(:, n2e)= 0.
+
+  uzx(1, :) = 0.
+  uzx(n1e, :)= 0.
+  uzx(:, 1) = 0.
+  uzx(:, n2e)= 0.
+
+  uzz(1, :) = 0.
+  uzz(n1e, :)= 0.
+  uzz(:, 1) = 0.
+  uzz(:, n2e)= 0.
+
+end subroutine dirichlet

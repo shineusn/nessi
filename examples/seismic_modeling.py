@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from nessi.swm import modext, modbuo, modlame
 from nessi.swm import acqpos, pmlmod
 from nessi.swm import ricker, srcspread
-#from nessi.swm import evolution
+from nessi.swm import evolution
 
 
 # ------------------------------------------------------------
@@ -124,9 +124,14 @@ print "Courant:: ", dt*np.amax(vpe)/dh
 # >> Marching
 # ------------------------------------------------------------
 
-
-
+recx,recz,recp = evolution(n1,n2,dh,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lb0,lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1)
 
 # ------------------------------------------------------------
 # >> Plot seismograms
 # ------------------------------------------------------------
+
+plt.subplot(211)
+plt.imshow(recx, aspect='auto', cmap='gray')
+plt.subplot(212)
+plt.imshow(recz, aspect='auto', cmap='gray')
+plt.show()

@@ -34,8 +34,8 @@ subroutine srcspread(n1, n2, nsp, xs, zs, h, gsrc, sigma)
 
   n1e = n1+2*nsp
   n2e = n2+2*nsp
-  is1 = int(zs/h)+1
-  is2 = int(xs/h)+1
+  is1 = int(zs/h)+nsp+1
+  is2 = int(xs/h)+nsp+1
   
   gsrc(:, :) = 0.
 

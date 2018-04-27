@@ -1,4 +1,4 @@
-CC = gcc-6
+CC = gcc
 
 DEPS = \
 	randgsl.o \

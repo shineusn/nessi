@@ -57,7 +57,7 @@
 ! Revision history
 
   
-subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, dts, nrec, srctype, &
+subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
      tsrc, gsrc, recx, recz, recp, recpos, isurf, isnap, bux, buz, lb0, lbmu, mue, &
      pmlx0, pmlx1, pmlz0, pmlz1)
 
@@ -66,7 +66,7 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, dts, nrec, srctype, &
   integer, intent(in) :: n1, n2, npml
   integer, intent(in) :: nt, nts, ntsnap, nrec, srctype
   integer, intent(in) :: isurf, isnap
-  real(4), intent(in) :: dt, dts, h
+  real(4), intent(in) :: dt, h
   
   real(4), dimension(nt), intent(in) :: tsrc
   real(4), dimension(n1+2*npml,n2+2*npml), intent(in) :: gsrc
@@ -75,7 +75,7 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, dts, nrec, srctype, &
   integer, dimension(nrec,2), intent(in) :: recpos
   
   real(4), dimension(nts, nrec), intent(out) :: recx, recz, recp
-  real(4), dimension(n1+2*npml, n2+2*npml), intent(out) :: bux, buz, lb0, lbmu, mue
+  real(4), dimension(n1+2*npml, n2+2*npml), intent(in) :: bux, buz, lb0, lbmu, mue
   
   
   integer :: i1, i2, it, its, ets, itsnap, n1e, n2e
