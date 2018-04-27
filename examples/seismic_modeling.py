@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 
 from nessi.swm import modext, modbuo, modlame
 from nessi.swm import acqpos, pmlmod
+from nessi.swm import ricker, srcspread
+#from nessi.swm import evolution
 
 
 # ------------------------------------------------------------
@@ -35,6 +37,8 @@ dts = 0.0001
 # >> Source parameters
 xs = 10.0; zs = 0.5 # source position
 f0 = 15.0; t0 = 0.1 # peak frequency and t0
+sigma = -1.
+srctype = 2
 
 # >> Snapshots
 isnap = 0
@@ -103,8 +107,11 @@ recpos = acqpos(n1, n2, npml, dh, acq)
 # ------------------------------------------------------------
 
 # >> Source spread grid
+gsrc = srcspread(n1, n2, npml, xs, zs, dh, sigma)
 
 # >> Ricker source
+tsrc = ricker(nt, dt, f0, t0)
+
 
 # ------------------------------------------------------------
 # >> Calculate stability condition
@@ -116,6 +123,8 @@ print "Courant:: ", dt*np.amax(vpe)/dh
 # ------------------------------------------------------------
 # >> Marching
 # ------------------------------------------------------------
+
+
 
 
 # ------------------------------------------------------------

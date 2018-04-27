@@ -13,6 +13,8 @@ from .swmwrap import modbuo
 from .swmwrap import modlame
 from .swmwrap import acqpos
 from .swmwrap import pmlmod
+from .swmwrap import ricker
+from .swmwrap import srcspread
 
 if __name__ == '__main__':
     import doctest

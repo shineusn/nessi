@@ -57,6 +57,23 @@ python module swmwrap ! in
             real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz0
             real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz1
         end subroutine pmlmod
+        subroutine ricker(nt,dt,f0,t0,tsrc) ! in :swmwrap:src/swm_sources.f90
+            integer intent(in) :: nt
+            real(kind=4) intent(in) :: dt
+            real(kind=4) intent(in) :: f0
+            real(kind=4) intent(in) :: t0
+            real(kind=4) dimension(nt),intent(out),depend(nt) :: tsrc
+        end subroutine ricker
+        subroutine srcspread(n1,n2,nsp,xs,zs,h,gsrc,sigma) ! in :swmwrap:src/swm_sources.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            integer intent(in) :: nsp
+            real(kind=4) intent(in) :: xs
+            real(kind=4) intent(in) :: zs
+            real(kind=4) intent(in) :: h
+            real(kind=4) dimension(n1+2*nsp,n2+2*nsp),intent(out),depend(n1,nsp,n2,nsp) :: gsrc
+            real(kind=4) intent(in) :: sigma
+        end subroutine srcspread
     end interface 
 end python module swmwrap
 
