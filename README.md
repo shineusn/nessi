@@ -20,4 +20,6 @@ Finally, you have to had the path of the nessi package to `PYTHONPATH`. In your 
 
 # Contributing
 
+NeSSI is developed and tested using python2.7 and python3.5 on GNU/Debian Stretch (stable). 
+
 **Don't suffer from Shiny New Stuff Syndrome** -- [DontBreakDebian](https://wiki.debian.org/DontBreakDebian#Don.27t_suffer_from_Shiny_New_Stuff_Syndrome)
