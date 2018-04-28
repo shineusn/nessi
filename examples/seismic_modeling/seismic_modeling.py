@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -117,7 +121,7 @@ tsrc = ricker(nt, dt, f0, t0)
 # >> Calculate stability condition
 # ------------------------------------------------------------
 
-print "Courant:: ", dt*np.amax(vpe)/dh
+print("Courant:: ", dt*np.amax(vpe)/dh)
 
 
 # ------------------------------------------------------------
