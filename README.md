@@ -17,3 +17,7 @@ Finally, you have to had the path of the nessi package to `PYTHONPATH`. In your 
 
 `export PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package`
 
+
+# Contributing
+
+**Don't suffer from Shiny New Stuff Syndrome** -- [DontBreakDebian](https://wiki.debian.org/DontBreakDebian#Don.27t_suffer_from_Shiny_New_Stuff_Syndrome)
