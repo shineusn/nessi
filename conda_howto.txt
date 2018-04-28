@@ -1,0 +1,22 @@
+conda update conda
+
+conda create --name nessi_dev
+
+source activate nessi_dev
+
+conda info --envs
+
+conda search numpy
+
+conda install numpy
+
+conda list
+
+source deactivate
+
+
+
+conda list --explicit > spec-file.txt
+
+
+conda create --name myenv --file spec-file.txt
