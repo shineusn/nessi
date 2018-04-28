@@ -121,7 +121,7 @@ tsrc = ricker(nt, dt, f0, t0)
 # >> Calculate stability condition
 # ------------------------------------------------------------
 
-print "Courant:: ", dt*np.amax(vpe)/dh
+print("Courant:: ", dt*np.amax(vpe)/dh)
 
 
 # ------------------------------------------------------------
