@@ -2,6 +2,7 @@
 
 NeSSI (Near-Surface Seismic Imaging) aims to provide python modules for the rapid development of seismic inversion codes based on the particle swarm optimization method.
 
+![Powered by PYTHON](https://www.python.org/static/community_logos/python-powered-w-100x40.png)
 ![LGPL3 logo](https://www.gnu.org/graphics/lgplv3-88x31.png)
 
 # Install
