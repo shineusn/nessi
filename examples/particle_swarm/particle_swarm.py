@@ -11,3 +11,5 @@ nindv = 49
 q, v = init_swarm(nindv, pspace)
 
 print q.shape[0], q.shape[1], q.shape[2]
+
+print q

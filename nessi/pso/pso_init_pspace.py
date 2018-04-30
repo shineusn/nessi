@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Module pso_init_pspace.
+"""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -22,29 +24,24 @@ def pso_init_pspace(fmod):
 
     # Check the number of points per particule
     try:
-        npts = int(len(tmp))
-        npar = int(len(tmp[0])/3)
-    except Exception:
+        npts = tmp.shape[0]
+        npar = int(tmp.shape[1]/3)
+    except IndexError:
         npts = 1
-        npar = int(len(tmp)/3)
+        npar = int(tmp.shape[0]/3)
 
     # Initialize pspace array
     pspace = zeros((npts, npar, 3), dtype=float32)
 
     # Fill pspace array
-    for ipts in range(0, npts):
-        i = 0
-        if(npts == 1):
-            for ipar in range(0, npar):
-                pspace[ipts, ipar, 0] = tmp[i]
-                pspace[ipts, ipar, 1] = tmp[i+1]
-                pspace[ipts, ipar, 2] = tmp[i+2]
-                i += 3
-        else:
-            for ipar in range(0, npar):
-                pspace[ipts, ipar, 0] = tmp[ipts, i]
-                pspace[ipts, ipar, 1] = tmp[ipts, i+1]
-                pspace[ipts, ipar, 2] = tmp[ipts, i+2]
-                i += 3
+    i = 0
+    if npts == 1:
+        for ipar in range(0, npar):
+            pspace[0, ipar, :] = tmp[i:i+3]
+            i += 3
+    else:
+        for ipar in range(0, npar):
+            pspace[:, ipar, :] = tmp[:, i:i+3]
+            i += 3
 
     return pspace
