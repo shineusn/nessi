@@ -1,30 +1,36 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
 from numpy import loadtxt, zeros, float32
 
+
 def pso_init_pspace(fmod):
+    """Create a table containing the parameter space boundaries.
+
+    Args:
+        fmod (str): file containing the parameter space values.
+
+    Returns:
+        array of floats: array containing the parameter space values.
     """
-    initpspace
-    Create a table containing the parameter space boundaries.
-    """
-    
+
     # Load pspace file in a temporary array
     tmp = loadtxt(fmod, comments='#')
-    
+
     # Check the number of points per particule
     try:
         npts = int(len(tmp))
         npar = int(len(tmp[0])/3)
-    except:
+    except Exception:
         npts = 1
-        npar = int(len(tmp)/2)
-        
+        npar = int(len(tmp)/3)
+
     # Initialize pspace array
     pspace = zeros((npts, npar, 3), dtype=float32)
-    
+
     # Fill pspace array
     for ipts in range(0, npts):
         i = 0
@@ -34,11 +40,11 @@ def pso_init_pspace(fmod):
                 pspace[ipts, ipar, 1] = tmp[i+1]
                 pspace[ipts, ipar, 2] = tmp[i+2]
                 i += 3
-        else:       
+        else:
             for ipar in range(0, npar):
                 pspace[ipts, ipar, 0] = tmp[ipts, i]
                 pspace[ipts, ipar, 1] = tmp[ipts, i+1]
                 pspace[ipts, ipar, 2] = tmp[ipts, i+2]
                 i += 3
-                    
+
     return pspace
