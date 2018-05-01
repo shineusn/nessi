@@ -20,7 +20,7 @@ def pso_init_pspace(fmod):
     """
 
     # Load pspace file in a temporary array
-    tmp = loadtxt(fmod, comments='#')
+    tmp = loadtxt(fmod, ndmin=2, comments='#')
 
     # Check the number of points per particule
     try:

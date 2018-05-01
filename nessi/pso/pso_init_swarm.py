@@ -3,6 +3,7 @@ Module pso_init_swarm
 """
 import numpy as np
 
+
 def pso_init_swarm(nindv, pspace):
     """
     Initialize all the particles of the swarm.
@@ -20,6 +21,6 @@ def pso_init_swarm(nindv, pspace):
     p_random = np.random.random_sample((npts, npar))
     for indv in range(0, nindv):
         p_current[indv, :, :] = pspace[:, :, 0]\
-            +p_random*(pspace[:, :, 1]-pspace[:, :, 0])
+                                + p_random*(pspace[:, :, 1]-pspace[:, :, 0])
 
     return p_current, p_velocity
