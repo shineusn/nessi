@@ -1,13 +1,17 @@
 """
-Module pso_standard_update
+Module pso_update is a collection of functions which allows to update
+the swarm using an update formula (standard, fully-informed) and a 
+topology (full, ring1, ring2, van Neumann, Moore).
 """
 import numpy as np
 
 
 def _pso_parser(kwargs):
     """
-    Parser
+    Parse the kwarg parameter list of pso_standard_update function
+    and calculate control parameter values.
     """
+
     control = kwargs.get('control', 0)
 
     cpar = np.zeros(3, dtype=np.float32)
@@ -30,25 +34,35 @@ def _pso_parser(kwargs):
 
 def get_gbest(particles, topology, indv=0):
     """
-    get gbest
+    Get gbest particle of the whole swarm or in the neighborhood of
+    a given particle.
     """
+
+    # Get the best particle of the whole swarm
     if topology == 'full':
         ibest = np.argmin(particles[:]['misfit'])
         gbest = particles[ibest]['history']
+
+    # Get the particle in the neighborhood (1 left, 1 right)
+    #of the particle including itself.
     if topology == 'ring1':
         ibest = np.argmin(particles[indv-1:indv+1]['misfit'])
         gbest = particles[ibest]['history']
+
+    # Get the particle in the neighborhood (2 left, 2 right)
+    #of the particle including itself.
     if topology == 'ring2':
         ibest = np.argmin(particles[indv-2:indv+2]['misfit'])
         gbest = particles[ibest]['history']
+
     return gbest
 
 def pso_standard_update(particles, pspace, **kwargs):
     """
-    update
-    Standard PSO update using inertia weight or constriction factor approach.
+    Standard PSO update.
     """
 
+    # Parse kwargs parameter list
     cpar, topology = _pso_parser(kwargs)
 
     # Update process

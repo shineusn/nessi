@@ -10,7 +10,8 @@ from numpy import loadtxt, zeros, float32
 
 
 def pso_init_pspace(fmod):
-    """Create a table containing the parameter space boundaries.
+    """
+    Create a table containing the parameter space boundaries.
 
     Args:
         fmod (str): file containing the parameter space values.
