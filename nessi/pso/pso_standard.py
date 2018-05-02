@@ -1,6 +1,6 @@
 """
 Module pso_update is a collection of functions which allows to update
-the swarm using an update formula (standard, fully-informed) and a 
+the swarm using an update formula (standard, fully-informed) and a
 topology (full, ring1, ring2, van Neumann, Moore).
 """
 import numpy as np
