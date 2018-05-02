@@ -11,6 +11,7 @@ from __future__ import (absolute_import,
 from .pso_init_pspace import pso_init_pspace as init_pspace
 from .pso_standard import pso_standard_update as standard_update
 from .pso_init_swarm import pso_init_swarm as init_swarm
+from .particle_class import particles
 
 if __name__ == '__main__':
     import doctest

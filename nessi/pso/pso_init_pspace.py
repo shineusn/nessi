@@ -24,25 +24,16 @@ def pso_init_pspace(fmod):
     tmp = loadtxt(fmod, ndmin=2, comments='#')
 
     # Check the number of points per particule
-    try:
-        npts = tmp.shape[0]
-        npar = int(tmp.shape[1]/3)
-    except IndexError:
-        npts = 1
-        npar = int(tmp.shape[0]/3)
+    npts = tmp.shape[0]
+    npar = int(tmp.shape[1]/3)
 
     # Initialize pspace array
     pspace = zeros((npts, npar, 3), dtype=float32)
 
     # Fill pspace array
     i = 0
-    if npts == 1:
-        for ipar in range(0, npar):
-            pspace[0, ipar, :] = tmp[i:i+3]
-            i += 3
-    else:
-        for ipar in range(0, npar):
-            pspace[:, ipar, :] = tmp[:, i:i+3]
-            i += 3
+    for ipar in range(0, npar):
+        pspace[:, ipar, :] = tmp[:, i:i+3]
+        i += 3
 
     return pspace

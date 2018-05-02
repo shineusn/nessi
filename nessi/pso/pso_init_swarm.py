@@ -15,8 +15,8 @@ def pso_init_swarm(particles, pspace):
     npar = pspace.shape[1]
 
     # Random generation of particle position
-    p_random = np.random.random_sample((npts, npar))
     for indv in range(0, nindv):
+        p_random = np.random.random_sample((npts, npar))
         particles[indv]['current'][:, :] = pspace[:, :, 0]\
                                     + p_random*(pspace[:, :, 1]-pspace[:, :, 0])
 

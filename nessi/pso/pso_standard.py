@@ -24,7 +24,7 @@ def _pso_parser(kwargs):
     else:
         # Constriction factor (control=1)
         cpar[1] = kwargs.get('c_1', 2.05)\
-                  * kwargs.get('c_0', 0.72)
+                  * kwargs.get('c_0', 0.7298)
         cpar[2] = kwargs.get('c_2', 2.05)\
                   * kwargs.get('c_1', 0.72)
 
@@ -32,7 +32,7 @@ def _pso_parser(kwargs):
 
     return cpar, topology
 
-def get_gbest(particles, topology, indv=0):
+def get_gbest(particles, topology, indv=0, ndim=0):
     """
     Get gbest particle of the whole swarm or in the neighborhood of
     a given particle.
@@ -81,7 +81,7 @@ def pso_standard_update(particles, pspace, **kwargs):
                                         + cpar[1]*np.random.random_sample()\
                                         * (history-current)\
                                         + cpar[2]*np.random.random_sample()\
-                                        * (gbest-current)
+                                        * (gbest[ipts,ipar]-current)
 
                 # Check particle velocity
                 # vvv = particles[ibest]['history'][ipts,ipar]
@@ -98,3 +98,4 @@ def pso_standard_update(particles, pspace, **kwargs):
                     particles[indv]['current'][ipts, ipar] = pspace[ipts, ipar, 0]
                 if(particles[indv]['current'][ipts, ipar] > pspace[ipts, ipar, 1]):
                     particles[indv]['current'][ipts, ipar] = pspace[ipts, ipar, 1]
+    return
