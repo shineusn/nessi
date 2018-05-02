@@ -17,7 +17,7 @@ Seismic Unix format support.
 """
 
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class SUdata():
     """
@@ -61,6 +61,7 @@ class SUdata():
             ('UnassignedInt2', np.int32),])
 
         self.data = np.zeros(1, dtype=self.sutype)
+        self.endian = 'l'
 
 
     def read(self, sufile, endian='l'):
@@ -88,5 +89,48 @@ class SUdata():
             suhdr = np.fromstring(sutmp, dtype=self.sutype.newbyteorder(), count=1)
             ns = suhdr['ns'][0]
             file_dtype = np.dtype(self.sutype.newbyteorder().descr+[('trace', ('>f4', ns))])
-
+            
         self.data = np.fromfile(sufile, dtype=file_dtype)
+        self.endian = endian
+        
+    def image(self):
+        """
+        matplotlib.pyplot.imshow adapted for SU files
+        """
+        t0 = float(self.data[0]['delrt'])/1000.
+        t1 = float(self.data[0]['ns']-1)*float(self.data[0]['dt'])/1000000.+t0
+        plt.imshow(self.data[:]['trace'], aspect='auto', cmap='gray',
+                   extent=[0., len(self.data), t1, t0])
+
+    def wind(self, tmin=0., tmax=0.):
+        """
+        Windowing data.
+        """
+
+        dt = float(self.data[0]['dt'])/1000000.
+
+        t0 = float(self.data[0]['delrt'])/1000.
+        t1 = float(self.data[0]['ns']-1)*float(self.data[0]['dt'])/1000000.+t0
+        
+        it0 = int(t0/dt)
+        it1 = int(t1/dt)
+        
+        trace = self.data[:]['trace']
+        tracew = trace[:,it0:it1]
+        
+        if self.endian == 'l':
+            sutype = self.sutype
+            suhdr = np.array(self.data, dtype=sutype)
+            file_dtype = np.dtype(self.sutype.descr+[('trace', ('<f4', tracew.shape[1]))])
+        if self.endian == 'b':
+            sutype = self.sutype.newbyteorder()
+            suhdr = np.array(self.data, dtype=sutype)
+            file_dtype = np.dtype(sutype.descr+[('trace', ('>f4', tracew.shape[1]))])
+    
+        self.data[:] = np.array(suhdr, dtype=file_dtype)
+        self.data[:]['ns'] = tracew.shape[1]
+        self.data[:]['delrt'] = 0
+        self.data[:]['trace'] = tracew
+
+        
+        

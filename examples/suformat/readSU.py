@@ -7,9 +7,9 @@ from nessi.io import SUdata
 musc = SUdata()
 
 musc.read('musc_F50_01.su', endian='b')
-
-plt.imshow(musc.data[:]['trace'], aspect='auto', cmap='gray')
+musc.image()
 plt.show()
 
-plt.plot(musc.data[20]['trace'])
+musc.wind(tmin=0., tmax=0.25)
+musc.image()
 plt.show()
