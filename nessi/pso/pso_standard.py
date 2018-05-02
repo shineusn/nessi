@@ -6,29 +6,25 @@ topology (full, ring1, ring2, van Neumann, Moore).
 import numpy as np
 
 
-def _pso_parser(kwargs):
+def _pso_parser(control=0, c_0=0.7298, c_1=2.05, c_2=2.05, topology='full'):
     """
     Parse the kwarg parameter list of pso_standard_update function
     and calculate control parameter values.
     """
 
-    control = kwargs.get('control', 0)
-
     cpar = np.zeros(3, dtype=np.float32)
-    cpar[0] = kwargs.get('c_0', 0.72)
+    cpar[0] = c_0
 
     if control == 0:
         # Inertia weight (control=0 default)
-        cpar[1] = kwargs.get('c_1', 2.05)
-        cpar[2] = kwargs.get('c_2', 2.05)
+        cpar[1] = c_1
+        cpar[2] = c_2
     else:
         # Constriction factor (control=1)
-        cpar[1] = kwargs.get('c_1', 2.05)\
-                  * kwargs.get('c_0', 0.7298)
-        cpar[2] = kwargs.get('c_2', 2.05)\
-                  * kwargs.get('c_1', 0.72)
+        cpar[1] = c_1*c_0
+        cpar[2] = c_2*c_0
 
-    topology = kwargs.get('topology', 'full')
+    #topology = kwargs.get('topology', 'full')
 
     return cpar, topology
 
@@ -46,13 +42,18 @@ def get_gbest(particles, topology, indv=0, ndim=0):
     # Get the particle in the neighborhood (1 left, 1 right)
     #of the particle including itself.
     if topology == 'ring1':
-        ibest = np.argmin(particles[indv-1:indv+1]['misfit'])
-        gbest = particles[ibest]['history']
-
-    # Get the particle in the neighborhood (2 left, 2 right)
-    #of the particle including itself.
-    if topology == 'ring2':
-        ibest = np.argmin(particles[indv-2:indv+2]['misfit'])
+        vref = particles[indv]['misfit']
+        ibest = indv
+        for i in range(0, 3):
+            ii = indv-1+i
+            if(ii == -1):
+                ii = len(particles)-1
+            if(ii == len(particles)):
+                ii = 0
+            vtmp = particles[ii]['misfit']
+            if(vtmp < vref):
+                vref = vtmp
+                ibest = ii
         gbest = particles[ibest]['history']
 
     return gbest
@@ -63,8 +64,8 @@ def pso_standard_update(particles, pspace, **kwargs):
     """
 
     # Parse kwargs parameter list
-    cpar, topology = _pso_parser(kwargs)
-
+    cpar, topology = _pso_parser(**kwargs)
+    
     # Update process
     for indv in range(0, particles.shape[0]):
         gbest = get_gbest(particles, topology, indv)

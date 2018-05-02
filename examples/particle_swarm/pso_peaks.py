@@ -19,10 +19,7 @@ PSO example using the 2D peaks function.
 import numpy as np
 import matplotlib.pyplot as plt
 
-from nessi.pso import init_pspace
-from nessi.pso import init_swarm
-from nessi.pso import particles
-from nessi.pso import standard_update
+from nessi.pso import Swarm
 
 def peaksF(x1min, x1max, dx1, x2min, x2max, dx2):
     """
@@ -70,47 +67,41 @@ def peaksEval(x1, x2):
 
     return f
 
+
+swarm = Swarm()
+
 fmod = 'pspace_peaks.ascii'
-pspace = init_pspace(fmod)
-
-ngen = 500
-nindv = 10
-swarm = particles(nindv, pspace.shape[0], pspace.shape[1])
-
+ngen = 200
+nindv = 20
 fit = np.zeros((ngen+1, 2), dtype=np.float32)
 
-# Initialize the swarm
-init_swarm(swarm, pspace)
+swarm.init_pspace(fmod)
+swarm.init_particles(nindv)
 
 # First evaluation
-for indv in range(0, nindv):
-    swarm[indv]['misfit'] = \
-        peaksEval(swarm[indv]['current'][0, 0], swarm[indv]['current'][0, 1])
-fit[0, 0] = np.amax(swarm[:]['misfit'])
-fit[0, 1] = np.mean(swarm[:]['misfit'])
+swarm.misfit[:] = peaksEval(swarm.current[:, 0, 0], swarm.current[:, 0, 1])
+fit[0, 0] = np.amin(swarm.misfit)
+fit[0, 1] = np.mean(swarm.misfit)
 
 # Loop over generations
 for igen in range(0, ngen):
-    # Update the swarm
-    standard_update(swarm, pspace, control=1)
+    # Update
+    swarm.update(control=1, topology='toroidal', ndim=4)
     # Evaluation
     for indv in range(0, nindv):
-        fit_value = peaksEval(swarm[indv]['current'][0, 0], swarm[indv]['current'][0, 1])
-        if fit_value > swarm[indv]['misfit']:
-            swarm[indv]['misfit'] = fit_value
-            swarm[indv]['history'] = swarm[indv]['current']
-    print(igen, np.amax(swarm[:]['misfit']), np.mean(swarm[:]['misfit']))
-    fit[igen+1, 0] = np.amax(swarm[:]['misfit'])
-    fit[igen+1, 1] = np.mean(swarm[:]['misfit'])
+        vfit = peaksEval(swarm.current[indv, 0, 0], swarm.current[indv, 0, 1])
+        if vfit < swarm.misfit[indv]:
+            swarm.history[indv, :, :] = swarm.current[indv, :, :]
+            swarm.misfit[indv] = vfit
+    fit[igen+1, 0] = np.amin(swarm.misfit)
+    fit[igen+1, 1] = np.mean(swarm.misfit)
 
 F = peaksF(-3.0, 3.0, 0.1, -3.0, 3.0, 0.1)
 plt.subplot(121)
 plt.xlim(-3.0, 3.0)
 plt.ylim(-3.0, 3.0)
-plt.imshow(F, aspect='auto', cmap='jet', extent=[-3.0, 3.0, -3.0, 3.0])
-for indv in range(0, nindv):
-    plt.scatter(swarm[indv]['history'][0, 1], swarm[indv]['history'][0, 0],
-                color='black')
+plt.imshow(F, aspect='auto', cmap='jet', extent=[-3.0, 3.0, -3.0, 3.0], origin='upper-left')
+plt.scatter(swarm.history[:, 0, 1], swarm.history[:, 0, 0], color='black')
 plt.subplot(122)
 plt.plot(fit[:, 0], color='red')
 plt.plot(fit[:, 1], color='gray')
