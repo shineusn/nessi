@@ -171,15 +171,26 @@ class SUdata():
             self.trace = np.array(self.trace)
         
         
-    def image(self):
+    def image(self, bclip=None, wclip=None, clip=None, legend=0):
         """
         matplotlib.pyplot.imshow adapted for SU files
         """
+        if(clip == None and bclip == None and clip == None):
+            bclip = np.amin(self.trace)
+            wclip = np.amax(self.trace)
+        else:
+            if(clip != None and bclip == None and wclip == None):
+                bclip = -1.*clip
+                wclip = clip
+            
         t0 = float(self.header[0]['delrt'])/1000.
         t1 = float(self.header[0]['ns']-1)*float(self.header[0]['dt'])/1000000.+t0
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap='gray',
-                   extent=[0., len(self.trace), t1, t0])
-        
+                   extent=[0., len(self.trace), t1, t0],
+                   vmin=bclip, vmax=wclip)
+        if legend == 1:
+            plt.colorbar()
+            
     def wind(self, tmin=0., tmax=0.):
         """
         Windowing
@@ -195,5 +206,3 @@ class SUdata():
         self.trace = self.trace[:, itmin:itmax+1]
         self.header[:]['ns'] = ns
         self.header[:]['delrt'] = int(tmin*1000)
-        #for i in range(len(self.header)):
-        #    self.header[i]['ns'] = ns
