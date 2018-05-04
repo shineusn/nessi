@@ -34,15 +34,15 @@
 !> D^{+}_{x}\tau_{xz}(m,n+1/2,l) +
 !> D^{+}_{z}\tau_{zz}(m+1/2,n,l)]
 !> \\
-!> D^{+}_{t}\tau_{xx}(m+1/2,n,l) = 
+!> D^{+}_{t}\tau_{xx}(m+1/2,n,l) =
 !> [\lambda(m+1/2,n)+2\mu(m+1/2,n)]D^{+}_{x}u_{t}(m,n,l+1/2) \nonumber\\
 !> + \lambda(m+1/2,n)D^{-}_{z}w_{t}(m+1/2,n+1/2,l+1/2)]&
 !> \\
-!> D^{+}_{t}\tau_{xz}(m,n+1/2,l) = 
+!> D^{+}_{t}\tau_{xz}(m,n+1/2,l) =
 !> \mu(m,n+1/2)[D^{+}_{z}u_{t}(m,n,l+1/2)+
 !> D^{-}_{x}w_{t}(m+1/2,n+1/2,l+1/2)]
 !> \\
-!> D^{+}_{t}\tau_{zz} = 
+!> D^{+}_{t}\tau_{zz} =
 !> [\lambda(m+1/2,n)+2\mu(m+1/2,n)]D^{-}_{z}w_{t}(m+1/2,n+1/2,l+1/2)\nonumber \\
 !> + \lambda(m+1/2,n)D^{+}_{x}u_{t}(m,n,l+1/2)&
 !> \end{eqnarray}
@@ -56,7 +56,7 @@
 !------------------------------------------------------------------------------
 ! Revision history
 
-  
+
 subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
      tsrc, gsrc, recx, recz, recp, recpos, isurf, isnap, bux, buz, lb0, lbmu, mue, &
      pmlx0, pmlx1, pmlz0, pmlz1)
@@ -67,17 +67,17 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
   integer, intent(in) :: nt, nts, ntsnap, nrec, srctype
   integer, intent(in) :: isurf, isnap
   real(4), intent(in) :: dt, h
-  
+
   real(4), dimension(nt), intent(in) :: tsrc
   real(4), dimension(n1+2*npml,n2+2*npml), intent(in) :: gsrc
   real(4), dimension(n1+2*npml, n2+2*npml), intent(in) :: pmlx0, pmlx1, pmlz0, pmlz1
-  
+
   integer, dimension(nrec,2), intent(in) :: recpos
-  
+
   real(4), dimension(nts, nrec), intent(out) :: recx, recz, recp
   real(4), dimension(n1+2*npml, n2+2*npml), intent(in) :: bux, buz, lb0, lbmu, mue
-  
-  
+
+
   integer :: i1, i2, it, its, ets, itsnap, n1e, n2e
   integer :: etsnap, ix, iz, irec, itt
   real :: start, finish
@@ -101,11 +101,11 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
   real, allocatable :: tmp(:, : )
   real, allocatable :: uxe(:, : ), uze(:, :)
 
-  
+
   dth = dt/h
   n1e = n1+2*npml
   n2e = n2+2*npml
-  
+
   ! >> Allocate derivative arrays
   allocate (d1(n1e, n2e))
   allocate (d2(n1e, n2e))
@@ -125,7 +125,7 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
   allocate (uzx(n1e, n2e))
   allocate (uzz(n1e, n2e))
 
-  ! >> Allocate splited stress fields 
+  ! >> Allocate splited stress fields
   allocate (txxx(n1e, n2e))
   allocate (txxz(n1e, n2e))
   allocate (tzzx(n1e, n2e))
@@ -385,7 +385,7 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
 
   deallocate (d1, d2)
 
-  ! >> Free velocity fields 
+  ! >> Free velocity fields
   deallocate (ux, uz)
 
   ! >> Free splitted velocity fields

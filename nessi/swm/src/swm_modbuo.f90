@@ -13,14 +13,14 @@
 !     (https://www.gnu.org/copyleft/lesser.html)
 ! ------------------------------------------------------------------
 
-subroutine modbuo (n1e, n2e, roe, bux, buz)
+subroutine modbuo(n1e, n2e, roe, bux, buz)
     !! subroutine: modbuo
-    !> \brief calculate the buoyancy models (bux and buz).
+    !> \brief calculate the buoyancy models according to the staggered-grid.
     !> \param[in] n1e The number of grid points in the first direction (z)
     !> \param[in] n2e The number of grid points in the second direction (x)
     !> \param[in] roe Extended density model of size (n1e, n2e)
-    !> \param[out] bux Extended buoyancy of size (n1+2*npml, n2+2*npml)
-    !> \param[out] bux Extended buoyancy of size (n1+2*npml, n2+2*npml)
+    !> \param[out] bux Extended buoyancy of size (n1e, n2e)
+    !> \param[out] bux Extended buoyancy of size (n1e, n2e)
 
     integer, intent(in) :: n1e, n2e
     real(4), intent(in), dimension(n1e, n2e) :: roe
@@ -31,14 +31,14 @@ subroutine modbuo (n1e, n2e, roe, bux, buz)
 
     !# Calculate bux
     do i2=1,n2e-1
-        bux(:, i2) = (1./2.)*(1./roe(:, i2)+1./roe(:, i2+1))
+        bux(:, i2) = 0.5*(1./roe(:, i2)+1./roe(:, i2+1))
     end do
-    bux(:,n2e) = 1./roe(:,n2e)
+    bux(:, n2e) = 1./roe(:, n2e)
 
     !# Calculate buz
     do i1=1,n1e-1
-        buz(i1, :) = (1./2.)*(1./roe(i1, :)+1./roe(i1+1, :))
+        buz(i1, :) = 0.5*(1./roe(i1, :)+1./roe(i1+1, :))
     end do
-    buz(n1e,:) = 1./roe(n1e,:)
+    buz(n1e, :) = 1./roe(n1e, :)
 
 end subroutine modbuo

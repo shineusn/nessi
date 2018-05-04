@@ -1,17 +1,16 @@
-subroutine pmlmod (n1, n2, h, isurf, npml, apml, ppml, vpe, pmlx0, pmlx1, pmlz0, pmlz1)
+subroutine pmlmod (n1, n2, h, isurf, npml, apml, ppml, pmlx0, pmlx1, pmlz0, pmlz1)
 
   integer, intent(in) :: n1, n2, npml, ppml, isurf
   real(4), intent(in) :: h, apml
-  real(4), dimension(n1+2*npml, n2+2*npml), intent(in) :: vpe
   real(4), dimension(n1+2*npml, n2+2*npml), intent(out) :: pmlx0, pmlx1
   real(4), dimension(n1+2*npml, n2+2*npml), intent(out) :: pmlz0, pmlz1
-  
+
   ! ADD IF ISURF HERE
   ! DO NOT CONSTRUCT TOP PML IN CASE OF FREE SURFACE.
   integer :: i, n1e, n2e
   real :: val0, val1, val2
 
-  real :: r, vpmax, d0, l
+  real :: r, d0, l
 
   n1e = n1+2*npml
   n2e = n2+2*npml
@@ -22,7 +21,7 @@ subroutine pmlmod (n1, n2, h, isurf, npml, apml, ppml, vpe, pmlx0, pmlx1, pmlz0,
   pmlz1(:, :) = 0.
 
   r = 0.0001 !0.9
-  vpmax = maxval(vpe)
+  !vpmax = maxval(vpe)
   l = float(npml-1)*h
   !d0 = tbnd%apml*vpmax*log(1./r)/(2*l)
   d0 = float(ppml+1)*apml*log(1./r)/(2.*l)

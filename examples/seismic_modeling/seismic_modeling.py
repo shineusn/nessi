@@ -48,8 +48,8 @@ dh = 0.5
 # >> Boundaries parameters
 isurf = 1 # Free surface
 npml = 20  # width in points of the PML bands
-apml = 6000.
-ppml = 32
+apml = 2000.
+ppml = 8
 
 # >> Acquisition parameters
 nrec = 48
@@ -104,14 +104,14 @@ roe = modext(npml, ro)
 # ------------------------------------------------------------
 
 bux, buz = modbuo(roe)
-mu0, mue, lb0, lbmu = modlame(vpe, vse, roe)
+mue, lb0, lbmu = modlame(vpe, vse, roe)
 
 
 # ------------------------------------------------------------
 # >> Calculate PMLs
 # ------------------------------------------------------------
 
-pmlx0,pmlx1,pmlz0,pmlz1 = pmlmod(n1,n2,dh,isurf,npml,apml,ppml,vpe)
+pmlx0,pmlx1,pmlz0,pmlz1 = pmlmod(n1,n2,dh,isurf,npml,apml,ppml)
 
 
 # ------------------------------------------------------------
@@ -148,7 +148,7 @@ print("Courant:: ", dt*np.amax(vpe)/dh)
 # >> Marching
 # ------------------------------------------------------------
 
-recx,recz,recp = evolution(n1,n2,dh,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lb0,lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1)
+recx,recz,recp = evolution(n1,n2,dh,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lb0, lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1)
 
 
 # ------------------------------------------------------------
