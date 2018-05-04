@@ -1,3 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------
+# Filename: seismic_modeling.py
+#   Author: Damien Pageot
+#    Email: nessi.develop@protonmail.com
+#
+# Copyright (C) 2018 Damien Pageot
+# ------------------------------------------------------------------
+"""
+Seismic modeling example.
+:copyright:
+    Damien Pageot (nessi.develop@protonmail.com)
+:license:
+    GNU Lesser General Public License, Version 3
+    (https://www.gnu.org/copyleft/lesser.html)
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

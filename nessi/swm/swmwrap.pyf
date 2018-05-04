@@ -76,12 +76,12 @@ python module swmwrap ! in
             real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: bux
             real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: buz
         end subroutine modbuo
-        subroutine modext(n1,n2,nsp,v,ve) ! in :swmwrap:src/swm_modext.f90
+        subroutine modext(n1,n2,npml,v,ve) ! in :swmwrap:src/swm_modext.f90
             integer, optional,intent(in),check(shape(v,0)==n1),depend(v) :: n1=shape(v,0)
             integer, optional,intent(in),check(shape(v,1)==n2),depend(v) :: n2=shape(v,1)
-            integer intent(in) :: nsp
+            integer intent(in) :: npml
             real(kind=4) dimension(n1,n2),intent(in) :: v
-            real(kind=4) dimension(n1+2*nsp,n2+2*nsp),intent(out),depend(n1,nsp,n2,nsp) :: ve
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: ve
         end subroutine modext
         subroutine modlame(n1e,n2e,vpe,vse,roe,mu0,mue,lb0,lbmu) ! in :swmwrap:src/swm_modlame.f90
             integer, optional,intent(in),check(shape(vpe,0)==n1e),depend(vpe) :: n1e=shape(vpe,0)
