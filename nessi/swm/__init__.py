@@ -16,6 +16,7 @@ from .swmwrap import pmlmod
 from .swmwrap import ricker
 from .swmwrap import srcspread
 from .swmwrap import evolution
+from .seismod import SeisMod
 
 if __name__ == '__main__':
     import doctest
