@@ -83,12 +83,12 @@ class SUdata():
             ('UnassignedInt1', np.int32), \
             ('UnassignedInt2', np.int32)])
 
-        
+
         self.filename = ' '
         self.header = []
         self.trace = []
         self.endian = 'l'
-        
+
 
     def _check_endian(self):
         """
@@ -127,7 +127,7 @@ class SUdata():
         self.filename = filename
         if endian == ' ':
             self._check_endian()
-        
+
         file = open(filename, 'rb')
         bhdr = file.read(240)
         if self.endian == 'b':
@@ -147,9 +147,9 @@ class SUdata():
                     self.trace.append(trc)
                 except:
                     EOF = True
-            self.trace = np.array(self.trace)  
+            self.trace = np.array(self.trace)
             self.header = np.array(self.header)
-            
+
         if self.endian == 'l':
             hdr = np.frombuffer(bhdr, dtype=self.sutype, count=1)[0]
             btrc = file.read(hdr['ns']*4)
@@ -169,8 +169,8 @@ class SUdata():
                     EOF = True
             self.header = np.array(self.header)
             self.trace = np.array(self.trace)
-        
-        
+
+
     def image(self, bclip=None, wclip=None, clip=None, legend=0):
         """
         matplotlib.pyplot.imshow adapted for SU files
@@ -182,7 +182,7 @@ class SUdata():
             if(clip != None and bclip == None and wclip == None):
                 bclip = -1.*clip
                 wclip = clip
-            
+
         t0 = float(self.header[0]['delrt'])/1000.
         t1 = float(self.header[0]['ns']-1)*float(self.header[0]['dt'])/1000000.+t0
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap='gray',
@@ -190,7 +190,7 @@ class SUdata():
                    vmin=bclip, vmax=wclip)
         if legend == 1:
             plt.colorbar()
-            
+
     def wind(self, tmin=0., tmax=0.):
         """
         Windowing
@@ -198,7 +198,7 @@ class SUdata():
         print(tmin, tmax)
         dt = self.header[0]['dt']/1000000.
         dlrt = float(self.header[0]['delrt'])/1000.
-        
+
         itmin = int((tmin-dlrt)/dt)
         itmax = int((tmax-dlrt)/dt)
 
@@ -206,3 +206,32 @@ class SUdata():
         self.trace = self.trace[:, itmin:itmax+1]
         self.header[:]['ns'] = ns
         self.header[:]['delrt'] = int(tmin*1000)
+
+    def create(self, data, dt):
+        """
+        Create a minimal SU file
+        """
+        # Get size of data
+        nr = data.shape[0]
+        ns = data.shape[1]
+
+        # Create
+        for ir in range(0, nr):
+            self.header.append(np.zeros(1, dtype=self.sutype))
+            self.header[ir]['tracl'] = int(ir+1)
+            self.header[ir]['tracf'] = int(ir+1)
+            self.header[ir]['ns'] = ns
+            self.header[ir]['dt'] = int(dt*1000000.)
+            self.trace.append(data[ir,:])
+        self.header = np.array(self.header)
+        self.trace = np.array(self.trace)
+
+    def write(self, filename):
+        """
+        Write SU file on disk
+        """
+        file = open(filename, 'wb')
+        for ir in range(0, len(self.header)):
+            file.write(self.header[ir])
+            file.write(self.trace[ir,:])
+        file.close()
