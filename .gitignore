@@ -9,3 +9,4 @@
 *.pyo
 
 *.bin
+.spy*
