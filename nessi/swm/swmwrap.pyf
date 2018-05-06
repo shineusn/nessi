@@ -93,12 +93,6 @@ python module swmwrap ! in
             real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lbd
             real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lbdmu
         end subroutine modlame
-        subroutine modread(fname,n1,n2,v) ! in :swmwrap:src/swm_modread.f90
-            character*(*) intent(in) :: fname
-            integer intent(in) :: n1
-            integer intent(in) :: n2
-            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: v
-        end subroutine modread
         subroutine pmlmod(n1,n2,h,isurf,npml,apml,ppml,pmlx0,pmlx1,pmlz0,pmlz1) ! in :swmwrap:src/swm_pmlmod.f90
             integer intent(in) :: n1
             integer intent(in) :: n2

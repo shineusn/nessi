@@ -292,7 +292,8 @@ subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
 
      call cpu_time (finish)
      full = full+(finish-start)
-     write(*, * ) it, nt, finish-start, full, sqrt(maxval(ux)**2+maxval(uz)**2), tsrc(it)
+     ! ADD A VERBOSE MODE
+     !write(*, * ) it, nt, finish-start, full, sqrt(maxval(ux)**2+maxval(uz)**2), tsrc(it)
 
      if((itsnap == etsnap .or. it == 1) .and. isnap == 1)then
         itsnap = 1

@@ -15,10 +15,6 @@ subroutine ricker(nt, dt, f0, t0, tsrc)
      tsrc(it) = (1.-2.*sigma)*exp(-1.*sigma)
   end do
 
-  open(11, file='fricker.bin', access='direct', recl=nt*4)
-  write(11, rec=1) tsrc
-  close(11)
-
 end subroutine ricker
 
 subroutine srcspread(n1, n2, nsp, xs, zs, h, gsrc, sigma)

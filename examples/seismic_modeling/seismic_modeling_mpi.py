@@ -1,3 +1,25 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------
+# Filename: seismic_modeling.py
+#   Author: Damien Pageot
+#    Email: nessi.develop@protonmail.com
+#
+# Copyright (C) 2018 Damien Pageot
+# ------------------------------------------------------------------
+"""
+Seismic modeling example.
+:copyright:
+    Damien Pageot (nessi.develop@protonmail.com)
+:license:
+    GNU Lesser General Public License, Version 3
+    (https://www.gnu.org/copyleft/lesser.html)
+"""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -6,10 +28,13 @@ from nessi.swm import acqpos, pmlmod
 from nessi.swm import ricker, srcspread
 from nessi.swm import evolution
 
+from nessi.io import SUdata
+
 from mpi4py import MPI
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
+
 
 # ------------------------------------------------------------
 # >> Input parameters
@@ -28,8 +53,8 @@ dh = 0.5
 # >> Boundaries parameters
 isurf = 1 # Free surface
 npml = 20  # width in points of the PML bands
-apml = 6000.
-ppml = 32
+apml = 600.
+ppml = 8
 
 # >> Acquisition parameters
 nrec = 48
@@ -84,14 +109,14 @@ roe = modext(npml, ro)
 # ------------------------------------------------------------
 
 bux, buz = modbuo(roe)
-mu0, mue, lb0, lbmu = modlame(vpe, vse, roe)
+mu, lbd, lbdmu = modlame(vpe, vse, roe)
 
 
 # ------------------------------------------------------------
 # >> Calculate PMLs
 # ------------------------------------------------------------
 
-pmlx0,pmlx1,pmlz0,pmlz1 = pmlmod(n1,n2,dh,isurf,npml,apml,ppml,vpe)
+pmlx0,pmlx1,pmlz0,pmlz1 = pmlmod(n1,n2,dh,isurf,npml,apml,ppml)
 
 
 # ------------------------------------------------------------
@@ -128,14 +153,17 @@ print("Courant:: ", dt*np.amax(vpe)/dh)
 # >> Marching
 # ------------------------------------------------------------
 
-recx,recz,recp = evolution(n1,n2,dh,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lb0,lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1)
+recx,recz,recp = evolution(n1,n2,dh,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lbd, lbdmu,mu,pmlx0,pmlx1,pmlz0,pmlz1)
+
 
 # ------------------------------------------------------------
-# >> Plot seismograms
+# >> Output in SU format
 # ------------------------------------------------------------
 
-plt.subplot(211)
-plt.imshow(recx, aspect='auto', cmap='gray')
-plt.subplot(212)
-plt.imshow(recz, aspect='auto', cmap='gray')
-plt.show()
+surecx = SUdata()
+surecx.create(recx.swapaxes(1,0), dts)
+surecz = SUdata()
+surecz.create(recz.swapaxes(1,0), dts)
+
+surecz.write('dobsz'+str(rank).zfill(2)+'.su')
+surecz.write('dobsx'+str(rank).zfill(2)+'.su')
