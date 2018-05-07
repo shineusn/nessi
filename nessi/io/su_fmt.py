@@ -89,6 +89,15 @@ class SUdata():
         self.trace = []
         self.endian = 'l'
 
+        # For FFT and MASW
+        self.nw = 0.
+        self.dw = 0.
+        self.fmin = 0.
+        
+        # For MASW only
+        self.nv = 0.
+        self.dv = 0.
+        self.vmin = 0.
 
     def _check_endian(self):
         """
@@ -185,6 +194,7 @@ class SUdata():
 
         t0 = float(self.header[0]['delrt'])/1000.
         t1 = float(self.header[0]['ns']-1)*float(self.header[0]['dt'])/1000000.+t0
+
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap='gray',
                    extent=[0., len(self.trace), t1, t0],
                    vmin=bclip, vmax=wclip)
@@ -235,3 +245,44 @@ class SUdata():
             file.write(self.header[ir])
             file.write(self.trace[ir,:])
         file.close()
+        
+    def masw(self, vmin=0., vmax=1000., dv=5., fmin=1., fmax=100.):
+        """
+        Calculate the dispersion diagram using MASW method
+        """
+        
+        # Get offset
+        scalco = self.header[0]['scalco']
+        if scalco < 0:
+            scale = -1./scalco
+        if scalco == 0:
+            scale = 1.
+        x = self.header[:]['sx']*scale-self.header[:]['gx']*scale
+        y = self.header[:]['sy']*scale-self.header[:]['gy']*scale
+        offset = np.sqrt(x**2+y**2)
+        # Velocity vector
+        nv = int((vmax-vmin)/dv)+1
+        vel = np.linspace(vmin, vmax, nv, dtype=np.float32)
+        
+        # FFT
+        ns = self.header[0]['ns']
+        dt = self.header[0]['dt']/1000000.
+        gobs = np.fft.rfft(self.trace, axis=1)
+        freq = np.fft.rfftfreq(ns, d=dt)
+        dw = freq[1]
+        iwmin = int(fmin/dw)
+        nw = int((fmax-fmin)/dw)+1
+        
+        #disp = cy.cmasw(gobs, iwmin, nw, offset, vel, freq)
+        # MASW
+        tmp = np.zeros(nw, dtype=np.complex64)
+        disp = np.zeros((nv, nw), dtype=np.float32)
+        for iv in range(0, nv):
+            tmp[:] = complex(0., 0.)
+            for ir in range(0, len(offset)):
+                for iw in range(0, nw):
+                    phase = complex(0., 1.)*2.*np.pi*offset[ir]*freq[iw+iwmin]/vel[iv]
+                    tmp[iw] += gobs[ir, iw+iwmin]*np.exp(phase)
+            disp[iv,:] += np.abs(tmp[:])
+            
+        return disp

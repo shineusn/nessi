@@ -37,7 +37,7 @@ nessi_dsp_masw(int nv, int nw, int n1c, int ns,
 	    {
 	      if(cabs(dobsc[iwmin+iw][(is)*nr+ir]) != 0.)
 		{phs=nessi_dsp_phase(w[iw],dist[is][ir],v[iv]);
-		  tmp[iw]+=+dobsc[iwmin+iw][ir]*cexp(ci*phs);
+		  tmp[iw]+=dobsc[iwmin+iw][ir]*cexp(ci*phs);
 		};
 	    }
 	}
