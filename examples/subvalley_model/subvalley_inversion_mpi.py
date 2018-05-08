@@ -29,6 +29,11 @@ from nessi.io import SUdata
 from nessi.pso import Swarm
 from nessi.grd import sibson2
 
+from seismod import seismod
+
+def vsnu2vp(vsmod, numod):
+    vpmod = np.sqrt(vsmod*vsmod*2.*(1.-numod)/(1.-2.*numod))
+    return vpmod
 
 # ------------------------------------------------------------------
 # >> Initialize MPI
@@ -89,7 +94,7 @@ if rank != 0:
 
     # >> Run parameters
     runpar = {'name': 'subvalley',
-              'tmax': tmax, 'dt': 0.000005, # Time marching
+              'tmax': tmax, 'dt': 0.0001, # Time marching
               'snap': 0, 'dtsnap': 0.001}   # Snapshots
 
     # >> Model grid parameters
@@ -156,19 +161,23 @@ for indv in range(0, nindv):
         val = swarm.current[indv, :, 4]
         numod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
         # P-wave velocity model
-
+        vpmod = vsnu2vp(vsmod, numod)
 
     # Broadcast velocity and density models to slaves.
+    comm.Bcast([vpmod, MPI.FLOAT], root=0)
     comm.Bcast([vsmod, MPI.FLOAT], root=0)
+    comm.Bcast([romod, MPI.FLOAT], root=0)
 
     # Calculate observed data and evaluate
     if rank != 0:
-        print(rank)
         # Seismic modeling
+        _, recz, _ = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
+        print('rank ', rank, ' done')
         # Rayleigh dispersion
         # L2-norm
 
-    # MPI Barrier
+    # Block until all processes have reached this point.
+    comm.Barrier()
 
     # Gather L2 results on master and store the result
 
