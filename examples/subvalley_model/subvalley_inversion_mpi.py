@@ -27,6 +27,7 @@ from mpi4py import MPI
 
 from nessi.io import SUdata
 from nessi.pso import Swarm
+from nessi.grd import sibson2
 
 
 # ------------------------------------------------------------------
@@ -85,7 +86,6 @@ if rank != 0:
 # >> Define modeling parameters
 # ------------------------------------------------------------------
 
-if rank != 0:
 
     # >> Run parameters
     runpar = {'name': 'subvalley',
@@ -119,7 +119,7 @@ comm.Barrier()
 # ------------------------------------------------------------------
 
 # Initialize the number of particles on master and slaves.
-nindv = 49
+nindv = 1 #49
 
 # Initialize the swarm on the master only.
 if rank == 0:
@@ -132,14 +132,34 @@ if rank == 0:
 # >> First evaluation
 # ------------------------------------------------------------------
 
+# Initialize velocity and density models on slaves
+if rank != 0:
+    vpmod = np.zeros((51, 301), dtype=np.float32)
+    vsmod = np.zeros((51, 301), dtype=np.float32)
+    romod = np.zeros((51, 301), dtype=np.float32)
+
 # Loop over particles
 for indv in range(0, nindv):
 
     # Coarse to fine grid
     if rank == 0:
-        print(rank, ' Coarse to fine grid.\n')
+        npts = swarm.pspace.shape[0]
+        xp = swarm.current[indv, :, 0]
+        zp = swarm.current[indv, :, 1]
+        # S-wave velocity model
+        val = swarm.current[indv, :, 2]
+        vsmod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+        # Density model
+        val = swarm.current[indv, :, 3]
+        romod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+        # Poisson's ratio model
+        val = swarm.current[indv, :, 4]
+        numod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+        # P-wave velocity model
+
 
     # Broadcast velocity and density models to slaves.
+    comm.Bcast([vsmod, MPI.FLOAT], root=0)
 
     # Calculate observed data and evaluate
     if rank != 0:
