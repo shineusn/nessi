@@ -125,8 +125,10 @@ comm.Barrier()
 # >> Initialize the swarm
 # ------------------------------------------------------------------
 
-# Initialize the number of particles on master and slaves.
-nindv = 9
+# Initialize the number of generations and particles on master
+# and slaves.
+ngen = 10
+nindv = 9 #49
 
 # Initialize the swarm on the master only.
 if rank == 0:
@@ -150,8 +152,6 @@ for indv in range(0, nindv):
 
     # Coarse to fine grid
     if rank == 0:
-        sys.stdout.write("\r%d%%" % int((indv+1)/(nindv)*100))
-        sys.stdout.flush()
         npts = swarm.pspace.shape[0]
         xp = swarm.current[indv, :, 0]
         zp = swarm.current[indv, :, 1]
@@ -203,7 +203,8 @@ for indv in range(0, nindv):
         else:
             swarm.misfit[indv] = L2
         swarm.history[indv, :, :] = swarm.current[indv, :, :]
-
+        #sys.stdout.write("\r%d%%" % int((indv+1)/(nindv)*100))
+        #sys.stdout.flush()
 
 # Block until all processes have reached this point.
 comm.Barrier()
@@ -211,6 +212,7 @@ comm.Barrier()
 # PSO update
 if rank == 0:
     swarm.update(control=1, topology='toroidal', ndim=3)
+    print('*PSO first evaluation done\n', flush=True)
 
 
 # ------------------------------------------------------------------
@@ -218,7 +220,69 @@ if rank == 0:
 # ------------------------------------------------------------------
 
 # Loop over generations
-    # Coarse to fine  grid
-    # Observed data and evaluation
-    # L2-norm
-    # PSO update on master
+for igen in range(0, ngen):
+
+    # Loop over particles
+    for indv in range(0, nindv):
+
+        # Coarse to fine grid
+        if rank == 0:
+            npts = swarm.pspace.shape[0]
+            xp = swarm.current[indv, :, 0]
+            zp = swarm.current[indv, :, 1]
+            # S-wave velocity model
+            val = swarm.current[indv, :, 2]
+            vsmod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+            # Density model
+            val = swarm.current[indv, :, 3]
+            romod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+            # Poisson's ratio model
+            val = swarm.current[indv, :, 4]
+            numod = sibson2(npts, xp, zp, val, 51, 301, 0.5)
+            # P-wave velocity model
+            vpmod = vsnu2vp(vsmod, numod)
+
+        # Broadcast velocity and density models to slaves.
+        comm.Bcast([vpmod, MPI.FLOAT], root=0)
+        comm.Bcast([vsmod, MPI.FLOAT], root=0)
+        comm.Bcast([romod, MPI.FLOAT], root=0)
+
+        # Calculate observed data and evaluate
+        if rank != 0:
+            # Seismic modeling
+            dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
+            # Rayleigh dispersion
+            disp1 = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=10., fmax=50.)
+            disp1 /= np.amax(disp1)
+            # L2-norm
+            L2 = 0.
+            for iv in range(0, disp.shape[0]):
+                for iw in range(0, disp.shape[1]):
+                    L2 += (disp[iv, iw]-disp1[iv, iw])**2
+            # Send L2 values to master
+            comm.send(L2, dest=0)
+
+        # Block until all processes have reached this point.
+        comm.Barrier()
+
+        # Get L2 and fill particles history
+        if rank == 0:
+            # L2 results
+            L2 = 0.
+            for ip in range(1, 3):
+                L2 += comm.recv(source=ip)
+            L2 = np.sqrt(L2)
+            # PSO update on master
+            if L2 <= swarm.misfit[indv]:
+                swarm.misfit[indv] = L2
+                swarm.history[indv, :, :] = swarm.current[indv, :, :]
+
+    # Block until all processes have reached this point.
+    comm.Barrier()
+
+    # PSO update
+    if rank == 0:
+        swarm.update(control=1, topology='toroidal', ndim=3)
+        print('*PSO ', igen,
+              np.amin(swarm.misfit[:]), np.mean(swarm.misfit[:]),
+              '\n', flush=True)
