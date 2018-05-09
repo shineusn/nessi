@@ -21,6 +21,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from mpi4py import MPI
@@ -114,6 +115,7 @@ if rank != 0:
 # Calculating the reference dispersion diagrams using the MASW method
 if rank != 0:
     disp = dobsz.masw(vmin=200., vmax=1200., dv=5., fmin=10., fmax=50.)
+    disp /= np.amax(disp)
 
 # Block until all processes have reached this point.
 comm.Barrier()
@@ -124,7 +126,7 @@ comm.Barrier()
 # ------------------------------------------------------------------
 
 # Initialize the number of particles on master and slaves.
-nindv = 1 #49
+nindv = 9
 
 # Initialize the swarm on the master only.
 if rank == 0:
@@ -148,6 +150,8 @@ for indv in range(0, nindv):
 
     # Coarse to fine grid
     if rank == 0:
+        sys.stdout.write("\r%d%%" % int((indv+1)/(nindv)*100))
+        sys.stdout.flush()
         npts = swarm.pspace.shape[0]
         xp = swarm.current[indv, :, 0]
         zp = swarm.current[indv, :, 1]
@@ -171,17 +175,42 @@ for indv in range(0, nindv):
     # Calculate observed data and evaluate
     if rank != 0:
         # Seismic modeling
-        _, recz, _ = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
-        print('rank ', rank, ' done')
+        dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
         # Rayleigh dispersion
+        disp1 = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=10., fmax=50.)
+        disp1 /= np.amax(disp1)
         # L2-norm
+        L2 = 0.
+        for iv in range(0, disp.shape[0]):
+            for iw in range(0, disp.shape[1]):
+                L2 += (disp[iv, iw]-disp1[iv, iw])**2
+        # Send L2 values to master
+        comm.send(L2, dest=0)
 
     # Block until all processes have reached this point.
     comm.Barrier()
 
-    # Gather L2 results on master and store the result
+    # Get L2 and fill particles history
+    if rank == 0:
+        # L2 results
+        L2 = 0.
+        for ip in range(1, 3):
+            L2 += comm.recv(source=ip)
+        L2 = np.sqrt(L2)
+        # PSO update on master
+        if(np.isnan(L2)):
+            swarm.misfit[indv] = 1000.
+        else:
+            swarm.misfit[indv] = L2
+        swarm.history[indv, :, :] = swarm.current[indv, :, :]
 
-# PSO update on master
+
+# Block until all processes have reached this point.
+comm.Barrier()
+
+# PSO update
+if rank == 0:
+    swarm.update(control=1, topology='toroidal', ndim=3)
 
 
 # ------------------------------------------------------------------

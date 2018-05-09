@@ -25,7 +25,7 @@ from nessi.swm import acqpos, pmlmod
 from nessi.swm import ricker, srcspread
 from nessi.swm import evolution
 
-
+from nessi.io import SUdata
 
 def seismod(runpar, modpar, acqpar, vpmod, vsmod, romod):
     # ------------------------------------------------------------
@@ -127,4 +127,18 @@ def seismod(runpar, modpar, acqpar, vpmod, vsmod, romod):
                                bux,buz,lbd, lbdmu,mu,
                                pmlx0,pmlx1,pmlz0,pmlz1)
 
-    return recx, recz, recp
+    # Minimal SU file
+    surecz = SUdata()
+    surecz.create(recz.swapaxes(1,0), dts)
+
+    # Fill headers
+    for ir in range(0, nrec):
+        surecz.header[ir]['gx'] = acq[ir, 0]*10
+        surecz.header[ir]['gy'] = acq[ir, 1]*10
+
+    surecz.header[:]['sx'] = sx*10
+    surecz.header[:]['gy'] = sz*10
+
+    surecz.header['scalco'] = -10
+
+    return surecz
