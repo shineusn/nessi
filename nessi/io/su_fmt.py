@@ -8,13 +8,11 @@
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-Seismic Unix format support.
-:copyright:
-    Damien Pageot (nessi.develop@protonmail.com)
-:license:
-    GNU Lesser General Public License, Version 3
-    (https://www.gnu.org/copyleft/lesser.html)
+.. module:: su_fmt
+    :synopsis: Seismic Unix format support.
+.. moduleauthor:: Damien Pageot (nessi.develop@protonmail.com)
 """
+#:license: GNU Lesser General Public License, Version 3 (https://www.gnu.org/copyleft/lesser.html)
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,10 +23,11 @@ class SUdata():
     """
 
     def __init__(self):
-        """
-        Define the Seismic Unix header.
-        """
+        """Define the Seismic Unix header.
 
+        Args:
+            None
+        """
         self.sutype = np.dtype([
             ('tracl', np.int32), ('tracr', np.int32), \
             ('fldr', np.int32), ('tracf', np.int32), \
@@ -120,18 +119,8 @@ class SUdata():
     def read(self, filename, endian=' '):
         """Read Seismic Unix file.
 
-        Parameters
-        ------
-            sufile : str
-                Seismic Unix file name.
-            endian : str
-                File byte order: little endian (default) 'l', big endian 'b'.
-
-        Return
-        ------
-            sudata : suhdr_dtype+traces
-                Seismic Unix data with header.
-
+        :param filename: name of the SU file
+        :param endian: byte order: little endian (default) 'l', big endian 'b'.
         """
         self.filename = filename
         if endian == ' ':
