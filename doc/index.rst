@@ -8,7 +8,11 @@
 	   
 Welcome to NeSSI's documentation!
 =================================
-	   
+
+NeSSI (Near-Surface Seismic Imaging) aims to provide python modules for the rapid development of seismic inversion codes based on the particle swarm optimization method.
+
+NeSSI is licensed under the GNU Lesser General Public License (version 3).
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

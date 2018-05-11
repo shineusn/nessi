@@ -169,7 +169,8 @@ class SUdata():
             self.trace = np.array(self.trace)
 
 
-    def image(self, bclip=None, wclip=None, clip=None, legend=0):
+    def image(self, bclip=None, wclip=None, clip=None, legend=0, label1=' ',
+              label2=' ', title=' '):
         """
         matplotlib.pyplot.imshow adapted for SU files
         """
@@ -184,6 +185,9 @@ class SUdata():
         t0 = float(self.header[0]['delrt'])/1000.
         t1 = float(self.header[0]['ns']-1)*float(self.header[0]['dt'])/1000000.+t0
 
+        plt.xlabel(label2)
+        plt.ylabel(label1)
+        plt.title(title)
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap='gray',
                    extent=[0., len(self.trace), t1, t0],
                    vmin=bclip, vmax=wclip)
@@ -194,7 +198,6 @@ class SUdata():
         """
         Windowing
         """
-        print(tmin, tmax)
         dt = self.header[0]['dt']/1000000.
         dlrt = float(self.header[0]['delrt'])/1000.
 
