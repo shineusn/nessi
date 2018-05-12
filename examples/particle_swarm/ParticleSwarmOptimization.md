@@ -25,9 +25,9 @@ distributions.  It  has  multiple  peaks  which  are  located
 at  (0,1.58),  (0.46,0.63),  and  (1.28,0)  with  different  peak
 function values (Aljarah & Ludwig, 2013). The function has the following definition: 
 
-\begin{equation}
-    F(X, Y) = 3(1-X)^{2}e^{-[X^{2}+(Y+1)^{2}]}+10\left(\frac{X}{5}-X^{3}-Y^{5}\right)e^{-[X^{2}+Y^{2}]}-\frac{1}{3}e^{-[(X+1)^{2}+Y^{2}]}
-\end{equation}
+$$
+F(X, Y) = 3(1-X)^{2}e^{-[X^{2}+(Y+1)^{2}]}+10\left(\frac{X}{5}-X^{3}-Y^{5}\right)e^{-[X^{2}+Y^{2}]}-\frac{1}{3}e^{-[(X+1)^{2}+Y^{2}]}
+$$
 
 
 ```python
