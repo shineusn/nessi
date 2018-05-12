@@ -19,7 +19,8 @@ Finally, you have to had the path of the nessi package to `PYTHONPATH`. In your 
 
 `export PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package`
 
-
+# Notebooks
+[Particle Swarm Optimization](examples/particle_swarm/ParticleSwarmOptimization.md)
 # Contributing
 
 NeSSI is developed and tested using python2.7 and python3.5 on GNU/Debian Stretch (stable). 
