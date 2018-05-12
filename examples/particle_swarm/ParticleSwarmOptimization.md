@@ -19,6 +19,8 @@ from mpl_toolkits.mplot3d import Axes3D
 from nessi.pso import Swarm
 ```
 
+### 1-The peak function
+
 The Peaks function in Equation 6 is a function of two
 variables,  obtained  by  translating  and  scaling  Gaussian
 distributions.  It  has  multiple  peaks  which  are  located
@@ -29,50 +31,109 @@ function values (Aljarah & Ludwig, 2013). The function has the following definit
 
 
 ```python
-def peaksF(x1min, x1max, dx1, x2min, x2max, dx2):
-    """
-    Return an array containing the 2D Rastrigin function.
-    """
+def peaksF(X, Y):
+    F = 3.*(1.-X)*(1.-X)\
+                *np.exp(-1.*X**2-(Y+1.)**2)\
+                -10.*(X/5.-X**3-Y**5)\
+                *np.exp(-1.*X**2-Y**2)\
+                -1./3.*np.exp(-1.*(X+1)**2-Y**2)
 
-    # >> Determine the number of samples
-    n1 = int((x1max-x1min)/dx1)+1
-    n2 = int((x2max-x2min)/dx2)+1
-
-    # >> Declare array
-    f = np.zeros((n1, n2), dtype=np.float32)
-
-    # >> Fill the array
-    for i2 in range(0, n2):
-        x2 = x2min+float(i2)*dx2
-        for i1 in range(0, n1):
-            x1 = x1min+float(i1)*dx1
-            f[i1, i2] = 3.*(1.-x1)*(1.-x1)\
-                        *np.exp(-1.*x1*x1-(x2+1.)*(x2+1.))\
-                        -10.*(x1/5.-x1*x1*x1-x2*x2*x2*x2*x2)\
-                        *np.exp(-1.*x1*x1-x2*x2)\
-                        -1./3.*np.exp(-1.*(x1+1)*(x1+1)-x2*x2)
-
-    return f
+    return F
 ```
 
 
 ```python
-# The peak function
-F = peaksF(-3.0, 3.0, 0.1, -3.0, 3.0, 0.1)
-
 # Initialize 3D plot
-
 fig = plt.figure(figsize=(9,6))
 ax = fig.gca(projection='3d')
 ax.set_xlabel(r'$x_{1}$')
 ax.set_ylabel(r'$x_{2}$')
 ax.set_zlabel(r'Amplitude')
+
+# Calculate peak function
 X, Y = np.meshgrid(np.linspace(-3, 3, 61), np.linspace(-3, 3, 61))
-surf = ax.plot_surface(X, Y, F, vmin=-6.0, vmax=8.0, cmap='jet')
+F = peaksF(X, Y)
+
+# Plot
+ax.plot_surface(X, Y, F, vmin=-6.0, vmax=8.0, cmap='jet');
 ```
 
 
 ![png](output_8_0.png)
+
+
+### 2-Define the search-space
+
+The search-space is delimited by the minimum and maximum values of each parameter (x1 and x2 in this case). An increment value (dx) is added to control the maximum displacement of the swarm's particles.
+
+| x1 min | x1 max | dx1 | x2 min | x2 max | dx2 |
+| ------ | ------ | --- | ------ | ------ | --- |
+| -3.0   | 3.0    | 0.3 | -3.0   | 3.0    | 0.3 |
+
+### 3-Process
+
+
+```python
+# Initialize the swarm object
+swarm = Swarm()
+
+# PSO parameters
+fmod = 'pspace_peaks.ascii'
+ngen = 100
+nindv = 20
+fit = np.zeros((ngen+1, 2), dtype=np.float32)
+
+# Get the search-space
+swarm.init_pspace(fmod)
+
+# Initialize particles
+swarm.init_particles(nindv)
+```
+
+
+```python
+# First evaluation
+swarm.misfit[:] = peaksF(swarm.current[:, 0, 0], swarm.current[:, 0, 1])
+fit[0, 0] = np.amin(swarm.misfit)
+fit[0, 1] = np.mean(swarm.misfit)
+```
+
+
+```python
+# Loop over generations
+for igen in range(0, ngen):
+    # Update
+    swarm.update(control=1)
+    # Evaluation
+    for indv in range(0, nindv):
+        vfit = peaksF(swarm.current[indv, 0, 0], swarm.current[indv, 0, 1])
+        if vfit < swarm.misfit[indv]:
+            swarm.history[indv, :, :] = swarm.current[indv, :, :]
+            swarm.misfit[indv] = vfit
+    # Store the misfit values
+    fit[igen+1, 0] = np.amin(swarm.misfit)
+    fit[igen+1, 1] = np.mean(swarm.misfit)
+```
+
+
+```python
+fig = plt.figure(figsize=(8, 4))
+ax1 = fig.add_subplot(1, 2, 1)
+ax1.set_xlim(-3.0, 3.0)
+ax1.set_ylim(-3.0, 3.0)
+ax1.set_xlabel(r'$x_{1}$')
+ax1.set_ylabel(r'$x_{2}$')
+ax1.imshow(F, aspect='auto', cmap='jet', extent=[-3.0, 3.0, -3.0, 3.0], origin='upper-left')
+ax1.scatter(swarm.history[:, 0, 0], swarm.history[:, 0, 1], color='black')
+ax2 = fig.add_subplot(1, 2, 2)
+ax2.set_xlabel('Number of generation')
+ax2.set_ylabel('Lower value of peak function found')
+ax2.plot(fit[:, 0], color='red')
+ax2.plot(fit[:, 1], color='gray');
+```
+
+
+![png](output_14_0.png)
 
 
 ## References
