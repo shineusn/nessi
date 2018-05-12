@@ -23,11 +23,9 @@ The Peaks function in Equation 6 is a function of two
 variables,  obtained  by  translating  and  scaling  Gaussian
 distributions.  It  has  multiple  peaks  which  are  located
 at  (0,1.58),  (0.46,0.63),  and  (1.28,0)  with  different  peak
-function values (Aljarah & Ludwig, 2013). The function has the following definition: 
+function values (Aljarah & Ludwig, 2013). The function has the following definition:
 
-$$
-F(X, Y) = 3(1-X)^{2}e^{-[X^{2}+(Y+1)^{2}]}+10\left(\frac{X}{5}-X^{3}-Y^{5}\right)e^{-[X^{2}+Y^{2}]}-\frac{1}{3}e^{-[(X+1)^{2}+Y^{2}]}
-$$
+![png](peak_equation.png)
 
 
 ```python
@@ -74,7 +72,7 @@ surf = ax.plot_surface(X, Y, F, vmin=-6.0, vmax=8.0, cmap='jet')
 ```
 
 
-![png](output_7_0.png)
+![png](output_8_0.png)
 
 
 ## References
