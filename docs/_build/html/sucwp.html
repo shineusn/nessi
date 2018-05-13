@@ -1,0 +1,152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SU/CWP format &#8212; NeSSI 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to NeSSI’s documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NeSSI’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NeSSI 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nessi.io.su_fmt">
+<span id="su-cwp-format"></span><h1>SU/CWP format<a class="headerlink" href="#module-nessi.io.su_fmt" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-su_fmt"></span><dl class="class">
+<dt id="nessi.io.su_fmt.SUdata">
+<em class="property">class </em><code class="descclassname">nessi.io.su_fmt.</code><code class="descname">SUdata</code><a class="headerlink" href="#nessi.io.su_fmt.SUdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seismic Unix format support</p>
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>data</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a minimal SU file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.image">
+<code class="descname">image</code><span class="sig-paren">(</span><em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>matplotlib.pyplot.imshow adapted for SU files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.masw">
+<code class="descname">masw</code><span class="sig-paren">(</span><em>vmin=0.0</em>, <em>vmax=1000.0</em>, <em>dv=5.0</em>, <em>fmin=1.0</em>, <em>fmax=100.0</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.masw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the dispersion diagram using MASW method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>filename</em>, <em>endian=' '</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Seismic Unix file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – name of the SU file</li>
+<li><strong>endian</strong> – byte order: little endian (default) ‘l’, big endian ‘b’.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.wind">
+<code class="descname">wind</code><span class="sig-paren">(</span><em>tmin=0.0</em>, <em>tmax=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.wind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Windowing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.su_fmt.SUdata.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#nessi.io.su_fmt.SUdata.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write SU file on disk</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to NeSSI’s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sucwp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NeSSI’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NeSSI 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Damien Pageot.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
+  </body>
+</html>
