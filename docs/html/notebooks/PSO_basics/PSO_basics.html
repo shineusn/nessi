@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Particle Swarm Optimization: basics &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Introduction" href="../../introduction.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NeSSI
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Particle Swarm Optimization: basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#method">Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-example">A simple example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-peak-function">1-The peak function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-the-search-space">2-Define the search-space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#process">3-Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Particle Swarm Optimization: basics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/notebooks/PSO_basics/PSO_basics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="particle-swarm-optimization-basics">
+<h1>Particle Swarm Optimization: basics<a class="headerlink" href="#particle-swarm-optimization-basics" title="Permalink to this headline">¶</a></h1>
+<p>Particle swarm optimization (PSO), first proposed by Eberhart and
+Kennedy (1995), is a population-based algorithm which intends for
+simulating the social behavior of a bird flock (swarm of particles) to
+reach the optimum region of the search space.</p>
+<p>PSO is quite recent in the framework of geophysical data inversion (Shaw
+and Srivastava, 2007; Yuan et al., 2009) and is not yet widely used like
+well-known global optimization methods such as Monte-Carlo (Metropolis
+and Ulam, 1949; Mosegaard and Tarantola, 1995; Mosegaard and Sambridge,
+2002; Socco and Boiero, 2008), simulated-annealing (Ryden and Park,
+2006) or neighbourhood algorithm (Sambridge, 1999a,b, 2001). However, it
+was successfully applied to surface-wave analysis (Song et al., 2012;
+Wilken and Rabbel, 2012), traveltime tomography (Tronicke et al., 2012;
+Luu et al., 2016), seismic refraction (Poormirzaee et al., 2014) and
+seismic wave impedance inversion in igneous rock (Yang et al., 2017).</p>
+<p>Banks et al. (2007, 2008); Zhang et al. (2015)</p>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>In PSO, individuals (<img class="math" src="../../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>), or particles, are characterized by a
+velocity vector
+<img class="math" src="../../_images/math/422d50cf6986157ff4038b8d226c92534da1be9b.png" alt="V_{i} = [v^{1}_{i},..., v^{d}_{i},..., v^{D}_{i}] \in R^{D}"/> and
+a position vector
+<img class="math" src="../../_images/math/23a2f6b22e695ee880750361bdde5e0c95a95f4f.png" alt="X_{i} = [x^{1}_{i},..., x^{d}_{i},..., x^{D}_{i}] \in R^{D}"/> in
+D-dimensional solution space. All particles are initialized with random
+values at the beginning of the inversion process and the corresponding
+velocity vectors are set to zero.</p>
+<p>The standard PSO update formulas are (Eberhart and Kennedy, 1995):</p>
+</div>
+<div class="section" id="a-simple-example">
+<h2>A simple example<a class="headerlink" href="#a-simple-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import matplotlib and numpy modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+
+<span class="c1"># Import the Swarm class from NeSSI</span>
+<span class="kn">from</span> <span class="nn">nessi.pso</span> <span class="k">import</span> <span class="n">Swarm</span>
+</pre></div>
+</div>
+<div class="section" id="the-peak-function">
+<h3>1-The peak function<a class="headerlink" href="#the-peak-function" title="Permalink to this headline">¶</a></h3>
+<p>The Peaks function in Equation 6 is a function of two variables,
+obtained by translating and scaling Gaussian distributions. It has
+multiple peaks which are located at (0,1.58), (0.46,0.63), and (1.28,0)
+with different peak function values (Aljarah &amp; Ludwig, 2013). The
+function has the following definition:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">peaksF</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">X</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">X</span><span class="p">)</span>\
+                <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">X</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="p">(</span><span class="n">Y</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>\
+                <span class="o">-</span><span class="mf">10.</span><span class="o">*</span><span class="p">(</span><span class="n">X</span><span class="o">/</span><span class="mf">5.</span><span class="o">-</span><span class="n">X</span><span class="o">**</span><span class="mi">3</span><span class="o">-</span><span class="n">Y</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>\
+                <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">X</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">Y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>\
+                <span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">X</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">Y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">F</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize 3D plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_</span><span class="si">{1}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">)</span>
+
+<span class="c1"># Calculate peak function</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">61</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">61</span><span class="p">))</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">peaksF</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">8.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../../_images/output_7_0.png" src="../../_images/output_7_0.png" />
+</div>
+<div class="section" id="define-the-search-space">
+<h3>2-Define the search-space<a class="headerlink" href="#define-the-search-space" title="Permalink to this headline">¶</a></h3>
+<p>The search-space is delimited by the minimum and maximum values of each
+parameter (x1 and x2 in this case). An increment value (dx) is added to
+control the maximum displacement of the swarm’s particles.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="19%" />
+<col width="13%" />
+<col width="19%" />
+<col width="19%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">x1 min</th>
+<th class="head">x1 max</th>
+<th class="head">dx1</th>
+<th class="head">x2 min</th>
+<th class="head">x2 max</th>
+<th class="head">dx2</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-3.0</td>
+<td>3.0</td>
+<td>0.3</td>
+<td>-3.0</td>
+<td>3.0</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="process">
+<h3>3-Process<a class="headerlink" href="#process" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the swarm object</span>
+<span class="n">swarm</span> <span class="o">=</span> <span class="n">Swarm</span><span class="p">()</span>
+
+<span class="c1"># PSO parameters</span>
+<span class="n">fmod</span> <span class="o">=</span> <span class="s1">&#39;pspace_peaks.ascii&#39;</span>
+<span class="n">ngen</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">nindv</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Get the search-space</span>
+<span class="n">swarm</span><span class="o">.</span><span class="n">init_pspace</span><span class="p">(</span><span class="n">fmod</span><span class="p">)</span>
+
+<span class="c1"># Initialize particles</span>
+<span class="n">swarm</span><span class="o">.</span><span class="n">init_particles</span><span class="p">(</span><span class="n">nindv</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First evaluation</span>
+<span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">peaksF</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">current</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">swarm</span><span class="o">.</span><span class="n">current</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">)</span>
+<span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop over generations</span>
+<span class="k">for</span> <span class="n">igen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ngen</span><span class="p">):</span>
+    <span class="c1"># Update</span>
+    <span class="n">swarm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Evaluation</span>
+    <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+        <span class="n">vfit</span> <span class="o">=</span> <span class="n">peaksF</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">swarm</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">vfit</span> <span class="o">&lt;</span> <span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">indv</span><span class="p">]:</span>
+            <span class="n">swarm</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">swarm</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">indv</span><span class="p">]</span> <span class="o">=</span> <span class="n">vfit</span>
+    <span class="c1"># Store the misfit values</span>
+    <span class="n">fit</span><span class="p">[</span><span class="n">igen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">)</span>
+    <span class="n">fit</span><span class="p">[</span><span class="n">igen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">misfit</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_</span><span class="si">{1}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$x_</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;upper-left&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">swarm</span><span class="o">.</span><span class="n">history</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">swarm</span><span class="o">.</span><span class="n">history</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Number of generation&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Lower value of peak function found&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fit</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fit</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../../_images/output_13_0.png" src="../../_images/output_13_0.png" />
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>Aljarah, I. &amp; Ludwig, S. (2013). A MapReduce based Glowworm Swarm
+Optimization Approach for Multimodal Functions.
+<em>10.1109/SIS.2013.6615155</em>.</p>
+<p>Eberhart, R. C., &amp; Kennedy, J. (1995). Particle swarm optimization. In
+<em>IEEE International Conference on Neural Networks, Perth, Australia.</em></p>
+<p>Shi, Y., &amp; Eberhart, R. (1998, May). A modified particle swarm
+optimizer. In <em>Evolutionary Computation Proceedings, 1998. IEEE World
+Congress on Computational Intelligence., The 1998 IEEE International
+Conference on (pp. 69-73). IEEE.</em></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../../introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

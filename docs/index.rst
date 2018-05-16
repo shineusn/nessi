@@ -8,9 +8,11 @@ Welcome to NeSSI's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
+   introduction
+	      
+   notebooks/PSO_basics/PSO_basics
+	     
 
 Indices and tables
 ==================
