@@ -1,4 +1,4 @@
-![NeSSI logo](doc/nessi.png)
+![NeSSI logo](https://raw.githubusercontent.com/wiki/PageotD/nessi/images/nessi.png)
 ![Powered by PYTHON](https://www.python.org/static/community_logos/python-powered-w-100x40.png)
 ![LGPL3 logo](https://www.gnu.org/graphics/lgplv3-88x31.png)
 
