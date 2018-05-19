@@ -65,5 +65,42 @@ This system can be expressed in term of velocity instead of displacement which l
 Staggered grid
 ==============
 
+The staggered-grid approach (:cite:`levander1988fourth`), initially developed for two-dimensional P-Sv seismic wave propagation modeling, is fourth-order accurate space and second order accurate time (:math:`O(\Delta t^{2},h^{4})`) numerical scheme.
+
+The staggered-grid allows to correctly model any variation of the material properties with a minimal numerical dispersion and anisotropy. The scheme can also be used to model wave propagation in mixed acoustic-elastic media with a good accuracy.
+
+:cite:`virieux1986psv,bohlen2006accuracy`
+
+.. figure:: images/fdtd/staggered.png
+	    :figwidth: 90 %
+	    :align: center
+
+	    Staggered finite-difference grid and spatial stencils for (a) the velocity update and (b) the stress update. After :cite:`levander1988fourth` with velocity-stress position switch proposed by :cite:`bohlen2006accuracy`.
+
+==============
+Discretization
+==============
+
+Given the use of the staggered-grid scheme to discretize the space, forward and backward finite-difference operators are use to solve the velocity-stress equations.
+
+The fourth-order forward (:math:`D^{+}`) and backward (:math:`D^{-}`) operators are widely used and are defined, in 1D, as:
+
+.. math::
+   D^{+}=c_{1}[f(i+1)-f(i)]+c_{2}[f(i+2)-f(i-1)] \nonumber \\
+   D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]
+   :label: fd-forward-backward
+
+:cite:`graves1996simulating`
+
+.. math::
+   \bar{\mu}(i+\frac{1}{2}, j+\frac{1}{2})=\left[ \frac{1}{4} \left( \frac{1}{\mu(i,j)}+\frac{1}{\mu(i+1,j)}+\frac{1}{\mu(i,j+1)}+\frac{1}{\mu(i+1,j+1)} \right) \right]^{-1} \\
+  \rho_{x}(i,j+\frac{1}{2}) = \frac{1}{2}(\rho (i,j+1)+\rho(i,j)) \\
+  \rho_{z}(i+\frac{1}{2},j) = \frac{1}{2}(\rho (i+1,j)+\rho(i,j))
+
+
+
+==========
+References
+==========
 
 .. bibliography:: references.bib

@@ -85,6 +85,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#governing-equation">Governing equation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#staggered-grid">Staggered grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discretization">Discretization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
@@ -212,16 +214,51 @@
 </div></div>
 <div class="section" id="staggered-grid">
 <h2>Staggered grid<a class="headerlink" href="#staggered-grid" title="Permalink to this headline">¶</a></h2>
+<p>The staggered-grid approach (<a class="reference internal" href="#levander1988fourth" id="id12">[Lev88]</a>), initially developed for two-dimensional P-Sv seismic wave propagation modeling, is fourth-order accurate space and second order accurate time (<img class="math" src="_images/math/edd4d67f6effec8250aa4becf615e54df50daff2.png" alt="O(\Delta t^{2},h^{4})"/>) numerical scheme.</p>
+<p>The staggered-grid allows to correctly model any variation of the material properties with a minimal numerical dispersion and anisotropy. The scheme can also be used to model wave propagation in mixed acoustic-elastic media with a good accuracy.</p>
+<p><a class="reference internal" href="#virieux1986psv" id="id13">[Vir86]</a><a class="reference internal" href="#bohlen2006accuracy" id="id14">[BS06]</a></p>
+<div class="figure align-center" id="id18" style="width: 90%">
+<img alt="_images/staggered.png" src="_images/staggered.png" />
+<p class="caption"><span class="caption-text">Staggered finite-difference grid and spatial stencils for (a) the velocity update and (b) the stress update. After <a class="reference internal" href="#levander1988fourth" id="id15">[Lev88]</a> with velocity-stress position switch proposed by <a class="reference internal" href="#bohlen2006accuracy" id="id16">[BS06]</a>.</span></p>
+</div>
+</div>
+<div class="section" id="discretization">
+<h2>Discretization<a class="headerlink" href="#discretization" title="Permalink to this headline">¶</a></h2>
+<p>Given the use of the staggered-grid scheme to discretize the space, forward and backward finite-difference operators are use to solve the velocity-stress equations.</p>
+<p>The fourth-order forward (<img class="math" src="_images/math/c703bbd4ec884da302b94f7b90aeece130dd8346.png" alt="D^{+}"/>) and backward (<img class="math" src="_images/math/3679044f3b7db44a244ce094f260c092663b4238.png" alt="D^{-}"/>) operators are widely used and are defined, in 1D, as:</p>
+<div class="math" id="equation-fd-forward-backward">
+<p><span class="eqno">(8)<a class="headerlink" href="#equation-fd-forward-backward" title="Permalink to this equation">¶</a></span><img src="_images/math/f079650c73c71b82ad25a325fa4c342e9265e36a.png" alt="D^{+}=c_{1}[f(i+1)-f(i)]+c_{2}[f(i+2)-f(i-1)] \nonumber \\
+D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]"/></p>
+</div><p><a class="reference internal" href="#graves1996simulating" id="id17">[Gra96]</a></p>
+<div class="math">
+<p><img src="_images/math/a81a62b199a389cd7ce7a479d1d0596e621e5dfe.png" alt="\bar{\mu}(i+\frac{1}{2}, j+\frac{1}{2})=\left[ \frac{1}{4} \left( \frac{1}{\mu(i,j)}+\frac{1}{\mu(i+1,j)}+\frac{1}{\mu(i,j+1)}+\frac{1}{\mu(i+1,j+1)} \right) \right]^{-1} \\
+\rho_{x}(i,j+\frac{1}{2}) = \frac{1}{2}(\rho (i,j+1)+\rho(i,j)) \\
+\rho_{z}(i+\frac{1}{2},j) = \frac{1}{2}(\rho (i+1,j)+\rho(i,j))"/></p>
+</div></div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p id="bibtex-bibliography-seismic_modeling-0"><table class="docutils citation" frame="void" id="aki2002quantitative" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id10">[AR02]</a></td><td>Keiiti Aki and Paul&nbsp;G Richards. <em>Quantitative seismology</em>. Volume&nbsp;1. University Science Books,U.S., 2002.</td></tr>
 </tbody>
 </table>
+<table class="docutils citation" frame="void" id="bohlen2006accuracy" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[BS06]</td><td><em>(<a class="fn-backref" href="#id14">1</a>, <a class="fn-backref" href="#id16">2</a>)</em> Thomas Bohlen and Erik&nbsp;H Saenger. Accuracy of heterogeneous staggered-grid finite-difference modeling of rayleigh waves. <em>Geophysics</em>, 71(4):T109–T115, 2006. <a class="reference external" href="https://doi.org/10.1190/1.2213051">doi:10.1190/1.2213051</a>.</td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="faccioli19972d" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id5">[FMPQ97]</a></td><td>E&nbsp;Faccioli, F&nbsp;Maggio, R&nbsp;Paolucci, and A&nbsp;Quarteroni. 2d and 3d elastic wave propagation by a pseudo-spectral domain decomposition method. <em>Journal of seismology</em>, 1(3):237–251, 1997.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="graves1996simulating" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[Gra96]</a></td><td>R.W. Graves. Simulating seismic wave propagation in 3d elastic media using staggered-grid finite-differences. <em>BSSA</em>, 1996.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="kelly1976synthetic" rules="none">
@@ -240,6 +277,12 @@
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id8">[KVV+99]</a></td><td>Dimitri Komatitsch, Jean-Pierre Vilotte, Rossana Vai, Jose&nbsp;M Castillo-Covarrubias, and Francisco&nbsp;J Sanchez-Sesma. The spectral element method for elastic wave equations-application to 2-d and 3-d seismic problems. <em>International Journal for numerical methods in engineering</em>, 45(9):1139–1164, 1999. <a class="reference external" href="https://doi.org/10.1002/(sici)1097-0207(19990730)45:9&lt;1139::aid-nme617&gt;3.0.co;2-t">doi:10.1002/(sici)1097-0207(19990730)45:9&lt;1139::aid-nme617&gt;3.0.co;2-t</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="levander1988fourth" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Lev88]</td><td><em>(<a class="fn-backref" href="#id12">1</a>, <a class="fn-backref" href="#id15">2</a>)</em> Alan&nbsp;R Levander. Fourth-order finite-difference p-sv seismograms. <em>Geophysics</em>, 53(11):1425–1436, 1988.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="li2016optimal" rules="none">
@@ -269,7 +312,7 @@
 <table class="docutils citation" frame="void" id="virieux1986psv" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[Vir86]</a></td><td>Jean Virieux. P-sv wave propagation in heterogeneous media: velocity-stress finite-difference method. <em>Geophysics</em>, 51(4):889–901, 1986.</td></tr>
+<tr><td class="label">[Vir86]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id13">2</a>)</em> Jean Virieux. P-sv wave propagation in heterogeneous media: velocity-stress finite-difference method. <em>Geophysics</em>, 51(4):889–901, 1986.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="virieux2016modelling" rules="none">
