@@ -10,7 +10,7 @@ Welcome to NeSSI's documentation!
    :maxdepth: 2
 
    introduction
-	      
+   seismic_modeling
    notebooks/PSO_basics/PSO_basics
 	     
 
