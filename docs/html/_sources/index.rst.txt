@@ -7,10 +7,11 @@ Welcome to NeSSI's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    introduction
    seismic_modeling
+   seismic_modeling_examples
    notebooks/PSO_basics/PSO_basics
 	     
 
