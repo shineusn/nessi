@@ -1,10 +1,11 @@
 import numpy as np
 from ctypes import CDLL, c_int, c_float, byref, POINTER, c_double
 from numpy.ctypeslib import ndpointer, load_library
+from nessi import QGPCOREWAVE_PATH
 
 import matplotlib.pyplot as plt
 
-libCoreWave = load_library('libQGpCoreWave', '/opt/geopsypack/2.10.1/lib/')
+libCoreWave = load_library('libQGpCoreWave', QGPCOREWAVE_PATH)
 
 def dispersion_curve_init(verbose):
     libCoreWave.dispersion_curve_init_.argtypes = [POINTER(c_int)]
