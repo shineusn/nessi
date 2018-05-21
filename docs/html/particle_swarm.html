@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Particle Swarm Optimization &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Particle Swarm Optimization: basics" href="notebooks/PSO_basics/PSO_basics.html" />
+    <link rel="prev" title="Seismic modeling examples" href="seismic_modeling_examples.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NeSSI
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Particle Swarm Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#method">Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Particle Swarm Optimization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/particle_swarm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="particle-swarm-optimization">
+<h1>Particle Swarm Optimization<a class="headerlink" href="#particle-swarm-optimization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Particle swarm optimization (PSO), first proposed by <a class="reference internal" href="#eberhart1995new" id="id1">[EK95]</a>, is a population-based algorithm which intends for simulating the social behavior of a bird flock (swarm of particles) to reach the optimum region of the search space.</p>
+<p>PSO is quite recent in the framework of geophysical data inversion (<a class="reference internal" href="#shaw2007particle" id="id2">[SS07]</a><a class="reference internal" href="#yuan2009swarm" id="id3">[YWT09]</a>) and is not yet widely used like well-known global optimization methods such as Monte-Carlo (<a class="reference internal" href="#metropolis1949monte" id="id4">[MU49]</a><a class="reference internal" href="#mosegaard1995monte" id="id5">[MT95]</a><a class="reference internal" href="#mosegaard2002monte" id="id6">[MS02]</a><a class="reference internal" href="#socco2008improved" id="id7">[SB08]</a>), simulated-annealing (<a class="reference internal" href="#ryden2006fast" id="id8">[RP06]</a>) or neighbourhood algorithm (<a class="reference internal" href="#sambridge1999neighbourhood" id="id9">[Sam99a]</a><a class="reference internal" href="#sambridge1999neighbourhoodb" id="id10">[Sam99b]</a><a class="reference internal" href="#sambridge2001finding" id="id11">[Sam01]</a>). However, it was successfully applied to surface-wave analysis (<a class="reference internal" href="#song2012application" id="id12">[STL+12]</a><a class="reference internal" href="#wilken2012application" id="id13">[WR12]</a>), traveltime tomography (<a class="reference internal" href="#tronicke2012crosshole" id="id14">[TPBoniger12]</a><a class="reference internal" href="#luu2016competitive" id="id15">[LNG16]</a>), seismic refraction (<a class="reference internal" href="#poormirzaee2014introducing" id="id16">[PMZ14]</a>) and seismic wave impedance inversion in igneous rock (<a class="reference internal" href="#yang2017particle" id="id17">[YXP+17]</a>).</p>
+<p>(<a class="reference internal" href="#banks2007review" id="id18">[BVA07]</a><a class="reference internal" href="#banks2008review" id="id19">[BVA08]</a><a class="reference internal" href="#zhang2015comprehensive" id="id20">[ZWJ15]</a>).</p>
+</div>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>In PSO, individuals <em>i</em>, or particles, are characterized by a velocity vector <img class="math" src="_images/math/4b93340c41287156f0c28383d907a7780775b9fd.png" alt="\mathbf{V}_{i}=[v_{i}^{1},...,v_{i}^{d},...,v_{i}^{D}]\ \in \mathrm{R}^{D}"/> and a position vector <img class="math" src="_images/math/1e1afd91c7c736a16bc5638a42e33163f9914bee.png" alt="\mathbf{X}_{i}=[x_{i}^{1},...,x_{i}^{d},...,x_{i}^{D}]\ \in \mathrm{R}^{D}"/> in D-dimensional solution space. All particles are initialized with random values at the beginning of the inversion process and the corresponding velocity vectors are set to zero.</p>
+<p>The standard PSO update formulas are (<a class="reference internal" href="#eberhart1995new" id="id21">[EK95]</a>):</p>
+<div class="math" id="equation-pso-canonical-update-v">
+<p><span class="eqno">(1)<a class="headerlink" href="#equation-pso-canonical-update-v" title="Permalink to this equation">¶</a></span><img src="_images/math/4a0e56d85316fd69a0fe38fa79dc8df58cef47fb.png" alt="\mathbf{V}_{i}^{k} = \mathbf{V}_{i}^{k-1}+c_{p} \times \mathbf{r_{p}} \times (\mathbf{X}_{\mathbf{p},i}-\mathbf{X}_{i}^{k-1})+c_{g} \times \mathbf{r_{g}} \times (\mathbf{X}_{\mathbf{g}}-\mathbf{X}_{i}^{k-1})"/></p>
+</div><div class="math" id="equation-pso-canonical-update-x">
+<p><span class="eqno">(2)<a class="headerlink" href="#equation-pso-canonical-update-x" title="Permalink to this equation">¶</a></span><img src="_images/math/1a1a9439bdfffc6efee596c85728c4b6d1022047.png" alt="\mathbf{X}_{i}^{k} = \mathbf{X}_{i}^{k-1}+ \mathbf{V}_{i}^{k}\ ,"/></p>
+</div><p>where <img class="math" src="_images/math/d526f4253313daa73175a478f4ded7541cfd3586.png" alt="\mathbf{r_{p}}"/> and <img class="math" src="_images/math/d1dab0d21c9d8ff13eb2bc5e4293253b79813b25.png" alt="\mathbf{r_{2}}"/> are vectors of random values that induce stochacity (<a class="reference internal" href="#souravlias2016particle" id="id22">[SP16]</a>), <img class="math" src="_images/math/31419d8e711dc3a1d662f84d8805c8b6a0888277.png" alt="c_{p}"/> is the cognitive parameter, <img class="math" src="_images/math/6a1ae2af668f944788bcf24350f3b802a1645018.png" alt="c_{g}"/> is the social parameter and <img class="math" src="_images/math/de90abaed2cd742c18620857fb25866183b0e417.png" alt="c_{p}=c_{g}=2"/> in most cases.</p>
+<p>Classical improvements of PSO concern the control of the velocity vector through the use of an inertia weight <img class="math" src="_images/math/ecd1ee2a1cd226b40c37e079aca62398d4b774f5.png" alt="w"/> (<a class="reference internal" href="#bansal2011inertia" id="id23">[BSS+11]</a>) or a constriction factor <img class="math" src="_images/math/1bc8153a40ba7d2281c26bfe99604ad9e6f34749.png" alt="\chi"/> (<a class="reference internal" href="#shi1998modified" id="id24">[SE98]</a><a class="reference internal" href="#clerc1999swarm" id="id25">[Cle99]</a><a class="reference internal" href="#eberhart2000comparing" id="id26">[ES00]</a>).</p>
+<div class="math" id="equation-inertia-update">
+<p><span class="eqno">(3)<a class="headerlink" href="#equation-inertia-update" title="Permalink to this equation">¶</a></span><img src="_images/math/c311f226acb7c26159347acef685e977309432b2.png" alt="\mathbf{V}_{i}^{k} = w \times \mathbf{V}_{i}^{k-1}+c_{p} \times \mathbf{r_{p}} \times (\mathbf{X}_{\mathbf{p},i}-\mathbf{X}_{i}^{k-1})+c_{g} \times \mathbf{r_{g}} \times (\mathbf{X}_{\mathbf{g}}-\mathbf{X}_{i}^{k-1})\ ,"/></p>
+</div><div class="math" id="equation-constriction-update">
+<p><span class="eqno">(4)<a class="headerlink" href="#equation-constriction-update" title="Permalink to this equation">¶</a></span><img src="_images/math/d74993c31f1f409cb4c0f27c03c54669f51480de.png" alt="\mathbf{V}_{i}^{k} = \chi \times \left[ \mathbf{V}_{i}^{k-1}+c_{p} \times \mathbf{r_{p}} \times (\mathbf{X}_{\mathbf{p},i}-\mathbf{X}_{i}^{k-1})+c_{g} \times \mathbf{r_{g}} \times (\mathbf{X}_{\mathbf{g}}-\mathbf{X}_{i}^{k-1}) \right]\ ."/></p>
+</div><p>Note that the value of <img class="math" src="_images/math/1bc8153a40ba7d2281c26bfe99604ad9e6f34749.png" alt="\chi"/> is directly related to the values of <img class="math" src="_images/math/31419d8e711dc3a1d662f84d8805c8b6a0888277.png" alt="c_{p}"/> and <img class="math" src="_images/math/6a1ae2af668f944788bcf24350f3b802a1645018.png" alt="c_{g}"/> such as:</p>
+<div class="math" id="equation-constriction-factor">
+<p><span class="eqno">(5)<a class="headerlink" href="#equation-constriction-factor" title="Permalink to this equation">¶</a></span><img src="_images/math/dcd0dc542914885b11a174f9ad3acf4e74d1448a.png" alt="\chi = \frac{2}{2-\phi-\sqrt{\phi^{2}-4\phi}}\ , ."/></p>
+</div><p>where <img class="math" src="_images/math/574bd9826daa2ff4d02587cd26da7ff4a3a754f2.png" alt="\phi=c_{p}+c_{g}"/> and <img class="math" src="_images/math/d133de60c3b892f58280a7ffc363827abfc27926.png" alt="\phi &gt; 4.1"/>. For <img class="math" src="_images/math/b783bffda36be2aaa92af05364e4fccd5a849940.png" alt="c_{p}=c_{g}=2.05"/>, equation <a class="reference internal" href="#equation-constriction-update">(4)</a> is equivalent to equation <a class="reference internal" href="#equation-inertia-update">(3)</a> using <img class="math" src="_images/math/26d42c6d56a0b1ba2fc8ae4880f492a819b83dc8.png" alt="\omega= 0.7298"/> and <img class="math" src="_images/math/77d1758a97dde743d8a80fcad99f6e27591addfb.png" alt="c_{p}=c_{g}=1.4962"/>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Add pseudo-code image here</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p id="bibtex-bibliography-particle_swarm-0"><table class="docutils citation" frame="void" id="aki2002quantitative" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[AR02]</td><td>Keiiti Aki and Paul&nbsp;G Richards. <em>Quantitative seismology</em>. Volume&nbsp;1. University Science Books,U.S., 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="banks2007review" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id18">[BVA07]</a></td><td>Alec Banks, Jonathan Vincent, and Chukwudi Anyakoha. A review of particle swarm optimization. part i: background and development. <em>Natural Computing</em>, 6(4):467–484, 2007. <a class="reference external" href="https://doi.org/10.1007/s11047-007-9049-5">doi:10.1007/s11047-007-9049-5</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="banks2008review" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id19">[BVA08]</a></td><td>Alec Banks, Jonathan Vincent, and Chukwudi Anyakoha. A review of particle swarm optimization. part ii: hybridisation, combinatorial, multicriteria and constrained optimization, and indicative applications. <em>Natural Computing</em>, 7(1):109–124, 2008. <a class="reference external" href="https://doi.org/10.1007/s11047-007-9050-z">doi:10.1007/s11047-007-9050-z</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="bansal2011inertia" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id23">[BSS+11]</a></td><td>Jagdish&nbsp;Chand Bansal, PK&nbsp;Singh, Mukesh Saraswat, Abhishek Verma, Shimpi&nbsp;Singh Jadon, and Ajith Abraham. Inertia weight strategies in particle swarm optimization. In <em>Nature and Biologically Inspired Computing (NaBIC), 2011 Third World Congress on</em>, 633–640. IEEE, 2011. <a class="reference external" href="https://doi.org/10.1109/nabic.2011.6089659">doi:10.1109/nabic.2011.6089659</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="berenger1994perfectly" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Ber94]</td><td>Jean-Pierre Berenger. A perfectly matched layer for the absorption of electromagnetic waves. <em>Journal of computational physics</em>, 114(2):185–200, 1994. <a class="reference external" href="https://doi.org/10.1006/jcph.1994.1159">doi:10.1006/jcph.1994.1159</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="bohlen2006accuracy" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[BS06]</td><td>Thomas Bohlen and Erik&nbsp;H Saenger. Accuracy of heterogeneous staggered-grid finite-difference modeling of rayleigh waves. <em>Geophysics</em>, 71(4):T109–T115, 2006. <a class="reference external" href="https://doi.org/10.1190/1.2213051">doi:10.1190/1.2213051</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="clerc1999swarm" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id25">[Cle99]</a></td><td>Maurice Clerc. The swarm and the queen: towards a deterministic and adaptive particle swarm optimization. In <em>Evolutionary Computation, 1999. CEC 99. Proceedings of the 1999 Congress on</em>, volume&nbsp;3, 1951–1957. IEEE, 1999. <a class="reference external" href="https://doi.org/10.1109/cec.1999.785513">doi:10.1109/cec.1999.785513</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="eberhart2000comparing" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id26">[ES00]</a></td><td>Russ&nbsp;C Eberhart and Yuhui Shi. Comparing inertia weights and constriction factors in particle swarm optimization. In <em>Evolutionary Computation, 2000. Proceedings of the 2000 Congress on</em>, volume&nbsp;1, 84–88. IEEE, 2000. <a class="reference external" href="https://doi.org/10.1109/cec.2000.870279">doi:10.1109/cec.2000.870279</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="eberhart1995new" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[EK95]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id21">2</a>)</em> Russell Eberhart and James Kennedy. A new optimizer using particle swarm theory. In <em>Micro Machine and Human Science, 1995. MHS‘95., Proceedings of the Sixth International Symposium on</em>, 39–43. IEEE, 1995. <a class="reference external" href="https://doi.org/10.1109/mhs.1995.494215">doi:10.1109/mhs.1995.494215</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="faccioli19972d" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[FMPQ97]</td><td>E&nbsp;Faccioli, F&nbsp;Maggio, R&nbsp;Paolucci, and A&nbsp;Quarteroni. 2d and 3d elastic wave propagation by a pseudo-spectral domain decomposition method. <em>Journal of seismology</em>, 1(3):237–251, 1997.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="festa2005newmark" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[FV05]</td><td>Gaetano Festa and Jean-Pierre Vilotte. The newmark scheme as velocity–stress time-staggering: an efficient pml implementation for spectral element simulations of elastodynamics. <em>Geophysical Journal International</em>, 161(3):789–812, 2005. URL: <a class="reference external" href="http://dx.doi.org/10.1111/j.1365-246X.2005.02601.x">http://dx.doi.org/10.1111/j.1365-246X.2005.02601.x</a>, <a class="reference external" href="https://doi.org/10.1111/j.1365-246X.2005.02601.x">doi:10.1111/j.1365-246X.2005.02601.x</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="graves1996simulating" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Gra96]</td><td>R.W. Graves. Simulating seismic wave propagation in 3d elastic media using staggered-grid finite-differences. <em>BSSA</em>, 1996.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="kelly1976synthetic" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[KWTA76]</td><td>KR&nbsp;Kelly, RW&nbsp;Ward, Sven Treitel, and RM&nbsp;Alford. Synthetic seismograms: a finite-difference approach. <em>Geophysics</em>, 41(1):2–27, 1976. <a class="reference external" href="https://doi.org/10.1190/1.1440605">doi:10.1190/1.1440605</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="komatitsch2005spectral" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[KTT05]</td><td>Dimitri Komatitsch, Seiji Tsuboi, and Jeroen Tromp. The spectral-element method in seismology. <em>Seismic Earth: Array Analysis of Broadband Seismograms</em>, pages 205–227, 2005. <a class="reference external" href="https://doi.org/10.1029/157gm13">doi:10.1029/157gm13</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="komatitsch1999spectral" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[KVV+99]</td><td>Dimitri Komatitsch, Jean-Pierre Vilotte, Rossana Vai, Jose&nbsp;M Castillo-Covarrubias, and Francisco&nbsp;J Sanchez-Sesma. The spectral element method for elastic wave equations-application to 2-d and 3-d seismic problems. <em>International Journal for numerical methods in engineering</em>, 45(9):1139–1164, 1999. <a class="reference external" href="https://doi.org/10.1002/(sici)1097-0207(19990730)45:9&lt;1139::aid-nme617&gt;3.0.co;2-t">doi:10.1002/(sici)1097-0207(19990730)45:9&lt;1139::aid-nme617&gt;3.0.co;2-t</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="levander1988fourth" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Lev88]</td><td>Alan&nbsp;R Levander. Fourth-order finite-difference p-sv seismograms. <em>Geophysics</em>, 53(11):1425–1436, 1988.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="li2016optimal" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[LHMB16]</td><td>Y.&nbsp;Li, B.&nbsp;Han, L.&nbsp;Métivier, and R.&nbsp;Brossier. Optimal fourth-order staggered-grid finite-difference scheme for 3d frequency-domain viscoelastic wave modeling. <em>Journal of Computational Physics</em>, 321:1055 – 1078, 2016. URL: <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0021999116302431">http://www.sciencedirect.com/science/article/pii/S0021999116302431</a>, <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.jcp.2016.06.018">doi:https://doi.org/10.1016/j.jcp.2016.06.018</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="luu2016competitive" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id15">[LNG16]</a></td><td>Keurfon Luu, Mark Noble, and Alexandrine Gesret. A competitive particle swarm optimization for nonlinear first arrival traveltime tomography. In <em>SEG Technical Program Expanded Abstracts 2016</em>, pages 2740–2744. Society of Exploration Geophysicists, 2016. <a class="reference external" href="https://doi.org/10.1190/segam2016-13840267.1">doi:10.1190/segam2016-13840267.1</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mahmoudian2003review" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[MM03]</td><td>Faranak Mahmoudian and Gary&nbsp;F Margrave. A review of the finite-element method in seismic wave modelling. Technical Report, Technical report, CREWES Research Report, 2003.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="metropolis1949monte" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[MU49]</a></td><td>Nicholas Metropolis and Stanislaw Ulam. The monte carlo method. <em>Journal of the American statistical association</em>, 44(247):335–341, 1949. <a class="reference external" href="https://doi.org/10.2307/2280232">doi:10.2307/2280232</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mosegaard2002monte" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[MS02]</a></td><td>Klaus Mosegaard and Malcolm Sambridge. Monte carlo analysis of inverse problems. <em>Inverse Problems</em>, 18(3):R29, 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mosegaard1995monte" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[MT95]</a></td><td>Klaus Mosegaard and Albert Tarantola. Monte carlo sampling of solutions to inverse problems. <em>Journal of Geophysical Research: Solid Earth</em>, 100(B7):12431–12447, 1995.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="poormirzaee2014introducing" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id16">[PMZ14]</a></td><td>R&nbsp;Poormirzaee, R&nbsp;Hamidzadeh Moghadam, and A&nbsp;Zarean. Introducing particle swarm optimization (pso) to invert refraction seismic data. In <em>Near Surface Geoscience 2014-20th European Meeting of Environmental and Engineering Geophysics</em>. 2014. URL: <a class="reference external" href="http://earthdoc.eage.org/publication/download/?publication=77645">http://earthdoc.eage.org/publication/download/?publication=77645</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ryden2006fast" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[RP06]</a></td><td>Nils Ryden and Choon&nbsp;Byong Park. Fast simulated annealing inversion of surface waves on pavement using phase-velocity spectra. <em>Geophysics</em>, 71(4):R49–R58, 2006.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sambridge1999neighbourhood" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[Sam99a]</a></td><td>Malcolm Sambridge. Geophysical inversion with a neighbourhood algorithm—i. searching a parameter space. <em>Geophysical Journal International</em>, 138(2):479–494, 1999. URL: <a class="reference external" href="http://dx.doi.org/10.1046/j.1365-246X.1999.00876.x">http://dx.doi.org/10.1046/j.1365-246X.1999.00876.x</a>, <a class="reference external" href="https://doi.org/10.1046/j.1365-246X.1999.00876.x">doi:10.1046/j.1365-246X.1999.00876.x</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sambridge1999neighbourhoodb" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[Sam99b]</a></td><td>Malcolm Sambridge. Geophysical inversion with a neighbourhood algorithm—ii. appraising the ensemble. <em>Geophysical Journal International</em>, 138(3):727–746, 1999.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sambridge2001finding" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[Sam01]</a></td><td>Malcolm Sambridge. Finding acceptable models in nonlinear inverse problems using a neighbourhood algorithm. <em>Inverse Problems</em>, 17(3):387, 2001.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="seron1990finite" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[SSKB90]</td><td>F.&nbsp;J. Seron, F.&nbsp;J. Sanz, M.&nbsp;Kindelan, and J.&nbsp;I. Badal. Finite-element method for elastic wave propagation. <em>Communication in Applied Numerical Methods</em>, 6:359–368, 1990.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="shaw2007particle" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[SS07]</a></td><td>Ranjit Shaw and Shalivahan Srivastava. Particle swarm optimization: a new tool to invert geophysical data. <em>Geophysics</em>, 72(2):F75–F83, 2007.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="shi1998modified" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id24">[SE98]</a></td><td>Yuhui Shi and Russell Eberhart. A modified particle swarm optimizer. In <em>Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on</em>, 69–73. IEEE, 1998.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="socco2008improved" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[SB08]</a></td><td>Laura&nbsp;Valentina Socco and Daniele Boiero. Improved monte carlo inversion of surface wave data. <em>Geophysical Prospecting</em>, 56(3):357–371, 2008.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="song2012application" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id12">[STL+12]</a></td><td>Xianhai Song, Li&nbsp;Tang, Xiaochun Lv, Hongping Fang, and Hanming Gu. Application of particle swarm optimization to interpret rayleigh wave dispersion curves. <em>Journal of Applied Geophysics</em>, 84:1 – 13, 2012. URL: <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0926985112000961">http://www.sciencedirect.com/science/article/pii/S0926985112000961</a>, <a class="reference external" href="https://doi.org/http://doi.org/10.1016/j.jappgeo.2012.05.011">doi:http://doi.org/10.1016/j.jappgeo.2012.05.011</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="souravlias2016particle" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id22">[SP16]</a></td><td>Dimitris Souravlias and Konstantinos&nbsp;E Parsopoulos. Particle swarm optimization with neighborhood-based budget allocation. <em>International Journal of Machine Learning and Cybernetics</em>, 7(3):451–477, 2016.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="tronicke2012crosshole" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id14">[TPBoniger12]</a></td><td>Jens Tronicke, Hendrik Paasche, and Urs Böniger. Crosshole traveltime tomography using particle swarm optimization: a near-surface field example. <em>Geophysics</em>, 77(1):R19–R32, 2012.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="vanvossen2002finite" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[vVRC02]</td><td>Robbert van Vossen, J.&nbsp;O. Robertsson, and Chris&nbsp;H. Chapman. Finite-difference modeling of wave propagation in a fluid-solid configuration. <em>Geophysics</em>, 7(2):618–624, March-April 2002. <a class="reference external" href="https://doi.org/10.1190/1.1468623">doi:10.1190/1.1468623</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="virieux1984sh" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Vir84]</td><td>Jean Virieux. Sh-wave propagation in heterogeneous media: velocity-stress finite-difference method. <em>Geophysics</em>, 49(11):1933–1942, 1984.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="virieux1986psv" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Vir86]</td><td>Jean Virieux. P-sv wave propagation in heterogeneous media: velocity-stress finite-difference method. <em>Geophysics</em>, 51(4):889–901, 1986.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="virieux2016modelling" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[VCAB+16]</td><td>Jean Virieux, V&nbsp;Cruz-Atienza, R&nbsp;Brossier, Emmanuel Chaljub, O&nbsp;Coutant, S&nbsp;Garambois, D&nbsp;Mercerat, V&nbsp;Prieux, Stéphane Operto, A&nbsp;Ribodetti, and others. <em>Modelling seismic wave propagation for geophysical imaging</em>. Intech, 2016.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="wilken2012application" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[WR12]</a></td><td>D.&nbsp;Wilken and W.&nbsp;Rabbel. On the application of particle swarm optimization strategies on scholte-wave inversion. <em>Geophysical Journal International</em>, 190(1):580–594, 2012. URL: <a class="reference external" href="http://dx.doi.org/10.1111/j.1365-246X.2012.05500.x">http://dx.doi.org/10.1111/j.1365-246X.2012.05500.x</a>, <a class="reference external" href="https://doi.org/10.1111/j.1365-246X.2012.05500.x">doi:10.1111/j.1365-246X.2012.05500.x</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="yang2017particle" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[YXP+17]</a></td><td>Haijun Yang, Yongzhong Xu, Gengxin Peng, Guiping Yu, Meng Chen, Wensheng Duan, Yongfeng Zhu, Yongfu Cui, and Xingjun Wang. Particle swarm optimization and its application to seismic inversion of igneous rocks. <em>International Journal of Mining Science and Technology</em>, 27(2):349–357, 2017.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="yuan2009swarm" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[YWT09]</a></td><td>Sanyi Yuan, Shangxu Wang, and Nan Tian. Swarm intelligence optimization and its application in geophysical data inversion. <em>Applied Geophysics</em>, 6(2):166–174, 2009. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s11770-009-0018-x">http://dx.doi.org/10.1007/s11770-009-0018-x</a>, <a class="reference external" href="https://doi.org/10.1007/s11770-009-0018-x">doi:10.1007/s11770-009-0018-x</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="zhang2015comprehensive" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id20">[ZWJ15]</a></td><td>Yudong Zhang, Shuihua Wand, and Genlin Ji. A comprehensive survey on particle swarm optimization algorithm and its applications. <em>Mathematical problem in engineering</em>, 2015. <a class="reference external" href="https://doi.org/http://dx.doi.org/10.1155/2015/931256">doi:http://dx.doi.org/10.1155/2015/931256</a>.</td></tr>
+</tbody>
+</table>
+</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="notebooks/PSO_basics/PSO_basics.html" class="btn btn-neutral float-right" title="Particle Swarm Optimization: basics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="seismic_modeling_examples.html" class="btn btn-neutral" title="Seismic modeling examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
