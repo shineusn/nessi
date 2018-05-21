@@ -1,0 +1,138 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module swmwrap ! in 
+    interface  ! in :swmwrap
+        subroutine acqpos(n1,n2,npml,dh,nrec,acq,recpos) ! in :swmwrap:src/swm_acqpos.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            integer intent(in) :: npml
+            real(kind=4) intent(in) :: dh
+            integer, optional,intent(in),check(shape(acq,0)==nrec),depend(acq) :: nrec=shape(acq,0)
+            real(kind=4) dimension(nrec,2),intent(in) :: acq
+            integer dimension(nrec,2),intent(out),depend(nrec) :: recpos
+        end subroutine acqpos
+        subroutine dxforward(f,n1,n2,d) ! in :swmwrap:src/swm_deriv.f90
+            real(kind=4) dimension(n1,n2),intent(in) :: f
+            integer, optional,intent(in),check(shape(f,0)==n1),depend(f) :: n1=shape(f,0)
+            integer, optional,intent(in),check(shape(f,1)==n2),depend(f) :: n2=shape(f,1)
+            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: d
+        end subroutine dxforward
+        subroutine dxbackward(f,n1,n2,d) ! in :swmwrap:src/swm_deriv.f90
+            real(kind=4) dimension(n1,n2),intent(in) :: f
+            integer, optional,intent(in),check(shape(f,0)==n1),depend(f) :: n1=shape(f,0)
+            integer, optional,intent(in),check(shape(f,1)==n2),depend(f) :: n2=shape(f,1)
+            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: d
+        end subroutine dxbackward
+        subroutine dzforward(f,n1,n2,nsp,d,isurf) ! in :swmwrap:src/swm_deriv.f90
+            real(kind=4) dimension(n1,n2),intent(in) :: f
+            integer, optional,intent(in),check(shape(f,0)==n1),depend(f) :: n1=shape(f,0)
+            integer, optional,intent(in),check(shape(f,1)==n2),depend(f) :: n2=shape(f,1)
+            integer intent(in) :: nsp
+            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: d
+            integer intent(in) :: isurf
+        end subroutine dzforward
+        subroutine dzbackward(f,n1,n2,nsp,d,isurf) ! in :swmwrap:src/swm_deriv.f90
+            real(kind=4) dimension(n1,n2),intent(in) :: f
+            integer, optional,intent(in),check(shape(f,0)==n1),depend(f) :: n1=shape(f,0)
+            integer, optional,intent(in),check(shape(f,1)==n2),depend(f) :: n2=shape(f,1)
+            integer intent(in) :: nsp
+            real(kind=4) dimension(n1,n2),intent(out),depend(n1,n2) :: d
+            integer intent(in) :: isurf
+        end subroutine dzbackward
+        subroutine evolution(n1,n2,h,npml,nt,nts,ntsnap,dt,nrec,srctype,tsrc,gsrc,recx,recz,recp,recpos,isurf,isnap,bux,buz,lb0,lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1) ! in :swmwrap:src/swm_marching.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            real(kind=4) intent(in) :: h
+            integer intent(in) :: npml
+            integer, optional,intent(in),check(len(tsrc)>=nt),depend(tsrc) :: nt=len(tsrc)
+            integer intent(in) :: nts
+            integer intent(in) :: ntsnap
+            real(kind=4) intent(in) :: dt
+            integer, optional,intent(in),check(shape(recpos,0)==nrec),depend(recpos) :: nrec=shape(recpos,0)
+            integer intent(in) :: srctype
+            real(kind=4) dimension(nt),intent(in) :: tsrc
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: gsrc
+            real(kind=4) dimension(nts,nrec),intent(out),depend(nts,nrec) :: recx
+            real(kind=4) dimension(nts,nrec),intent(out),depend(nts,nrec) :: recz
+            real(kind=4) dimension(nts,nrec),intent(out),depend(nts,nrec) :: recp
+            integer dimension(nrec,2),intent(in) :: recpos
+            integer intent(in) :: isurf
+            integer intent(in) :: isnap
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: bux
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: buz
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: lb0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: lbmu
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: mue
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: pmlx0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: pmlx1
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: pmlz0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(in),depend(n1,npml,n2,npml) :: pmlz1
+        end subroutine evolution
+        subroutine modbuo(n1e,n2e,roe,bux,buz) ! in :swmwrap:src/swm_modbuo.f90
+            integer, optional,intent(in),check(shape(roe,0)==n1e),depend(roe) :: n1e=shape(roe,0)
+            integer, optional,intent(in),check(shape(roe,1)==n2e),depend(roe) :: n2e=shape(roe,1)
+            real(kind=4) dimension(n1e,n2e),intent(in) :: roe
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: bux
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: buz
+        end subroutine modbuo
+        subroutine modext(n1,n2,npml,v,ve) ! in :swmwrap:src/swm_modext.f90
+            integer, optional,intent(in),check(shape(v,0)==n1),depend(v) :: n1=shape(v,0)
+            integer, optional,intent(in),check(shape(v,1)==n2),depend(v) :: n2=shape(v,1)
+            integer intent(in) :: npml
+            real(kind=4) dimension(n1,n2),intent(in) :: v
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: ve
+        end subroutine modext
+        subroutine modlame(n1e,n2e,vpe,vse,roe,mu,lbd,lbdmu) ! in :swmwrap:src/swm_modlame.f90
+            integer, optional,intent(in),check(shape(vpe,0)==n1e),depend(vpe) :: n1e=shape(vpe,0)
+            integer, optional,intent(in),check(shape(vpe,1)==n2e),depend(vpe) :: n2e=shape(vpe,1)
+            real(kind=4) dimension(n1e,n2e),intent(in) :: vpe
+            real(kind=4) dimension(n1e,n2e),intent(in),depend(n1e,n2e) :: vse
+            real(kind=4) dimension(n1e,n2e),intent(in),depend(n1e,n2e) :: roe
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: mu
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lbd
+            real(kind=4) dimension(n1e,n2e),intent(out),depend(n1e,n2e) :: lbdmu
+        end subroutine modlame
+        subroutine pmlmod(n1,n2,h,isurf,npml,apml,ppml,pmlx0,pmlx1,pmlz0,pmlz1) ! in :swmwrap:src/swm_pmlmod.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            real(kind=4) intent(in) :: h
+            integer intent(in) :: isurf
+            integer intent(in) :: npml
+            real(kind=4) intent(in) :: apml
+            integer intent(in) :: ppml
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlx0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlx1
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz0
+            real(kind=4) dimension(n1+2*npml,n2+2*npml),intent(out),depend(n1,npml,n2,npml) :: pmlz1
+        end subroutine pmlmod
+        subroutine dirichlet(n1e,n2e,uxx,uxz,uzx,uzz) ! in :swmwrap:src/swm_pmlmod.f90
+            integer, optional,intent(in),check(shape(uxx,0)==n1e),depend(uxx) :: n1e=shape(uxx,0)
+            integer, optional,intent(in),check(shape(uxx,1)==n2e),depend(uxx) :: n2e=shape(uxx,1)
+            real(kind=4) dimension(n1e,n2e),intent(inout) :: uxx
+            real(kind=4) dimension(n1e,n2e),intent(inout),depend(n1e,n2e) :: uxz
+            real(kind=4) dimension(n1e,n2e),intent(inout),depend(n1e,n2e) :: uzx
+            real(kind=4) dimension(n1e,n2e),intent(inout),depend(n1e,n2e) :: uzz
+        end subroutine dirichlet
+        subroutine ricker(nt,dt,f0,t0,tsrc) ! in :swmwrap:src/swm_sources.f90
+            integer intent(in) :: nt
+            real(kind=4) intent(in) :: dt
+            real(kind=4) intent(in) :: f0
+            real(kind=4) intent(in) :: t0
+            real(kind=4) dimension(nt),intent(out),depend(nt) :: tsrc
+        end subroutine ricker
+        subroutine srcspread(n1,n2,nsp,xs,zs,h,gsrc,sigma) ! in :swmwrap:src/swm_sources.f90
+            integer intent(in) :: n1
+            integer intent(in) :: n2
+            integer intent(in) :: nsp
+            real(kind=4) intent(in) :: xs
+            real(kind=4) intent(in) :: zs
+            real(kind=4) intent(in) :: h
+            real(kind=4) dimension(n1+2*nsp,n2+2*nsp),intent(out),depend(n1,nsp,n2,nsp) :: gsrc
+            real(kind=4) intent(in) :: sigma
+        end subroutine srcspread
+    end interface 
+end python module swmwrap
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
