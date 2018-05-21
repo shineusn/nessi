@@ -97,7 +97,72 @@ The fourth-order forward (:math:`D^{+}`) and backward (:math:`D^{-}`) operators 
   \rho_{x}(i,j+\frac{1}{2}) = \frac{1}{2}(\rho (i,j+1)+\rho(i,j)) \\
   \rho_{z}(i+\frac{1}{2},j) = \frac{1}{2}(\rho (i+1,j)+\rho(i,j))
 
+===============================
+Initial and boundary conditions
+===============================
 
+---------------------------------
+PML absorbing boundary conditions
+---------------------------------
+
+At the scale of seismic exploration and less, the target area (*i.e.* the model), is a semi-infinite space bounded only at the top by a free surface. It is thus necessary to simulate a infinite medium at the lateral and bottom boundary. This can be achieve using the *Perfectly Matched Layer* (PML) absorbing boundaries. PML were initially developed in the framework of electro-magentic modeling by :cite:`berenger1994perfectly` and was quickly adopted in seismic modeling.
+
+In the time domain, PML can be defined as:
+
+.. math:: d = d_{0} \left( \frac{q}{L_{PML}} \right) ^{n}\ , \\
+	  d_{0} = Ac_{p} \frac{log(1/R)}{2L_{PML}}\ ,
+	  :label: pml
+		  
+where :math:`q` is the distance from PML intern boundary, :math:`L_{PML}` is the width of the PML, :math:`A` is the amplitude of the PML, :math:`c_{p}` is the P-wave velocity and :math:`R` is a reflection coefficient generally low. PML are parametrized following recommandations of :cite:`festa2005newmark`: :math:`A=3` and :math:`R=0.01`.
+
+------------
+Free surface
+------------
+
+As discussed in the previous subsection, the earth structures must be considered as semi-infinite space due to the presence of a free surface defined by the topography. Given the strong formulation of the wave equation used by finite-difference methods, the free surface must be explicitly defined.
+
+The image theory method is a way to apprximate the free surface and was firstly proposed by :cite:`levander1988fourth`.
+
+At free surface boundary condition :math:`z=0`, all normal stresses vanish:
+
+.. math:: \sigma_{zz} = \lambda \frac{\partial u_{x}}{\partial x}+(\lambda+2\mu)\frac{\partial u_{z}}{\partial z} =0 \nonumber \\
+	  \sigma_{xz} = \mu \left( \frac{\partial u_{z}}{\partial x} + \frac{\partial u_{x}}{\partial z} \right) = 0
+	  
+If the free surface on the staggered grid is defined along :math:`\sigma_{zz}`, :math:`\sigma_{zz}` is explicitly set to 0 and :math:`\sigma_{xz}` over the free surface is an odd function such as:
+
+.. math:: \sigma_{zz}^{z(i)=0}(i,j) = 0, \nonumber \\
+	  \sigma_{zz}^{z(i)=0}(i-\frac{1}{2},j) = -\sigma_{zz}^{z(i)=0}(i+\frac{1}{2},j)
+
+	  
+---------------------	  
+Fluid-solid interface
+---------------------
+
+Given the use of harmonic averaging of :math:`\mu`, at the fluid-solid interface :math:`\tau_{xz}` naturally vanishes and satisfies implicitly the continuity conditions through the fluid-solid interface (:cite:`vanvossen2002finite`).
+
+=======
+Sources
+=======
+
+----------------
+Explosive source
+----------------
+
+Explosive source is added to normal stress :math:`\sigma_{xx}` and :math:`\sigma{zz}`.
+
+.. math:: F(i,j,t) = S(t)\frac{\Delta t}{\Delta x^{2}}
+
+-----------------	  
+Body force source
+-----------------
+
+------------
+Source types
+------------
+
+=======================
+Precision and stability
+=======================
 
 ==========
 References

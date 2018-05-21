@@ -86,6 +86,19 @@
 <li class="toctree-l2"><a class="reference internal" href="#governing-equation">Governing equation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#staggered-grid">Staggered grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#discretization">Discretization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initial-and-boundary-conditions">Initial and boundary conditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pml-absorbing-boundary-conditions">PML absorbing boundary conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#free-surface">Free surface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fluid-solid-interface">Fluid-solid interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#explosive-source">Explosive source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#body-force-source">Body force source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-types">Source types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#precision-and-stability">Precision and stability</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -217,7 +230,7 @@
 <p>The staggered-grid approach (<a class="reference internal" href="#levander1988fourth" id="id12">[Lev88]</a>), initially developed for two-dimensional P-Sv seismic wave propagation modeling, is fourth-order accurate space and second order accurate time (<img class="math" src="_images/math/edd4d67f6effec8250aa4becf615e54df50daff2.png" alt="O(\Delta t^{2},h^{4})"/>) numerical scheme.</p>
 <p>The staggered-grid allows to correctly model any variation of the material properties with a minimal numerical dispersion and anisotropy. The scheme can also be used to model wave propagation in mixed acoustic-elastic media with a good accuracy.</p>
 <p><a class="reference internal" href="#virieux1986psv" id="id13">[Vir86]</a><a class="reference internal" href="#bohlen2006accuracy" id="id14">[BS06]</a></p>
-<div class="figure align-center" id="id18" style="width: 90%">
+<div class="figure align-center" id="id22" style="width: 90%">
 <img alt="_images/staggered.png" src="_images/staggered.png" />
 <p class="caption"><span class="caption-text">Staggered finite-difference grid and spatial stencils for (a) the velocity update and (b) the stress update. After <a class="reference internal" href="#levander1988fourth" id="id15">[Lev88]</a> with velocity-stress position switch proposed by <a class="reference internal" href="#bohlen2006accuracy" id="id16">[BS06]</a>.</span></p>
 </div>
@@ -235,12 +248,65 @@ D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]"/></p>
 \rho_{x}(i,j+\frac{1}{2}) = \frac{1}{2}(\rho (i,j+1)+\rho(i,j)) \\
 \rho_{z}(i+\frac{1}{2},j) = \frac{1}{2}(\rho (i+1,j)+\rho(i,j))"/></p>
 </div></div>
+<div class="section" id="initial-and-boundary-conditions">
+<h2>Initial and boundary conditions<a class="headerlink" href="#initial-and-boundary-conditions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pml-absorbing-boundary-conditions">
+<h3>PML absorbing boundary conditions<a class="headerlink" href="#pml-absorbing-boundary-conditions" title="Permalink to this headline">¶</a></h3>
+<p>At the scale of seismic exploration and less, the target area (<em>i.e.</em> the model), is a semi-infinite space bounded only at the top by a free surface. It is thus necessary to simulate a infinite medium at the lateral and bottom boundary. This can be achieve using the <em>Perfectly Matched Layer</em> (PML) absorbing boundaries. PML were initially developed in the framework of electro-magentic modeling by <a class="reference internal" href="#berenger1994perfectly" id="id18">[Ber94]</a> and was quickly adopted in seismic modeling.</p>
+<p>In the time domain, PML can be defined as:</p>
+<div class="math" id="equation-pml">
+<p><span class="eqno">(9)<a class="headerlink" href="#equation-pml" title="Permalink to this equation">¶</a></span><img src="_images/math/8adeeb118c51bab0d9c2b5a39a663d1c0bc2c6a5.png" alt="d = d_{0} \left( \frac{q}{L_{PML}} \right) ^{n}\ , \\
+d_{0} = Ac_{p} \frac{log(1/R)}{2L_{PML}}\ ,"/></p>
+</div><p>where <img class="math" src="_images/math/620a3ce6403ec82f1347af9985bc03f7a9382f4a.png" alt="q"/> is the distance from PML intern boundary, <img class="math" src="_images/math/e89b6a9c3a3ced24ecabbc8a9256093a06926924.png" alt="L_{PML}"/> is the width of the PML, <img class="math" src="_images/math/0043fe6507e9b1d112e07a2801e24927e267dd50.png" alt="A"/> is the amplitude of the PML, <img class="math" src="_images/math/31419d8e711dc3a1d662f84d8805c8b6a0888277.png" alt="c_{p}"/> is the P-wave velocity and <img class="math" src="_images/math/a00254b18ffa992f0ef19f6e6e095b83c8f85e94.png" alt="R"/> is a reflection coefficient generally low. PML are parametrized following recommandations of <a class="reference internal" href="#festa2005newmark" id="id19">[FV05]</a>: <img class="math" src="_images/math/88ed4e5fc1f76ba58db8cc2356a535b93c924488.png" alt="A=3"/> and <img class="math" src="_images/math/f0b787a4298524e8ec91659c98e79b62b92949f3.png" alt="R=0.01"/>.</p>
+</div>
+<div class="section" id="free-surface">
+<h3>Free surface<a class="headerlink" href="#free-surface" title="Permalink to this headline">¶</a></h3>
+<p>As discussed in the previous subsection, the earth structures must be considered as semi-infinite space due to the presence of a free surface defined by the topography. Given the strong formulation of the wave equation used by finite-difference methods, the free surface must be explicitly defined.</p>
+<p>The image theory method is a way to apprximate the free surface and was firstly proposed by <a class="reference internal" href="#levander1988fourth" id="id20">[Lev88]</a>.</p>
+<p>At free surface boundary condition <img class="math" src="_images/math/b4a88b332e9885e000f4ad02238b759cf4b179b3.png" alt="z=0"/>, all normal stresses vanish:</p>
+<div class="math">
+<p><img src="_images/math/c77df0252335ae25b5bf7b593833fc8dc468620f.png" alt="\sigma_{zz} = \lambda \frac{\partial u_{x}}{\partial x}+(\lambda+2\mu)\frac{\partial u_{z}}{\partial z} =0 \nonumber \\
+\sigma_{xz} = \mu \left( \frac{\partial u_{z}}{\partial x} + \frac{\partial u_{x}}{\partial z} \right) = 0"/></p>
+</div><p>If the free surface on the staggered grid is defined along <img class="math" src="_images/math/cff23f869e02d812818a1a27990fec3de3bcc94e.png" alt="\sigma_{zz}"/>, <img class="math" src="_images/math/cff23f869e02d812818a1a27990fec3de3bcc94e.png" alt="\sigma_{zz}"/> is explicitly set to 0 and <img class="math" src="_images/math/0e0ec18410daab7910b8ca269deb1efce8d42d22.png" alt="\sigma_{xz}"/> over the free surface is an odd function such as:</p>
+<div class="math">
+<p><img src="_images/math/86d1b72abcada04b7ab078f43ee26a8bc7b229a6.png" alt="\sigma_{zz}^{z(i)=0}(i,j) = 0, \nonumber \\
+\sigma_{zz}^{z(i)=0}(i-\frac{1}{2},j) = -\sigma_{zz}^{z(i)=0}(i+\frac{1}{2},j)"/></p>
+</div></div>
+<div class="section" id="fluid-solid-interface">
+<h3>Fluid-solid interface<a class="headerlink" href="#fluid-solid-interface" title="Permalink to this headline">¶</a></h3>
+<p>Given the use of harmonic averaging of <img class="math" src="_images/math/d79e8a2c7ce54906c2b25549da38bdbe02cf40d6.png" alt="\mu"/>, at the fluid-solid interface <img class="math" src="_images/math/2ff89b37a8f447dd3f721fa4c1188711b2431bc0.png" alt="\tau_{xz}"/> naturally vanishes and satisfies implicitly the continuity conditions through the fluid-solid interface (<a class="reference internal" href="#vanvossen2002finite" id="id21">[vVRC02]</a>).</p>
+</div>
+</div>
+<div class="section" id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="explosive-source">
+<h3>Explosive source<a class="headerlink" href="#explosive-source" title="Permalink to this headline">¶</a></h3>
+<p>Explosive source is added to normal stress <img class="math" src="_images/math/6ccaafc34deeae27b08b04bcbd0a8420093756e4.png" alt="\sigma_{xx}"/> and <img class="math" src="_images/math/921099ab9b53ec4799134c6a125648dc3bfeb50b.png" alt="\sigma{zz}"/>.</p>
+<div class="math">
+<p><img src="_images/math/d61cd39f80e6f2f36049efc27882d70fc314ef6f.png" alt="F(i,j,t) = S(t)\frac{\Delta t}{\Delta x^{2}}"/></p>
+</div></div>
+<div class="section" id="body-force-source">
+<h3>Body force source<a class="headerlink" href="#body-force-source" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="source-types">
+<h3>Source types<a class="headerlink" href="#source-types" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="precision-and-stability">
+<h2>Precision and stability<a class="headerlink" href="#precision-and-stability" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p id="bibtex-bibliography-seismic_modeling-0"><table class="docutils citation" frame="void" id="aki2002quantitative" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id10">[AR02]</a></td><td>Keiiti Aki and Paul&nbsp;G Richards. <em>Quantitative seismology</em>. Volume&nbsp;1. University Science Books,U.S., 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="berenger1994perfectly" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id18">[Ber94]</a></td><td>Jean-Pierre Berenger. A perfectly matched layer for the absorption of electromagnetic waves. <em>Journal of computational physics</em>, 114(2):185–200, 1994. <a class="reference external" href="https://doi.org/10.1006/jcph.1994.1159">doi:10.1006/jcph.1994.1159</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="bohlen2006accuracy" rules="none">
@@ -253,6 +319,12 @@ D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]"/></p>
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id5">[FMPQ97]</a></td><td>E&nbsp;Faccioli, F&nbsp;Maggio, R&nbsp;Paolucci, and A&nbsp;Quarteroni. 2d and 3d elastic wave propagation by a pseudo-spectral domain decomposition method. <em>Journal of seismology</em>, 1(3):237–251, 1997.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="festa2005newmark" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id19">[FV05]</a></td><td>Gaetano Festa and Jean-Pierre Vilotte. The newmark scheme as velocity–stress time-staggering: an efficient pml implementation for spectral element simulations of elastodynamics. <em>Geophysical Journal International</em>, 161(3):789–812, 2005. URL: <a class="reference external" href="http://dx.doi.org/10.1111/j.1365-246X.2005.02601.x">http://dx.doi.org/10.1111/j.1365-246X.2005.02601.x</a>, <a class="reference external" href="https://doi.org/10.1111/j.1365-246X.2005.02601.x">doi:10.1111/j.1365-246X.2005.02601.x</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="graves1996simulating" rules="none">
@@ -282,7 +354,7 @@ D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]"/></p>
 <table class="docutils citation" frame="void" id="levander1988fourth" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Lev88]</td><td><em>(<a class="fn-backref" href="#id12">1</a>, <a class="fn-backref" href="#id15">2</a>)</em> Alan&nbsp;R Levander. Fourth-order finite-difference p-sv seismograms. <em>Geophysics</em>, 53(11):1425–1436, 1988.</td></tr>
+<tr><td class="label">[Lev88]</td><td><em>(<a class="fn-backref" href="#id12">1</a>, <a class="fn-backref" href="#id15">2</a>, <a class="fn-backref" href="#id20">3</a>)</em> Alan&nbsp;R Levander. Fourth-order finite-difference p-sv seismograms. <em>Geophysics</em>, 53(11):1425–1436, 1988.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="li2016optimal" rules="none">
@@ -301,6 +373,12 @@ D^{-}=c_{1}[f(i)-f(i-1)]+c_{2}[f(i+1)-f(i-2)]"/></p>
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id6">[SSKB90]</a></td><td>F.&nbsp;J. Seron, F.&nbsp;J. Sanz, M.&nbsp;Kindelan, and J.&nbsp;I. Badal. Finite-element method for elastic wave propagation. <em>Communication in Applied Numerical Methods</em>, 6:359–368, 1990.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="vanvossen2002finite" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id21">[vVRC02]</a></td><td>Robbert van Vossen, J.&nbsp;O. Robertsson, and Chris&nbsp;H. Chapman. Finite-difference modeling of wave propagation in a fluid-solid configuration. <em>Geophysics</em>, 7(2):618–624, March-April 2002. <a class="reference external" href="https://doi.org/10.1190/1.1468623">doi:10.1190/1.1468623</a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="virieux1984sh" rules="none">
