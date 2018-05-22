@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *interfaces references* chapter in docs
 - *geopsy-gpdc* paragraph in *interfaces* (docs/)
 - *gprMax* paragraph in *interfaces* (docs/)
+- *NeSSI Global Optimization* references (docs/)	
 ### Modified
 - nessi.swm functions are now located at nessi.modeling.swm
-- nessi.pso functions are now located at nessi.globopt.pso
+- nessi.pso.Swarm class is now callable from nessi.globopt.Swarm
 
 ## [0.0.0] - 2018-05-21
 - starting point for development

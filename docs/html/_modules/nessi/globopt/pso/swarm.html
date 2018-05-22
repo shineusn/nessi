@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nessi.globopt.pso.swarm &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> NeSSI
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seismic_modeling.html">2D elastic seismic modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../particle_swarm.html">Particle Swarm Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../interfaces.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_globopt.html">NeSSI global optimization module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>nessi.globopt.pso.swarm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nessi.globopt.pso.swarm</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># -------------------------------------------------------------------</span>
+<span class="c1"># Filename: swarm.py</span>
+<span class="c1">#   Author: Damien Pageot</span>
+<span class="c1">#    Email: nessi.develop@protonmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2018 Damien Pageot</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The Swarm class and its associated functions for particles swarm</span>
+<span class="sd">optimization.</span>
+<span class="sd">:copyright:</span>
+<span class="sd">    Damien Pageot (nessi.develop@protonmail.com)</span>
+<span class="sd">:license:</span>
+<span class="sd">    GNU Lesser General Public License, Version 3</span>
+<span class="sd">    (https://www.gnu.org/copyleft/lesser.html)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Swarm"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm">[docs]</a><span class="k">class</span> <span class="nc">Swarm</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Swarm</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize class Swarm</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Swarm.init_pspace"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm.init_pspace">[docs]</a>    <span class="k">def</span> <span class="nf">init_pspace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmod</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialiaze parameter space</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Load pspace file in a temporary array</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fmod</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check the number of points per particule</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Resize pspace array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Fill pspace array</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[:,</span> <span class="n">ipar</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span></div>
+
+<div class="viewcode-block" id="Swarm.init_particles"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm.init_particles">[docs]</a>    <span class="k">def</span> <span class="nf">init_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize all the particles of the swarm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get npts and npar from pspace</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Resize arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nindv</span><span class="p">)</span>
+
+        <span class="c1"># Random generation of particle position</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+            <span class="n">p_random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">((</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>\
+                <span class="o">+</span> <span class="n">p_random</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndim</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define toroidal grid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nindv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">nindv</span><span class="o">%</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">ndim</span>
+            <span class="n">n2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nindv</span><span class="o">/</span><span class="n">ndim</span><span class="p">)</span>
+            <span class="n">vngrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nindv</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n1</span><span class="p">):</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">i2</span><span class="o">*</span><span class="n">n1</span><span class="p">)</span><span class="o">+</span><span class="n">i1</span>
+                    <span class="c1"># top</span>
+                    <span class="k">if</span> <span class="n">i1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i2</span><span class="o">*</span><span class="n">n1</span><span class="o">+</span><span class="p">(</span><span class="n">n1</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i2</span><span class="o">*</span><span class="n">n1</span><span class="o">+</span><span class="p">(</span><span class="n">i1</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1"># right</span>
+                    <span class="k">if</span> <span class="n">i2</span> <span class="o">==</span> <span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">i2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n1</span><span class="o">+</span><span class="n">i1</span>
+                    <span class="c1"># bottom</span>
+                    <span class="k">if</span> <span class="n">i1</span> <span class="o">==</span> <span class="n">n1</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">i2</span><span class="o">*</span><span class="n">n1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">i2</span><span class="o">*</span><span class="n">n1</span><span class="o">+</span><span class="p">(</span><span class="n">i1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1"># left</span>
+                    <span class="k">if</span> <span class="n">i2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">n2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n1</span><span class="p">)</span><span class="o">+</span><span class="n">i1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">vngrid</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">i2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n1</span><span class="o">+</span><span class="n">i1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;ndim must be a multiple of nindv&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">vngrid</span>
+
+    <span class="k">def</span> <span class="nf">get_gbest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topology</span><span class="p">,</span> <span class="n">indv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get gbest particle of the whole swarm or in the neighborhood of</span>
+<span class="sd">        a given particle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nindv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Get the best particle of the whole swarm</span>
+        <span class="k">if</span> <span class="n">topology</span> <span class="o">==</span> <span class="s1">&#39;full&#39;</span><span class="p">:</span>
+            <span class="n">ibest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[:])</span>
+
+        <span class="c1"># Get the best particle in the neighborhood (1 left, 1 right)</span>
+        <span class="c1"># of the particle including itself.</span>
+        <span class="k">if</span> <span class="n">topology</span> <span class="o">==</span> <span class="s1">&#39;ring&#39;</span><span class="p">:</span>
+            <span class="n">ibest</span> <span class="o">=</span> <span class="n">indv</span>
+            <span class="n">vbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">indv</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">indv</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">ii</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ii</span> <span class="o">=</span> <span class="n">nindv</span><span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nindv</span><span class="p">:</span>
+                    <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">vbest</span><span class="p">:</span>
+                    <span class="n">ibest</span> <span class="o">=</span> <span class="n">ii</span>
+                    <span class="n">vbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+
+        <span class="c1"># Get the best particle in the neighborhood (left, right, top, bottom)</span>
+        <span class="c1"># of the particle including itself.</span>
+        <span class="k">if</span> <span class="n">topology</span> <span class="o">==</span> <span class="s1">&#39;toroidal&#39;</span><span class="p">:</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_grid</span><span class="p">(</span><span class="n">ndim</span><span class="p">)</span>
+            <span class="n">ibest</span> <span class="o">=</span> <span class="n">indv</span>
+            <span class="n">vbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">indv</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">grid</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">vbest</span><span class="p">:</span>
+                    <span class="n">ibest</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                    <span class="n">vbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">grid</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">i</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">ibest</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+<div class="viewcode-block" id="Swarm.update"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Standard PSO update.</span>
+
+<span class="sd">        :param control: 0 for weight (default), 1 for constriction </span>
+<span class="sd">        :param c_0: value of the control parameter (default 0.7298)</span>
+<span class="sd">        :param c_1: value of the cognitive parameter (default 2.05)</span>
+<span class="sd">        :param c_2: value of the social parameter (default 2.05)</span>
+<span class="sd">        :param topology: used topology (default &#39;full&#39;): full, ring, toroidal</span>
+<span class="sd">        :param ndim: number of particles in the first dimension if toroidal topology is used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Parse kwargs parameter list</span>
+        <span class="n">ctrl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_0&#39;</span><span class="p">,</span> <span class="mf">0.7298</span><span class="p">)</span>
+        <span class="n">topology</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">)</span>
+        <span class="n">ndim</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ndim&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ctrl</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cog</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_1&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">)</span>
+            <span class="n">soc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_2&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ctrl</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">cog</span> <span class="o">=</span> <span class="n">omega</span><span class="o">*</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_1&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">)</span>
+            <span class="n">soc</span> <span class="o">=</span> <span class="n">omega</span><span class="o">*</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;c_2&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">)</span>
+
+        <span class="c1"># Update process</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">gbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gbest</span><span class="p">(</span><span class="n">topology</span><span class="p">,</span> <span class="n">indv</span><span class="p">,</span> <span class="n">ndim</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+                    <span class="c1"># Get values</span>
+                    <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span>
+                    <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span>
+                    <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span>
+
+                    <span class="c1"># Update velocity vector</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">omega</span><span class="o">*</span><span class="n">velocity</span>\
+                                                <span class="o">+</span> <span class="n">cog</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span>\
+                                                <span class="o">*</span> <span class="p">(</span><span class="n">history</span><span class="o">-</span><span class="n">current</span><span class="p">)</span>\
+                                                <span class="o">+</span> <span class="n">soc</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span>\
+                                                <span class="o">*</span> <span class="p">(</span><span class="n">gbest</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span><span class="o">-</span><span class="n">current</span><span class="p">)</span>
+
+                    <span class="c1"># Check particle velocity</span>
+                    <span class="c1"># vvv = particles[ibest][&#39;history&#39;][ipts,ipar]</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">])</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">])</span>\
+                            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+                    <span class="c1"># Update particle position</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span>
+
+                    <span class="c1"># Check if particle is in parameter space</span>
+                    <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

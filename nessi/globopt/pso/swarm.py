@@ -157,6 +157,13 @@ class Swarm():
     def update(self, **kwargs):
         """
         Standard PSO update.
+
+        :param control: 0 for weight (default), 1 for constriction 
+        :param c_0: value of the control parameter (default 0.7298)
+        :param c_1: value of the cognitive parameter (default 2.05)
+        :param c_2: value of the social parameter (default 2.05)
+        :param topology: used topology (default 'full'): full, ring, toroidal
+        :param ndim: number of particles in the first dimension if toroidal topology is used
         """
 
         # Parse kwargs parameter list

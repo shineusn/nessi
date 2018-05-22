@@ -15,6 +15,7 @@ Welcome to NeSSI's documentation!
     particle_swarm
     notebooks/PSO_basics/PSO_basics
     interfaces
+    nessi_globopt
     nessi_modeling_interfaces
     
 
