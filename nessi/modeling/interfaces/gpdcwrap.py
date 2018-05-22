@@ -8,11 +8,30 @@ import matplotlib.pyplot as plt
 libCoreWave = load_library('libQGpCoreWave', QGPCOREWAVE_PATH)
 
 def dispersion_curve_init(verbose):
+    """
+    Initialize the dispersion curve calculation.
+
+    :param verbose: integer, 0 minimal ouput, 1 verbose output 
+    """
     libCoreWave.dispersion_curve_init_.argtypes = [POINTER(c_int)]
     libCoreWave.dispersion_curve_init_(byref(c_int(verbose)))
     return
 
 def dispersion_curve_rayleigh(nLayers, h, vp, vs, rho, nSamples, omega, nModes, slowness, group):
+    """
+    Calculate the Rayleigh theoretical dispersion curve.
+
+    :param nLayers: integer, number of layers
+    :param h: double, thickness of layers (m)
+    :param vp: double, P-wave velocity in each layer (m/s)
+    :param vs: double, S-wave velocity in each layer (m/s)
+    :param rho: double, density in each layer (kg/m3)
+    :param nSamples: integer, number of frequency samples
+    :param omega: double, angular frequencies (rad/s)
+    :param nModes: integer, number of modes including fundamental
+    :param slowness: double, output of slowness values
+    :param group: integer, 0 for phase, 1 for group
+    """
     libCoreWave.dispersion_curve_rayleigh_.argtypes = [ POINTER(c_int),
                                                         ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
                                                         ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
@@ -37,6 +56,20 @@ def dispersion_curve_rayleigh(nLayers, h, vp, vs, rho, nSamples, omega, nModes, 
     return
 
 def dispersion_curve_love(nLayers, h, vp, vs, rho, nSamples, omega, nModes, slowness, group):
+    """
+    Calculate the Love theoretical dispersion curve.
+
+    :param nLayers: integer, number of layers
+    :param h: double, thickness of layers (m)
+    :param vp: double, P-wave velocity in each layer (m/s)
+    :param vs: double, S-wave velocity in each layer (m/s)
+    :param rho: double, density in each layer (kg/m3)
+    :param nSamples: integer, number of frequency samples
+    :param omega: double, angular frequencies (rad/s)
+    :param nModes: integer, number of modes including fundamental
+    :param slowness: double, output of slowness values
+    :param group: integer, 0 for phase, 1 for group
+    """
     libCoreWave.dispersion_curve_love_.argtypes = [ POINTER(c_int),
                                                     ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
                                                     ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
