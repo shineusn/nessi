@@ -16,6 +16,10 @@
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
+
+from nessi.signal import time_window
+from nessi.signal import space_window
 
 class SUdata():
     """
@@ -194,20 +198,38 @@ class SUdata():
         if legend == 1:
             plt.colorbar()
 
-    def wind(self, tmin=0., tmax=0.):
+    def wind(self, key=' ', min=0, max=0, tmin=0., tmax=0.):
         """
         Windowing
         """
-        dt = self.header[0]['dt']/1000000.
-        dlrt = float(self.header[0]['delrt'])/1000.
+        dobsw = copy.deepcopy(self)
 
-        itmin = int((tmin-dlrt)/dt)
-        itmax = int((tmax-dlrt)/dt)
+        if key != ' ': # Window traces in space
+            # Get traces indices from key
+            imin = np.argmin(np.abs(dobsw.header[:][key]-min))
+            imax = np.argmin(np.abs(dobsw.header[:][key]-max))
 
-        ns = itmax-itmin+1
-        self.trace = self.trace[:, itmin:itmax+1]
-        self.header[:]['ns'] = ns
-        self.header[:]['delrt'] = int(tmin*1000)
+            # Call nessi.signal.space_window function
+            dobsw.trace = space_window(dobsw.trace, imin, imax, axis=0)
+
+            # Edit SU header
+            dobsw.header = dobsw.header[imin:imax+1][:]
+            for ir in range(0, len(dobsw.header)):
+                dobsw.header[ir]['cdpt'] = ir+1
+
+        else: # Window traces in time
+            # Get parameters from SU header
+            dt = dobsw.header[0]['dt']/1000000.
+            delrt = float(dobsw.header[0]['delrt'])/1000.
+
+            # Call nessi.signal.time_window function
+            dobsw.trace = time_window(dobsw.trace, tmin, tmax, dt, delrt, axis=1)
+
+            # Edit SU header
+            dobsw.header[:]['ns'] = np.size(dobsw.trace, axis=1)
+            dobsw.header[:]['delrt'] = int(tmin*1000)
+
+        return dobsw
 
     def create(self, data, dt):
         """

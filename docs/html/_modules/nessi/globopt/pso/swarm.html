@@ -178,7 +178,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize class Swarm</span>
+<span class="sd">        Initialize Swarm class</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
@@ -188,7 +188,9 @@
 
 <div class="viewcode-block" id="Swarm.init_pspace"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm.init_pspace">[docs]</a>    <span class="k">def</span> <span class="nf">init_pspace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmod</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialiaze parameter space</span>
+<span class="sd">        Initialiaze parameter space from file</span>
+
+<span class="sd">        :param fmod: input file containing the boundaries of the parameter space.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Load pspace file in a temporary array</span>
@@ -210,6 +212,8 @@
 <div class="viewcode-block" id="Swarm.init_particles"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm.init_particles">[docs]</a>    <span class="k">def</span> <span class="nf">init_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize all the particles of the swarm.</span>
+
+<span class="sd">        :param nindv: integer, number of particles</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Get npts and npar from pspace</span>

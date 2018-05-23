@@ -27,7 +27,7 @@ class Swarm():
 
     def __init__(self):
         """
-        Initialize class Swarm
+        Initialize Swarm class
         """
         self.current = np.zeros((1, 1, 3), dtype=np.float32)
         self.velocity = np.zeros((1, 1, 3), dtype=np.float32)
@@ -37,7 +37,9 @@ class Swarm():
 
     def init_pspace(self, fmod):
         """
-        Initialiaze parameter space
+        Initialiaze parameter space from file
+
+        :param fmod: input file containing the boundaries of the parameter space.
         """
 
         # Load pspace file in a temporary array
@@ -59,6 +61,8 @@ class Swarm():
     def init_particles(self, nindv):
         """
         Initialize all the particles of the swarm.
+
+        :param nindv: integer, number of particles
         """
 
         # Get npts and npar from pspace
