@@ -5,6 +5,7 @@ from __future__ import (absolute_import,
 
 from .windowing import time_window
 from .windowing import space_window
+from .tapering import taper1d
 
 if __name__ == '__main__':
     import doctest

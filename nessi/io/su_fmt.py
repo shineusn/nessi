@@ -20,6 +20,7 @@ import copy
 
 from nessi.signal import time_window
 from nessi.signal import space_window
+from nessi.signal import taper1d
 
 class SUdata():
     """
@@ -200,8 +201,16 @@ class SUdata():
 
     def wind(self, key=' ', min=0, max=0, tmin=0., tmax=0.):
         """
-        Windowing
+        Window SU traces in time or space.
+
+        :param dobs: input data to window
+        :param key: SU header key
+        :param imin: minimum value of key to pass (=0)
+        :param imax: maximum value of key to pass (=0)
+        :param tmin: minimum time to pass (=0)
+        :param tmax: maximum time to pass (=0)
         """
+        # Create a copy of the input SU data
         dobsw = copy.deepcopy(self)
 
         if key != ' ': # Window traces in space
@@ -230,6 +239,37 @@ class SUdata():
             dobsw.header[:]['delrt'] = int(tmin*1000)
 
         return dobsw
+
+    def taper(self, tr1=0, tr2=0, min=0., tbeg=0., tend=0., type='linear'):
+        """
+        Taper the edge traces of a data panel to zero.
+
+        :param dobs: input data to window
+        :param tr1: number of traces to be tapered at beginning.
+        :param tr2: number of traces to be tapered at end.
+        :param min: minimum amplitude to taper (<1., default=0.)
+        :param tbeg: length of taper (ms) at trace start (=0.).
+        :param tend: length of taper (ms) at trace end (=0).
+        :param taper: taper type: 'linear'(default), 'sine', 'cosine'
+        """
+        # Create a copy of the input SU data
+        dobstaper = copy.deepcopy(self)
+
+        # Get values from SU header
+        ns = self.header[0]['ns']
+        dt = self.header[0]['dt']/1000000.
+
+        # Taper in space
+        if(tr1 !=0 or tr2 !=0):
+            dobstaper.trace = taper1d(dobstaper.trace, tr1, tr2, min, type, axis=0)
+
+        # Taper in time
+        if(tbeg !=0. or tend !=0.):
+            ntap1 = int(tbeg/1000./dt)
+            ntap2 = int(tend/1000./dt)
+            dobstaper.trace = taper1d(dobstaper.trace, ntap1, ntap2, min, type, axis=1)
+
+        return dobstaper
 
     def create(self, data, dt):
         """
