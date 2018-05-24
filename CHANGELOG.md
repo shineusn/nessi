@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - time_window function in nessi.signal windowing.py
 - space_window function in nessi.signal windowing.py
 - taper1d function in nessi.signal tapering.py
+- sine and cosine taper types
 
 ### Modified
 - nessi.swm functions are now located at nessi.modeling.swm
