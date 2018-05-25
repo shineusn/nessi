@@ -21,6 +21,7 @@ import copy
 from nessi.signal import time_window
 from nessi.signal import space_window
 from nessi.signal import taper1d
+from nessi.signal import sin2filter
 
 class SUdata():
     """
@@ -239,6 +240,27 @@ class SUdata():
             dobsw.header[:]['delrt'] = int(tmin*1000)
 
         return dobsw
+
+    def pfilter(self, freq, amps, dt, axis=0):
+        """
+        Applies a zero-phase, sine-squared tapered filter (adapted from the
+        sufilter command - Seismic Unix 44R1).
+
+        :param freq: array of filter frequencies (Hz)
+        :param amps: array of filter amplitudes
+        :param dt: time sampling
+        :param axis: time axis if dobs is a 2D array
+        """
+        # Create a copy of the input SU data
+        dobsfilter = copy.deepcopy(self)
+
+        # Get values from SU header
+        dt = self.header[0]['dt']/1000000.
+
+        # Apply filter
+        dobsfilter.trace = sin2filter(self.trace, freq, amps, dt, axis=1)
+
+        return dobsfilter
 
     def taper(self, tr1=0, tr2=0, min=0., tbeg=0., tend=0., type='linear'):
         """

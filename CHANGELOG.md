@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - taper1d function in nessi.signal tapering.py
 - sine and cosine taper types
 - SU/CWP class references in docs/
+- sin2filter polynomial filter nessi.signal filtering.py
+- pfilter method in nessi.io for SU data format
 
 ### Modified
 - nessi.swm functions are now located at nessi.modeling.swm
