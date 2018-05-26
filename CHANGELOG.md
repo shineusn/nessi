@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adding kill method (zero out traces) in nessi.io for SU data format
 
 ### Modified
+- README.md
 - nessi.swm functions are now located at nessi.modeling.swm
 - nessi.pso.Swarm class is now callable from nessi.globopt.Swarm
 - adding window in space to suwind method in nessi.io for SU data format
