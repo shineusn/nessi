@@ -16,6 +16,12 @@
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
+
+from nessi.signal import time_window
+from nessi.signal import space_window
+from nessi.signal import taper1d
+from nessi.signal import sin2filter
 
 class SUdata():
     """
@@ -194,20 +200,127 @@ class SUdata():
         if legend == 1:
             plt.colorbar()
 
-    def wind(self, tmin=0., tmax=0.):
+    def kill(self, key=' ', a=1, min=-1, count=1):
         """
-        Windowing
+        Zero out traces.
+        If min= is set it overrides selecting traces by header.
+
+        :param key: SU header keyword
+        :param a: header value identifying traces to kill
+        :param min: first trace to kill
+        :param count: number of traces to kill
         """
+
+        # Create a copy of the input SU data
+        dobskill = copy.deepcopy(self)
+
+        # Get the number of traces
+        ntrac = self.traces.shape[0]
+
+        # Kill traces
+        if min > 0:
+            for icount in range(0, count):
+                if min+icount < ntrac:
+                    dobskill.trace[min+icount, :] = 0.
+        else:
+            if key != ' ':
+                for itrac in range(0, ntrac):
+                    if dobskill.header[itrac][key] == a:
+                        dobskill.trace[itrac, :] = 0.
+
+        return dobskill
+
+    def wind(self, key=' ', min=0, max=0, tmin=0., tmax=0.):
+        """
+        Window SU traces in time or space.
+
+        :param key: SU header key
+        :param imin: minimum value of key to pass (=0)
+        :param imax: maximum value of key to pass (=0)
+        :param tmin: minimum time to pass (=0)
+        :param tmax: maximum time to pass (=0)
+        """
+        # Create a copy of the input SU data
+        dobsw = copy.deepcopy(self)
+
+        if key != ' ': # Window traces in space
+            # Get traces indices from key
+            imin = np.argmin(np.abs(dobsw.header[:][key]-min))
+            imax = np.argmin(np.abs(dobsw.header[:][key]-max))
+
+            # Call nessi.signal.space_window function
+            dobsw.trace = space_window(dobsw.trace, imin, imax, axis=0)
+
+            # Edit SU header
+            dobsw.header = dobsw.header[imin:imax+1][:]
+            for ir in range(0, len(dobsw.header)):
+                dobsw.header[ir]['cdpt'] = ir+1
+
+        else: # Window traces in time
+            # Get parameters from SU header
+            dt = dobsw.header[0]['dt']/1000000.
+            delrt = float(dobsw.header[0]['delrt'])/1000.
+
+            # Call nessi.signal.time_window function
+            dobsw.trace = time_window(dobsw.trace, tmin, tmax, dt, delrt, axis=1)
+
+            # Edit SU header
+            dobsw.header[:]['ns'] = np.size(dobsw.trace, axis=1)
+            dobsw.header[:]['delrt'] = int(tmin*1000)
+
+        return dobsw
+
+    def pfilter(self, freq, amps, dt, axis=0):
+        """
+        Applies a zero-phase, sine-squared tapered filter (adapted from the
+        sufilter command - Seismic Unix 44R1).
+
+        :param freq: array of filter frequencies (Hz)
+        :param amps: array of filter amplitudes
+        :param dt: time sampling
+        :param axis: time axis if dobs is a 2D array
+        """
+        # Create a copy of the input SU data
+        dobsfilter = copy.deepcopy(self)
+
+        # Get values from SU header
         dt = self.header[0]['dt']/1000000.
-        dlrt = float(self.header[0]['delrt'])/1000.
 
-        itmin = int((tmin-dlrt)/dt)
-        itmax = int((tmax-dlrt)/dt)
+        # Apply filter
+        dobsfilter.trace = sin2filter(self.trace, freq, amps, dt, axis=1)
 
-        ns = itmax-itmin+1
-        self.trace = self.trace[:, itmin:itmax+1]
-        self.header[:]['ns'] = ns
-        self.header[:]['delrt'] = int(tmin*1000)
+        return dobsfilter
+
+    def taper(self, tr1=0, tr2=0, min=0., tbeg=0., tend=0., type='linear'):
+        """
+        Taper the edge traces of a data panel to zero.
+
+        :param dobs: input data to window
+        :param tr1: number of traces to be tapered at beginning.
+        :param tr2: number of traces to be tapered at end.
+        :param min: minimum amplitude to taper (<1., default=0.)
+        :param tbeg: length of taper (ms) at trace start (=0.).
+        :param tend: length of taper (ms) at trace end (=0).
+        :param taper: taper type: 'linear'(default), 'sine', 'cosine'
+        """
+        # Create a copy of the input SU data
+        dobstaper = copy.deepcopy(self)
+
+        # Get values from SU header
+        ns = self.header[0]['ns']
+        dt = self.header[0]['dt']/1000000.
+
+        # Taper in space
+        if(tr1 !=0 or tr2 !=0):
+            dobstaper.trace = taper1d(dobstaper.trace, tr1, tr2, min, type, axis=0)
+
+        # Taper in time
+        if(tbeg !=0. or tend !=0.):
+            ntap1 = int(tbeg/1000./dt)
+            ntap2 = int(tend/1000./dt)
+            dobstaper.trace = taper1d(dobstaper.trace, ntap1, ntap2, min, type, axis=1)
+
+        return dobstaper
 
     def create(self, data, dt):
         """

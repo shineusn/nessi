@@ -12,6 +12,7 @@ Welcome to NeSSI's documentation!
     introduction
     seismic_modeling
     seismic_modeling_examples
+    sucwp_references
     particle_swarm
     notebooks/PSO_basics/PSO_basics
     interfaces
