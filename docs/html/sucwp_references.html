@@ -191,6 +191,48 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="nessi.io.SUdata.kill">
+<code class="descname">kill</code><span class="sig-paren">(</span><em>key=' '</em>, <em>a=1</em>, <em>min=-1</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero out traces.
+If min= is set it overrides selecting traces by header.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – SU header keyword</li>
+<li><strong>a</strong> – header value identifying traces to kill</li>
+<li><strong>min</strong> – first trace to kill</li>
+<li><strong>count</strong> – number of traces to kill</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.pfilter">
+<code class="descname">pfilter</code><span class="sig-paren">(</span><em>freq</em>, <em>amps</em>, <em>dt</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.pfilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.pfilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies a zero-phase, sine-squared tapered filter (adapted from the
+sufilter command - Seismic Unix 44R1).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>freq</strong> – array of filter frequencies (Hz)</li>
+<li><strong>amps</strong> – array of filter amplitudes</li>
+<li><strong>dt</strong> – time sampling</li>
+<li><strong>axis</strong> – time axis if dobs is a 2D array</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="nessi.io.SUdata.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>filename</em>, <em>endian=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read Seismic Unix file.</p>
@@ -240,7 +282,6 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dobs</strong> – input data to window</li>
 <li><strong>key</strong> – SU header key</li>
 <li><strong>imin</strong> – minimum value of key to pass (=0)</li>
 <li><strong>imax</strong> – maximum value of key to pass (=0)</li>

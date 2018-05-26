@@ -173,6 +173,7 @@
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">time_window</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">space_window</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">taper1d</span>
+<span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">sin2filter</span>
 
 <div class="viewcode-block" id="SUdata"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata">[docs]</a><span class="k">class</span> <span class="nc">SUdata</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -351,11 +352,40 @@
         <span class="k">if</span> <span class="n">legend</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="SUdata.kill"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zero out traces.</span>
+<span class="sd">        If min= is set it overrides selecting traces by header.</span>
+
+<span class="sd">        :param key: SU header keyword</span>
+<span class="sd">        :param a: header value identifying traces to kill</span>
+<span class="sd">        :param min: first trace to kill</span>
+<span class="sd">        :param count: number of traces to kill</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create a copy of the input SU data</span>
+        <span class="n">dobskill</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Get the number of traces</span>
+        <span class="n">ntrac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">traces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Kill traces</span>
+        <span class="k">if</span> <span class="nb">min</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">icount</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">min</span><span class="o">+</span><span class="n">icount</span> <span class="o">&lt;</span> <span class="n">ntrac</span><span class="p">:</span>
+                    <span class="n">dobskill</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="nb">min</span><span class="o">+</span><span class="n">icount</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39; &#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">itrac</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntrac</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">dobskill</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">itrac</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span><span class="p">:</span>
+                        <span class="n">dobskill</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">itrac</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="k">return</span> <span class="n">dobskill</span></div>
+
 <div class="viewcode-block" id="SUdata.wind"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.wind">[docs]</a>    <span class="k">def</span> <span class="nf">wind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Window SU traces in time or space.</span>
 
-<span class="sd">        :param dobs: input data to window</span>
 <span class="sd">        :param key: SU header key</span>
 <span class="sd">        :param imin: minimum value of key to pass (=0)</span>
 <span class="sd">        :param imax: maximum value of key to pass (=0)</span>
@@ -391,6 +421,27 @@
             <span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;delrt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmin</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dobsw</span></div>
+
+<div class="viewcode-block" id="SUdata.pfilter"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.pfilter">[docs]</a>    <span class="k">def</span> <span class="nf">pfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">amps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Applies a zero-phase, sine-squared tapered filter (adapted from the</span>
+<span class="sd">        sufilter command - Seismic Unix 44R1).</span>
+
+<span class="sd">        :param freq: array of filter frequencies (Hz)</span>
+<span class="sd">        :param amps: array of filter amplitudes</span>
+<span class="sd">        :param dt: time sampling</span>
+<span class="sd">        :param axis: time axis if dobs is a 2D array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create a copy of the input SU data</span>
+        <span class="n">dobsfilter</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Get values from SU header</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000000.</span>
+
+        <span class="c1"># Apply filter</span>
+        <span class="n">dobsfilter</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">sin2filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">amps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dobsfilter</span></div>
 
 <div class="viewcode-block" id="SUdata.taper"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.taper">[docs]</a>    <span class="k">def</span> <span class="nf">taper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tr1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tr2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tbeg</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tend</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

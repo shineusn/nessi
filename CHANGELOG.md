@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *geopsy-gpdc* paragraph in *interfaces* (docs/)
 - *gprMax* paragraph in *interfaces* (docs/)
 - *NeSSI Global Optimization* references (docs/)
+- *SU/CWP references* (docs/)
 - time_window function in nessi.signal windowing.py
 - space_window function in nessi.signal windowing.py
 - taper1d function in nessi.signal tapering.py
