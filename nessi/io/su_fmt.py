@@ -200,11 +200,40 @@ class SUdata():
         if legend == 1:
             plt.colorbar()
 
+    def kill(self, key=' ', a=1, min=-1, count=1):
+        """
+        Zero out traces.
+        If min= is set it overrides selecting traces by header.
+
+        :param key: SU header keyword
+        :param a: header value identifying traces to kill
+        :param min: first trace to kill
+        :param count: number of traces to kill
+        """
+
+        # Create a copy of the input SU data
+        dobskill = copy.deepcopy(self)
+
+        # Get the number of traces
+        ntrac = self.traces.shape[0]
+
+        # Kill traces
+        if min > 0:
+            for icount in range(0, count):
+                if min+icount < ntrac:
+                    dobskill.trace[min+icount, :] = 0.
+        else:
+            if key != ' ':
+                for itrac in range(0, ntrac):
+                    if dobskill.header[itrac][key] == a:
+                        dobskill.trace[itrac, :] = 0.
+
+        return dobskill
+
     def wind(self, key=' ', min=0, max=0, tmin=0., tmax=0.):
         """
         Window SU traces in time or space.
 
-        :param dobs: input data to window
         :param key: SU header key
         :param imin: minimum value of key to pass (=0)
         :param imax: maximum value of key to pass (=0)

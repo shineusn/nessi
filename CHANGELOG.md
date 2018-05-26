@@ -20,13 +20,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - SU/CWP class references in docs/
 - sin2filter polynomial filter nessi.signal filtering.py
 - pfilter method in nessi.io for SU data format
+- adding taper method in nessi.io for SU data format
+- adding kill method (zero out traces) in nessi.io for SU data format
 
 ### Modified
 - nessi.swm functions are now located at nessi.modeling.swm
 - nessi.pso.Swarm class is now callable from nessi.globopt.Swarm
 - adding window in space to suwind method in nessi.io for SU data format
 - wind method (SU format) now depends nessi.signal.time_window and nessi.signal.space_window
-- adding taper method in nessi.io for SU data format
 
 ## [0.0.0] - 2018-05-21
 - starting point for development
