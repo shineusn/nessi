@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>NeSSI global optimization module &mdash; NeSSI  documentation</title>
+  <title>Getting started &mdash; NeSSI  documentation</title>
   
 
   
@@ -29,8 +29,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="nessi.modeling.interfaces references" href="nessi_modeling_interfaces.html" />
-    <link rel="prev" title="Interfaces" href="interfaces.html" /> 
+    <link rel="next" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Welcome to NeSSI’s documentation!" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -80,7 +80,11 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
@@ -88,10 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">NeSSI global optimization module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#particle-swarm-optimization-class">Particle Swarm optimization class</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_globopt.html">NeSSI global optimization module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
 </ul>
 
@@ -138,13 +139,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>NeSSI global optimization module</li>
+      <li>Getting started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/nessi_globopt.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -176,69 +177,27 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="module-nessi.globopt">
-<span id="nessi-global-optimization-module"></span><h1>NeSSI global optimization module<a class="headerlink" href="#module-nessi.globopt" title="Permalink to this headline">¶</a></h1>
-<p>nessi.globopt</p>
-<p>A module containing class for particle swarm
-optimization.
-================================================</p>
-<div class="section" id="particle-swarm-optimization-class">
-<h2>Particle Swarm optimization class<a class="headerlink" href="#particle-swarm-optimization-class" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="nessi.globopt.Swarm">
-<em class="property">class </em><code class="descname">Swarm</code><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="nessi.globopt.Swarm.init_particles">
-<code class="descname">init_particles</code><span class="sig-paren">(</span><em>nindv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm.init_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm.init_particles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize all the particles of the swarm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nindv</strong> – integer, number of particles</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="nessi.globopt.Swarm.init_pspace">
-<code class="descname">init_pspace</code><span class="sig-paren">(</span><em>fmod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm.init_pspace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm.init_pspace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialiaze parameter space from file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fmod</strong> – input file containing the boundaries of the parameter space.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="nessi.globopt.Swarm.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Standard PSO update.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>control</strong> – 0 for weight (default), 1 for constriction</li>
-<li><strong>c_0</strong> – value of the control parameter (default 0.7298)</li>
-<li><strong>c_1</strong> – value of the cognitive parameter (default 2.05)</li>
-<li><strong>c_2</strong> – value of the social parameter (default 2.05)</li>
-<li><strong>topology</strong> – used topology (default ‘full’): full, ring, toroidal</li>
-<li><strong>ndim</strong> – number of particles in the first dimension if toroidal topology is used</li>
+<div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>NeSSI is currently developed under 64-bit GNU/Linux distributions only (Debian 9 Stretch and Ubuntu 16.10) using virtual environments created with <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>. NeSSI is designed to run with some of the major Python releases (2.7, 3.4, 3.5 and 3.6) since all users doesn’t have access to the latest version.</p>
+<p>If you want to use a specific release of Python which is not supported by your OS, we strongly recommand to create a virtual environment using <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a> instead of manually installing Python from sources on your system (<a class="reference external" href="https://wiki.debian.org/DontBreakDebian#Don.27t_suffer_from_Shiny_New_Stuff_Syndrome">Don’t suffer from Shiny New Stuff Syndrome - Don’t break Debian</a>).</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>NeSSI requiered:</p>
+<ul class="simple">
+<li>a C and a Fortran compiler such as <a class="reference external" href="https://gcc.gnu.org/">GCC</a></li>
+<li>the <strong>Numpy</strong> python package</li>
+<li>the <strong>Scipy</strong> python package</li>
+<li>the <strong>Matplotlib</strong> python package</li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+<p>All can be installed using your package manager and/or the Python <strong>pip</strong> package manager.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The installation of NeSSI is not automatized yet (with a setup.py for example) but it is quite simple.</p>
+<p>In a terminal, go to the nessi/nessi folder and type:  <code class="docutils literal notranslate"><span class="pre">make</span></code> .</p>
+<p>Then, you have to add the path of the nessi package to <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>. In your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> file, add:</p>
+<p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package</span></code></p>
 </div>
 </div>
 
@@ -250,10 +209,10 @@ optimization.
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="nessi_modeling_interfaces.html" class="btn btn-neutral float-right" title="nessi.modeling.interfaces references" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="interfaces.html" class="btn btn-neutral" title="Interfaces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Welcome to NeSSI’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

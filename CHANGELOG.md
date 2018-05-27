@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - pfilter method in nessi.io for SU data format
 - adding taper method in nessi.io for SU data format
 - adding kill method (zero out traces) in nessi.io for SU data format
+- *getting started* chapter in docs/
 
 ### Modified
 - README.md
