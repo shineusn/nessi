@@ -19,7 +19,6 @@ optimization.
 
 import numpy as np
 
-
 class Swarm():
     """
     Swarm
@@ -135,7 +134,7 @@ class Swarm():
         if topology == 'ring':
             ibest = indv
             vbest = self.misfit[indv]
-            for i in range(indv-1, indv+1):
+            for i in range(indv-1, indv+2):
                 ii = i
                 if i < 0:
                     ii = nindv-1
@@ -162,7 +161,7 @@ class Swarm():
         """
         Standard PSO update.
 
-        :param control: 0 for weight (default), 1 for constriction 
+        :param control: 0 for weight (default), 1 for constriction
         :param c_0: value of the control parameter (default 0.7298)
         :param c_1: value of the cognitive parameter (default 2.05)
         :param c_2: value of the social parameter (default 2.05)

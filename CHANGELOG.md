@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adding taper method in nessi.io for SU data format
 - adding kill method (zero out traces) in nessi.io for SU data format
 - *getting started* chapter in docs/
+- *test_swarm.py* in nessi/globopt/tests
 
 ### Modified
 - README.md
@@ -31,6 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - nessi.pso.Swarm class is now callable from nessi.globopt.Swarm
 - adding window in space to suwind method in nessi.io for SU data format
 - wind method (SU format) now depends nessi.signal.time_window and nessi.signal.space_window
+
+### Fixed
+- *get_gbest* method of the Swarm class (nessi.globopt), option *ring*
 
 ## [0.0.0] - 2018-05-21
 - starting point for development
