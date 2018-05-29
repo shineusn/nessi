@@ -7,25 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - YYYY-MM-DD
 
 ### Added
-- geopsy-gpdc interface in nessi.modeling.interfaces
+
+- *getting started* chapter in docs/
 - *interfaces* chapter in docs/
+- *gprMax* paragraph in *interfaces* (docs/)
 - *interfaces references* chapter in docs
 - *geopsy-gpdc* paragraph in *interfaces* (docs/)
-- *gprMax* paragraph in *interfaces* (docs/)
+- geopsy-gpdc interface in nessi.modeling.interfaces
+- *test_gpdcwrap.py* in nessi/modeling/tests
 - *NeSSI Global Optimization* references (docs/)
+- *test_swarm.py* in nessi/globopt/tests
 - *SU/CWP references* (docs/)
 - time_window function in nessi.signal windowing.py
 - space_window function in nessi.signal windowing.py
 - taper1d function in nessi.signal tapering.py
 - sine and cosine taper types
-- SU/CWP class references in docs/
 - sin2filter polynomial filter nessi.signal filtering.py
 - pfilter method in nessi.io for SU data format
 - adding taper method in nessi.io for SU data format
 - adding kill method (zero out traces) in nessi.io for SU data format
-- *getting started* chapter in docs/
-- *test_swarm.py* in nessi/globopt/tests
-- *test_gpdcwrap.py* in nessi/modeling/tests
 - add *modbuilder* module (perspectives)
 
 ### Modified
@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - wind method (SU format) now depends nessi.signal.time_window and nessi.signal.space_window
 - all *__init__.py headers*
 - all python file headers (docstrings...)
+- all Fortran source code headers (infos)
 - rename *grd* module in *interp2d* and move it in *modbuilder* module
 
 ### Fixed
