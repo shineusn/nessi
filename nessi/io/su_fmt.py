@@ -1,18 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -------------------------------------------------------------------
-# Filename: pso_peaks.py
+# Filename: su_fmt.py
 #   Author: Damien Pageot
 #    Email: nessi.develop@protonmail.com
 #
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-.. module:: su_fmt
-    :synopsis: Seismic Unix format support.
-.. moduleauthor:: Damien Pageot (nessi.develop@protonmail.com)
+Support of Seismic Unix format and some commands.
+
+:copyright:
+    Damien Pageot (nessi.develop@protonmail.com)
+:license:
+    GNU Lesser General Public License, Version 3
+    (https://www.gnu.org/copyleft/lesser.html)
 """
-#:license: GNU Lesser General Public License, Version 3 (https://www.gnu.org/copyleft/lesser.html)
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt

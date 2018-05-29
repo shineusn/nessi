@@ -8,14 +8,18 @@
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-The Swarm class and its associated functions for particles swarm
-optimization.
+Class and methods for particle swarm optimization.
+
 :copyright:
     Damien Pageot (nessi.develop@protonmail.com)
 :license:
     GNU Lesser General Public License, Version 3
     (https://www.gnu.org/copyleft/lesser.html)
 """
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import numpy as np
 
