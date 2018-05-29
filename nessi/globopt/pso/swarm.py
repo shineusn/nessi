@@ -205,7 +205,6 @@ class Swarm():
                                                 * (gbest[ipts, ipar]-current)
 
                     # Check particle velocity
-                    # vvv = particles[ibest]['history'][ipts,ipar]
                     if(np.abs(self.velocity[indv, ipts, ipar]) > self.pspace[ipts, ipar, 2]):
                         self.velocity[indv, ipts, ipar] = \
                             np.sign(self.velocity[indv, ipts, ipar])\
