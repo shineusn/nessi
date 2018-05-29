@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adding kill method (zero out traces) in nessi.io for SU data format
 - *getting started* chapter in docs/
 - *test_swarm.py* in nessi/globopt/tests
+- add *modbuilder* module (perspectives)
 
 ### Modified
 - README.md
@@ -34,12 +35,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - wind method (SU format) now depends nessi.signal.time_window and nessi.signal.space_window
 - all *__init__.py headers*
 - all python file headers (docstrings...)
+- rename *grd* module in *interp2d* and move it in *modbuilder* module
 
 ### Fixed
 - *get_gbest* method of the Swarm class (nessi.globopt), option *ring*
 
 ## [0.0.0] - 2018-05-21
-- starting point for development
+- starting point for development of the true first version (0.1.0); not a valid version.
 
 ## [X.X.X] - YYYY-MM-DD
 ### Added

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # -------------------------------------------------------------------
-# Filename: Convenience import for nessi.grd
+# Filename: Convenience import for nessi.modbuilder
 #   Author: Damien Pageot
 #    Email: nessi.develop@protonmail.com
 #
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-Initialization file for nessi.grd .
+Initialization file for nessi.modbuilder .
 
 :copyright:
     Damien Pageot (nessi.develop@protonmail.com)
@@ -21,10 +21,10 @@ from __future__ import division
 from __future__ import print_function
 
 # Import nessi.grd classes and functions
-from .grdwrap import voronoi
-from .grdwrap import idweight
-from .grdwrap import sibson1
-from .grdwrap import sibson2
+from interp2d.grdwrap import voronoi
+from interp2d.grdwrap import idweight
+from interp2d.grdwrap import sibson1
+from interp2d.grdwrap import sibson2
 
 if __name__ == '__main__':
     import doctest

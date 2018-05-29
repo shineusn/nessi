@@ -56,13 +56,9 @@ def test_init_pspace_multi_line():
     # Attempted output
     output = np.zeros((3, 2, 3), dtype=np.float32)
     output = np.array([
-        [[-3.0, 3.0, 0.6],
-         [-3.0, 3.0, 0.6]],
-        [[-3.0, 3.0, 0.6],
-         [-3.0, 3.0, 0.6]],
-        [[-3.0, 3.0, 0.6],
-         [-3.0, 3.0, 0.6]]
-        ], dtype=np.float32)
+            [[-3.0, 3.0, 0.6], [-3.0, 3.0, 0.6]],
+            [[-3.0, 3.0, 0.6], [-3.0, 3.0, 0.6]],
+            [[-3.0, 3.0, 0.6], [-3.0, 3.0, 0.6]]], dtype=np.float32)
 
     # Initialize the swarm class
     swarm = Swarm()
@@ -79,13 +75,9 @@ def test_init_particles():
     """
 
     # Attempted output
-    output = np.array([[[-0.49786797,  1.321947  ],
-                        [-2.9993138 , -1.1860045 ],
-                        [-2.1194646 , -2.4459684 ]],
-                       [[-1.8824388 , -0.9266356 ],
-                        [-0.61939514,  0.23290041],
-                       [-0.4848329 ,  1.111317  ]]]
-                      , dtype=np.float32)
+    output = np.array([
+            [[-0.49786797,  1.321947  ], [-2.9993138 , -1.1860045 ], [-2.1194646 , -2.4459684 ]],
+            [[-1.8824388 , -0.9266356 ], [-0.61939514,  0.23290041], [-0.4848329 ,  1.111317  ]]], dtype=np.float32)
 
     # Initialize the random number generator
     np.random.seed(1)
