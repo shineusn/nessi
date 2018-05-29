@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adding kill method (zero out traces) in nessi.io for SU data format
 - *getting started* chapter in docs/
 - *test_swarm.py* in nessi/globopt/tests
+- *test_gpdcwrap.py* in nessi/modeling/tests
 - add *modbuilder* module (perspectives)
 
 ### Modified

@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-# Import nessi.grd classes and functions
+# Import nessi.modbuilder.interp2d classes and functions
 from interp2d.grdwrap import voronoi
 from interp2d.grdwrap import idweight
 from interp2d.grdwrap import sibson1
