@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - YYYY-MM-DD
 
 ### Added
-
+- CONTRIBUTE.md
 - *getting started* chapter in docs/
 - *interfaces* chapter in docs/
 - *gprMax* paragraph in *interfaces* (docs/)

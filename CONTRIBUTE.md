@@ -33,8 +33,8 @@ Before submitting a pull request:
 3. Add a test for your change. Only refactoring and documentation changes require no new tests. If you are adding functionality or fixing a bug, we need a test!
 4. Make the test pass.
 5. Push to your fork and submit a pull request.
-  - for feature branches set base branch to `nessi:develop`
-  - for bugfix branches set base branch to the latests maintenance branch, e.g. `nessi:master`
+    * for feature branches set base branch to `nessi:develop`
+    * for bugfix branches set base branch to the latests maintenance branch, e.g. `nessi:master`
 6. Wait for our review. We may suggest some changes or improvements or alternatives. Keep in mind that PR checklist items can be met after the pull request has been opened by adding more commits to the branch.
 
 All the submitted pieces including potential data must be compatible with the LGPLv3 license and will be LGPLv3 licensed as soon as they are part of NeSSI. Sending a pull request implies that you agree with this.
