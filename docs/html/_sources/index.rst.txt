@@ -7,14 +7,19 @@ Welcome to NeSSI's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
-   introduction
-   seismic_modeling
-   seismic_modeling_examples
-   particle_swarm
-   notebooks/PSO_basics/PSO_basics
-	     
+    getting_started
+    introduction
+    seismic_modeling
+    seismic_modeling_examples
+    sucwp_references
+    particle_swarm
+    notebooks/PSO_basics/PSO_basics
+    interfaces
+    nessi_globopt
+    nessi_modeling_interfaces
+
 
 Indices and tables
 ==================

@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SU/CWP references &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Particle Swarm Optimization" href="particle_swarm.html" />
+    <link rel="prev" title="Seismic modeling examples" href="seismic_modeling_examples.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NeSSI
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SU/CWP references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_globopt.html">NeSSI global optimization module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>SU/CWP references</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sucwp_references.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="su-cwp-references">
+<h1>SU/CWP references<a class="headerlink" href="#su-cwp-references" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="nessi.io.SUdata">
+<em class="property">class </em><code class="descname">SUdata</code><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seismic Unix format support</p>
+<dl class="method">
+<dt id="nessi.io.SUdata.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>data</em>, <em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a minimal SU file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.image">
+<code class="descname">image</code><span class="sig-paren">(</span><em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>matplotlib.pyplot.imshow adapted for SU files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.kill">
+<code class="descname">kill</code><span class="sig-paren">(</span><em>key=' '</em>, <em>a=1</em>, <em>min=-1</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero out traces.
+If min= is set it overrides selecting traces by header.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – SU header keyword</li>
+<li><strong>a</strong> – header value identifying traces to kill</li>
+<li><strong>min</strong> – first trace to kill</li>
+<li><strong>count</strong> – number of traces to kill</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.pfilter">
+<code class="descname">pfilter</code><span class="sig-paren">(</span><em>freq</em>, <em>amps</em>, <em>dt</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.pfilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.pfilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies a zero-phase, sine-squared tapered filter (adapted from the
+sufilter command - Seismic Unix 44R1).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>freq</strong> – array of filter frequencies (Hz)</li>
+<li><strong>amps</strong> – array of filter amplitudes</li>
+<li><strong>dt</strong> – time sampling</li>
+<li><strong>axis</strong> – time axis if dobs is a 2D array</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>filename</em>, <em>endian=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Seismic Unix file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> – name of the SU file</li>
+<li><strong>endian</strong> – byte order: little endian (default) ‘l’, big endian ‘b’.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.taper">
+<code class="descname">taper</code><span class="sig-paren">(</span><em>tr1=0</em>, <em>tr2=0</em>, <em>min=0.0</em>, <em>tbeg=0.0</em>, <em>tend=0.0</em>, <em>type='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.taper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.taper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Taper the edge traces of a data panel to zero.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dobs</strong> – input data to window</li>
+<li><strong>tr1</strong> – number of traces to be tapered at beginning.</li>
+<li><strong>tr2</strong> – number of traces to be tapered at end.</li>
+<li><strong>min</strong> – minimum amplitude to taper (&lt;1., default=0.)</li>
+<li><strong>tbeg</strong> – length of taper (ms) at trace start (=0.).</li>
+<li><strong>tend</strong> – length of taper (ms) at trace end (=0).</li>
+<li><strong>taper</strong> – taper type: ‘linear’(default), ‘sine’, ‘cosine’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.wind">
+<code class="descname">wind</code><span class="sig-paren">(</span><em>key=' '</em>, <em>min=0</em>, <em>max=0</em>, <em>tmin=0.0</em>, <em>tmax=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.wind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.wind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Window SU traces in time or space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – SU header key</li>
+<li><strong>imin</strong> – minimum value of key to pass (=0)</li>
+<li><strong>imax</strong> – maximum value of key to pass (=0)</li>
+<li><strong>tmin</strong> – minimum time to pass (=0)</li>
+<li><strong>tmax</strong> – maximum time to pass (=0)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write SU file on disk</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="particle_swarm.html" class="btn btn-neutral float-right" title="Particle Swarm Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="seismic_modeling_examples.html" class="btn btn-neutral" title="Seismic modeling examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -8,8 +8,8 @@
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-The Swarm class and its associated functions for particles swarm
-optimization.
+Class and methods for particle swarm optimization.
+
 :copyright:
     Damien Pageot (nessi.develop@protonmail.com)
 :license:
@@ -17,8 +17,11 @@ optimization.
     (https://www.gnu.org/copyleft/lesser.html)
 """
 
-import numpy as np
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
+import numpy as np
 
 class Swarm():
     """
@@ -27,7 +30,7 @@ class Swarm():
 
     def __init__(self):
         """
-        Initialize class Swarm
+        Initialize Swarm class
         """
         self.current = np.zeros((1, 1, 3), dtype=np.float32)
         self.velocity = np.zeros((1, 1, 3), dtype=np.float32)
@@ -37,7 +40,9 @@ class Swarm():
 
     def init_pspace(self, fmod):
         """
-        Initialiaze parameter space
+        Initialiaze parameter space from file
+
+        :param fmod: input file containing the boundaries of the parameter space.
         """
 
         # Load pspace file in a temporary array
@@ -59,6 +64,8 @@ class Swarm():
     def init_particles(self, nindv):
         """
         Initialize all the particles of the swarm.
+
+        :param nindv: integer, number of particles
         """
 
         # Get npts and npar from pspace
@@ -131,7 +138,7 @@ class Swarm():
         if topology == 'ring':
             ibest = indv
             vbest = self.misfit[indv]
-            for i in range(indv-1, indv+1):
+            for i in range(indv-1, indv+2):
                 ii = i
                 if i < 0:
                     ii = nindv-1
@@ -157,6 +164,13 @@ class Swarm():
     def update(self, **kwargs):
         """
         Standard PSO update.
+
+        :param control: 0 for weight (default), 1 for constriction
+        :param c_0: value of the control parameter (default 0.7298)
+        :param c_1: value of the cognitive parameter (default 2.05)
+        :param c_2: value of the social parameter (default 2.05)
+        :param topology: used topology (default 'full'): full, ring, toroidal
+        :param ndim: number of particles in the first dimension if toroidal topology is used
         """
 
         # Parse kwargs parameter list
@@ -191,7 +205,6 @@ class Swarm():
                                                 * (gbest[ipts, ipar]-current)
 
                     # Check particle velocity
-                    # vvv = particles[ibest]['history'][ipts,ipar]
                     if(np.abs(self.velocity[indv, ipts, ipar]) > self.pspace[ipts, ipar, 2]):
                         self.velocity[indv, ipts, ipar] = \
                             np.sign(self.velocity[indv, ipts, ipar])\

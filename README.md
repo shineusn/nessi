@@ -4,20 +4,28 @@
 
 NeSSI (Near-Surface Seismic Imaging) aims to provide python modules for the rapid development of seismic inversion codes based on the particle swarm optimization method.
 
-NeSSI is an open-source project licensed under the [LGPLv3]().
+NeSSI is an open-source project licensed under the [LGPLv3](http://www.gnu.org/licenses/lgpl-3.0-standalone.html).
 
 ## Documentation
 
+The [NeSSI documentation](https://pageotd.github.io/nessi/) provides informations about:
+* [How to install the NeSSI package]()
+* Methods and data format:
+  * [the 2D PSv modeling engine]()
+  * [the particle swarm optimization method]()
+  * [the SU/CWP format]()
+  * [the interfaces with external softwares]()
+* NeSSI's [feature descriptions]()
+
 The [NeSSI wiki]() provides informations about:
-* [installation]()
-* [modeling engine]()
-* [SU/CWP format]()
-* [particle swarm optimization]()
-* [contributing guide lines]()
+* [How to contribute]()
+* [How to pull issues]()
 
-The [NeSSI documentation]() gives technical informations about the NeSSI submodules, classes and functions.
+Some examples in the form of [jupyter notebooks](http://jupyter.org/) are availables in the [nessi.materials](https://github.com/PageotD/nessi.materials) repository.
 
-Tutorials in the form of [jupyter notebooks]() will be available soon.
+## References
+
+* An example of application using the 2D PSv modeling engine and PSO to invert Rayleigh dispersion diagrams: [Pageot et al., Alternative method for surface wave inversion, _Congrès Français d'Acoustique, Le Havre, 2018_](https://www.researchgate.net/publication/324889746_Methode_alternative_d'inversion_des_ondes_de_surface)
 
 ## Install
 First, install git on your computer. For exemple on Ubuntu:
@@ -30,14 +38,6 @@ Then, in a terminal, go to the nessi/nessi folder and type:
 
 `make`
 
-Finally, you have to had the path of the nessi package to `PYTHONPATH`. In your `.bashrc` file, add:
+Finally, you have to add the path of the NeSSI package to `PYTHONPATH`. In your `.bashrc` file, add:
 
 `export PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package`
-
-# Notebooks
-[Particle Swarm Optimization](examples/particle_swarm/ParticleSwarmOptimization.md)
-# Contributing
-
-NeSSI is developed and tested using python2.7 and python3.5 on GNU/Debian Stretch (stable).
-
-**Don't suffer from Shiny New Stuff Syndrome** -- [DontBreakDebian](https://wiki.debian.org/DontBreakDebian#Don.27t_suffer_from_Shiny_New_Stuff_Syndrome)

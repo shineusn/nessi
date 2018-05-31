@@ -1,61 +1,17 @@
-!------------------------------------------------------------------------------
-! LICENSE
-!------------------------------------------------------------------------------
-! This file is part of SWAM2D.
+! -------------------------------------------------------------------
+! Filename: swm_marching.f90
+!   Author: Damien Pageot
+!    Email: nessi.develop@protonmail.com
 !
-! SWAM2D is free software: you can redistribute it and/or modify
-! it under the terms of the GNU General Public License as published by
-! the Free Software Foundation, either version 3 of the License, or
-! (at your option) any later version.
-!
-! SWAM2D is distributed in the hope that it will be useful,
-! but WITHOUT ANY WARRANTY; without even the implied warranty of
-! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-! GNU General Public License for more details.
-!
-! You should have received a copy of the GNU General Public License
-! along with SWAM2D. If not, see <http://www.gnu.org/licenses/>.
-!------------------------------------------------------------------------------
-!------------------------------------------------------------------------------
-! MODULE: marching
-!------------------------------------------------------------------------------
-!> @brief
-!> ...
-!!
-!> @details
-!> \latexonly
-!> \begin{small}
-!> \begin{eqnarray}
-!> D^{+}_{t}u_{t}(m,n,l-1/2) =\frac{1}{\rho(m,n)}[
-!> D^{-}_{x}\tau_{xx}(m+1/2,n,l) +
-!> D^{-}_{z}\tau_{xz}(m,n+1/2,l)]
-!> \\
-!> D^{+}_{t}w_{t}(m+1/2,n+1/2,l-1/2)=\frac{1}{\rho(m+1/2,n+1/2)}[
-!> D^{+}_{x}\tau_{xz}(m,n+1/2,l) +
-!> D^{+}_{z}\tau_{zz}(m+1/2,n,l)]
-!> \\
-!> D^{+}_{t}\tau_{xx}(m+1/2,n,l) =
-!> [\lambda(m+1/2,n)+2\mu(m+1/2,n)]D^{+}_{x}u_{t}(m,n,l+1/2) \nonumber\\
-!> + \lambda(m+1/2,n)D^{-}_{z}w_{t}(m+1/2,n+1/2,l+1/2)]&
-!> \\
-!> D^{+}_{t}\tau_{xz}(m,n+1/2,l) =
-!> \mu(m,n+1/2)[D^{+}_{z}u_{t}(m,n,l+1/2)+
-!> D^{-}_{x}w_{t}(m+1/2,n+1/2,l+1/2)]
-!> \\
-!> D^{+}_{t}\tau_{zz} =
-!> [\lambda(m+1/2,n)+2\mu(m+1/2,n)]D^{-}_{z}w_{t}(m+1/2,n+1/2,l+1/2)\nonumber \\
-!> + \lambda(m+1/2,n)D^{+}_{x}u_{t}(m,n,l+1/2)&
-!> \end{eqnarray}
-!> \end{small}
-!> \endlatexonly
-!!
-!> \cite levander1988fourth
-!!
-!> @author Damien Pageot
-!> @date 09 Jan 2017
-!------------------------------------------------------------------------------
-! Revision history
-
+! Copyright (C) 2018 Damien Pageot
+! ------------------------------------------------------------------
+! subroutine marching
+! :copyright:
+!     Damien Pageot (nessi.develop@protonmail.com)
+! :license:
+!     GNU Lesser General Public License, Version 3
+!     (https://www.gnu.org/copyleft/lesser.html)
+! ------------------------------------------------------------------
 
 subroutine evolution(n1, n2, h, npml, nt, nts, ntsnap, dt, nrec, srctype, &
      tsrc, gsrc, recx, recz, recp, recpos, isurf, isnap, bux, buz, lb0, lbmu, mue, &

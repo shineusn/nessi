@@ -160,6 +160,9 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+# If true, the current module name will be prepended to all description
+# unit titles (such as .. function::).
+add_module_names = False
 
 # -- Extension configuration -------------------------------------------------
 

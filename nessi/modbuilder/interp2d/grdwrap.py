@@ -1,3 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------
+# Filename: grdwrap.py
+#   Author: Damien Pageot
+#    Email: nessi.develop@protonmail.com
+#
+# Copyright (C) 2018 Damien Pageot
+# ------------------------------------------------------------------
+"""
+Functions for coarse grid to fine grid interpolation.
+
+:copyright:
+    Damien Pageot (nessi.develop@protonmail.com)
+:license:
+    GNU Lesser General Public License, Version 3
+    (https://www.gnu.org/copyleft/lesser.html)
+"""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from numpy import loadtxt, zeros, float32, ascontiguousarray
 from ctypes import CDLL, c_int, c_float
 from numpy.ctypeslib import ndpointer, load_library
@@ -6,7 +29,7 @@ from numpy.ctypeslib import ndpointer, load_library
 def voronoi(npts, xp, zp, val, n1, n2, dh):
     """
     voronoi
-    Coarse inversion gird to fine modelling grid using 
+    Coarse inversion gird to fine modelling grid using
     Voronoi tesselation.
     """
 
@@ -28,7 +51,7 @@ def voronoi(npts, xp, zp, val, n1, n2, dh):
     xp = ascontiguousarray(xp, dtype=float32)
     zp = ascontiguousarray(zp, dtype=float32)
     val = ascontiguousarray(val, dtype=float32)
-    
+
     # call nessi_grd_vrn
     clibgrd.nessi_grd_vrn(npts, xp, zp, val, n1, n2, dh, model)
 
@@ -38,7 +61,7 @@ def voronoi(npts, xp, zp, val, n1, n2, dh):
 def idweight(npts, xp, zp, val, pw, n1, n2, dh):
     """
     voronoi
-    Coarse inversion gird to fine modelling grid using 
+    Coarse inversion gird to fine modelling grid using
     Voronoi tesselation.
     """
 
@@ -60,7 +83,7 @@ def idweight(npts, xp, zp, val, pw, n1, n2, dh):
     xp = ascontiguousarray(xp, dtype=float32)
     zp = ascontiguousarray(zp, dtype=float32)
     val = ascontiguousarray(val, dtype=float32)
-    
+
     # call nessi_grd_vrn
     clibgrd.nessi_grd_idw(npts, xp, zp, val, n1, n2, dh, pw, model)
 
@@ -69,7 +92,7 @@ def idweight(npts, xp, zp, val, pw, n1, n2, dh):
 def sibson1(npts, xp, zp, val, n1, n2, dh):
     """
     voronoi
-    Coarse inversion gird to fine modelling grid using 
+    Coarse inversion gird to fine modelling grid using
     Voronoi tesselation.
     """
 
@@ -91,7 +114,7 @@ def sibson1(npts, xp, zp, val, n1, n2, dh):
     xp = ascontiguousarray(xp, dtype=float32)
     zp = ascontiguousarray(zp, dtype=float32)
     val = ascontiguousarray(val, dtype=float32)
-    
+
     # call nessi_grd_vrn
     clibgrd.nessi_grd_ds1(npts, xp, zp, val, n1, n2, dh, model)
 
@@ -100,7 +123,7 @@ def sibson1(npts, xp, zp, val, n1, n2, dh):
 def sibson2(npts, xp, zp, val, n1, n2, dh):
     """
     voronoi
-    Coarse inversion gird to fine modelling grid using 
+    Coarse inversion gird to fine modelling grid using
     Voronoi tesselation.
     """
 
@@ -122,7 +145,7 @@ def sibson2(npts, xp, zp, val, n1, n2, dh):
     xp = ascontiguousarray(xp, dtype=float32)
     zp = ascontiguousarray(zp, dtype=float32)
     val = ascontiguousarray(val, dtype=float32)
-    
+
     # call nessi_grd_vrn
     clibgrd.nessi_grd_ds2(npts, xp, zp, val, n1, n2, dh, model)
 
