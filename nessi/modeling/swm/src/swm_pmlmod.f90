@@ -1,3 +1,18 @@
+! -------------------------------------------------------------------
+! Filename: swm_pmlmod.f90
+!   Author: Damien Pageot
+!    Email: nessi.develop@protonmail.com
+!
+! Copyright (C) 2018 Damien Pageot
+! ------------------------------------------------------------------
+! subroutines pmlmod, dirichlet
+! :copyright:
+!     Damien Pageot (nessi.develop@protonmail.com)
+! :license:
+!     GNU Lesser General Public License, Version 3
+!     (https://www.gnu.org/copyleft/lesser.html)
+! ------------------------------------------------------------------
+
 subroutine pmlmod (n1, n2, h, isurf, npml, apml, ppml, pmlx0, pmlx1, pmlz0, pmlz1)
 
   integer, intent(in) :: n1, n2, npml, ppml, isurf

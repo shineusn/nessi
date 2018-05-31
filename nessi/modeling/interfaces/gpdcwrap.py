@@ -1,3 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------
+# Filename: gpdcwrap.py
+#   Author: Damien Pageot
+#    Email: nessi.develop@protonmail.com
+#
+# Copyright (C) 2018 Damien Pageot
+# ------------------------------------------------------------------
+"""
+Functions to use the Geopsy-gpdc engine.
+
+:copyright:
+    Damien Pageot (nessi.develop@protonmail.com)
+:license:
+    GNU Lesser General Public License, Version 3
+    (https://www.gnu.org/copyleft/lesser.html)
+"""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
 from ctypes import CDLL, c_int, c_float, byref, POINTER, c_double
 from numpy.ctypeslib import ndpointer, load_library
@@ -11,7 +34,7 @@ def dispersion_curve_init(verbose):
     """
     Initialize the dispersion curve calculation.
 
-    :param verbose: integer, 0 minimal ouput, 1 verbose output 
+    :param verbose: integer, 0 minimal ouput, 1 verbose output
     """
     libCoreWave.dispersion_curve_init_.argtypes = [POINTER(c_int)]
     libCoreWave.dispersion_curve_init_(byref(c_int(verbose)))
@@ -42,7 +65,7 @@ def dispersion_curve_rayleigh(nLayers, h, vp, vs, rho, nSamples, omega, nModes, 
                                                         POINTER(c_int),
                                                         ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
                                                         POINTER(c_int)]
-    
+
     libCoreWave.dispersion_curve_rayleigh_(byref(c_int(nLayers)),
                                            h,
                                            vp,
@@ -80,7 +103,7 @@ def dispersion_curve_love(nLayers, h, vp, vs, rho, nSamples, omega, nModes, slow
                                                     POINTER(c_int),
                                                     ndpointer(dtype=np.float64, ndim=1, flags='C_CONTIGUOUS'),
                                                     POINTER(c_int)]
-    
+
     libCoreWave.dispersion_curve_love_(byref(c_int(nLayers)),
                                        h,
                                        vp,

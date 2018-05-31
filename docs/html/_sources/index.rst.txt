@@ -9,6 +9,7 @@ Welcome to NeSSI's documentation!
 .. toctree::
     :maxdepth: 1
 
+    getting_started
     introduction
     seismic_modeling
     seismic_modeling_examples
@@ -18,7 +19,7 @@ Welcome to NeSSI's documentation!
     interfaces
     nessi_globopt
     nessi_modeling_interfaces
-    
+
 
 Indices and tables
 ==================

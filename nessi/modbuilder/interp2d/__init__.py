@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # -------------------------------------------------------------------
-# Filename: Convenience import for nessi.modeling.interfaces
+# Filename: Convenience import for nessi.modbuilder.interp2d
 #   Author: Damien Pageot
 #    Email: nessi.develop@protonmail.com
 #
 # Copyright (C) 2018 Damien Pageot
 # ------------------------------------------------------------------
 """
-Initialization file for nessi.modeling.interfaces .
+Initialization file for nessi.modbuilder.interp2d .
 
 :copyright:
     Damien Pageot (nessi.develop@protonmail.com)
@@ -20,10 +20,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-# Import nessi.modeling.interfaces classes and functions
-from .gpdcwrap import dispersion_curve_init
-from .gpdcwrap import dispersion_curve_rayleigh
-from .gpdcwrap import dispersion_curve_love
+# Import nessi.grd classes and functions
+from .grdwrap import voronoi
+from .grdwrap import idweight
+from .grdwrap import sibson1
+from .grdwrap import sibson2
 
 if __name__ == '__main__':
     import doctest
