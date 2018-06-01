@@ -48,10 +48,13 @@ def time_window(dobs, tmin=0.0, tmax=0.0, dt=0.01, delrt=0, axis=0):
     itmax = int((tmax-delrt)/dt)
 
     # Windowing
-    if axis == 0:
-        dobswind = dobs[itmin:itmax+1, :]
-    if axis == 1:
-        dobswind = dobs[:, itmin:itmax+1]
+    if ntrac == 1:
+        dobswind = dobs[itmin:itmax+1]
+    else:
+        if axis == 0:
+            dobswind = dobs[itmin:itmax+1, :]
+        if axis == 1:
+            dobswind = dobs[:, itmin:itmax+1]
 
     return dobswind
 

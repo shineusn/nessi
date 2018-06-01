@@ -4,8 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.0] - 2018-05-31 
- 
+## [0.1.1] - YYYY-MM-DD
+
+### Added
+- *test_windowing.py* in nessi/signal/tests
+- *test_tapering.py* in nessi/signal/tests
+- *test_filtering.py* in nessi/signal/tests
+
+### Modified
+- README.md
+
+### Fixed
+- remake html documentation
+- *signal.time_window* issue for 1D signal
+- *signal.taper1d* issue for 1D signal
+
+## [0.1.0] - 2018-05-31
+
 ### Added
 - CONTRIBUTE.md
 - *getting started* chapter in docs/
