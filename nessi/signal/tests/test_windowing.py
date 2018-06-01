@@ -25,8 +25,6 @@ import numpy as np
 from nessi.signal.windowing import time_window
 from nessi.signal.windowing import space_window
 
-# test_space_window_multi_trac
-
 def test_time_window_one_trac():
     """
     signal.time_window for one-trace signal.

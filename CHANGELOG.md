@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - *test_windowing.py* in nessi/signal/tests
+- *test_tapering.py* in nessi/signal/tests
 
 ### Fixed
 - remake html documentation
 - *signal.time_window* issue for 1D signal
+- *signal.taper1d* issue for 1D signal
 
 ## [0.1.0] - 2018-05-31
 
