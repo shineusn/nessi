@@ -59,7 +59,10 @@ def sin2filter(dobs, freq, amps, dt, axis=0):
 
 
     # Create a gobs filter array
-    gobsfilter = np.zeros(np.shape(gobs), dtype=np.complex64)
+    if np.ndim(dobs) == 1:
+        gobsfilter = np.zeros(nfft, dtype=np.complex64)
+    else:
+        gobsfilter = np.zeros((nfft, ntrac), dtype=np.complex64)
 
     # Get the number of filter frequencies
     npoly = len(freq)
@@ -102,14 +105,18 @@ def sin2filter(dobs, freq, amps, dt, axis=0):
         pfilt[ifreq] = amps[-1]
 
     # Apply filter
-    if axis == 0:
-        for itrac in range(0, ntrac):
-            gobsfilter[:, itrac] = gobs[:, itrac]*pfilt[:]
-        dobsfilter = np.fft.irfft(gobsfilter, n=ns, axis=0)
+    if np.ndim(dobs) == 1:
+        gobsfilter[:] = gobs[:]*pfilt[:]
+        dobsfilter = np.fft.irfft(gobsfilter, n=ns)
+    else:
+        if axis == 0:
+            for itrac in range(0, ntrac):
+                gobsfilter[:, itrac] = gobs[:, itrac]*pfilt[:]
+            dobsfilter = np.fft.irfft(gobsfilter, n=ns, axis=0)
 
-    if axis == 1:
-        for itrac in range(0, ntrac):
-            gobsfilter[itrac, :] = gobs[itrac,:]*pfilt[:]
-        dobsfilter = np.fft.irfft(gobsfilter, n=ns, axis=1)
+        if axis == 1:
+            for itrac in range(0, ntrac):
+                gobsfilter[itrac, :] = gobs[itrac,:]*pfilt[:]
+            dobsfilter = np.fft.irfft(gobsfilter, n=ns, axis=1)
 
     return dobsfilter

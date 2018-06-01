@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - *test_windowing.py* in nessi/signal/tests
 - *test_tapering.py* in nessi/signal/tests
+- *test_filtering.py* in nessi/signal/tests
 
 ### Fixed
 - remake html documentation
