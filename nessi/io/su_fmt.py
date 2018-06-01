@@ -188,6 +188,14 @@ class SUdata():
               label2=' ', title=' '):
         """
         matplotlib.pyplot.imshow adapted for SU files
+
+        :param bclip: data values outside of [bclip,wclip] are clipped
+        :param wclip: data values outside of [bclip,wclip] are clipped
+        :param clip: clip used to determine bclip and wclip
+        :param legend: colorbar 0=no colorbar (default) 1=colorbar
+        :param label1: x-axis label
+        :param label2: y-axis label
+        :param title: title of the image
         """
         if(clip == None and bclip == None and clip == None):
             bclip = np.amin(self.trace)
@@ -436,5 +444,5 @@ class SUdata():
         # Edit header
         dobsresamp.header[:]['ns'] = nso
         dobsresamp.header[:]['dt'] = int(dto*1000000.)
-        
+
         return dobsresamp

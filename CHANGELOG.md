@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.2] - YYYY-MM-DD
+## [0.2.0] - YYYY-MM-DD
 
 ### Added
-- resampling function (+doc) for SU/CWP data
+- *resamp* resampling function (+doc) for SU/CWP data
+
+### Modified
+- docstring of the *image* method of the SUdata class
+
+## [0.1.2] - YYYY-MM-DD
 
 ### Modified
 - add __ZENODO__ DOI in the README.md

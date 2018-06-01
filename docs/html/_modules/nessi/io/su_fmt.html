@@ -341,6 +341,14 @@
               <span class="n">label2</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        matplotlib.pyplot.imshow adapted for SU files</span>
+
+<span class="sd">        :param bclip: data values outside of [bclip,wclip] are clipped</span>
+<span class="sd">        :param wclip: data values outside of [bclip,wclip] are clipped</span>
+<span class="sd">        :param clip: clip used to determine bclip and wclip</span>
+<span class="sd">        :param legend: colorbar 0=no colorbar (default) 1=colorbar</span>
+<span class="sd">        :param label1: x-axis label</span>
+<span class="sd">        :param label2: y-axis label</span>
+<span class="sd">        :param title: title of the image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span><span class="p">(</span><span class="n">clip</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bclip</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">clip</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">bclip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span>
@@ -589,7 +597,7 @@
         <span class="c1"># Edit header</span>
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nso</span>
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dto</span><span class="o">*</span><span class="mf">1000000.</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">dobsresamp</span></div></div>
 </pre></div>
 
