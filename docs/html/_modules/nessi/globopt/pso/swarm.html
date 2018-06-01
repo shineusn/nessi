@@ -161,8 +161,8 @@
 <span class="c1"># Copyright (C) 2018 Damien Pageot</span>
 <span class="c1"># ------------------------------------------------------------------</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The Swarm class and its associated functions for particles swarm</span>
-<span class="sd">optimization.</span>
+<span class="sd">Class and methods for particle swarm optimization.</span>
+
 <span class="sd">:copyright:</span>
 <span class="sd">    Damien Pageot (nessi.develop@protonmail.com)</span>
 <span class="sd">:license:</span>
@@ -170,8 +170,11 @@
 <span class="sd">    (https://www.gnu.org/copyleft/lesser.html)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <div class="viewcode-block" id="Swarm"><a class="viewcode-back" href="../../../../nessi_globopt.html#nessi.globopt.Swarm">[docs]</a><span class="k">class</span> <span class="nc">Swarm</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -288,7 +291,7 @@
         <span class="k">if</span> <span class="n">topology</span> <span class="o">==</span> <span class="s1">&#39;ring&#39;</span><span class="p">:</span>
             <span class="n">ibest</span> <span class="o">=</span> <span class="n">indv</span>
             <span class="n">vbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">indv</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">indv</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">indv</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">indv</span><span class="o">+</span><span class="mi">2</span><span class="p">):</span>
                 <span class="n">ii</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">ii</span> <span class="o">=</span> <span class="n">nindv</span><span class="o">-</span><span class="mi">1</span>
@@ -315,7 +318,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Standard PSO update.</span>
 
-<span class="sd">        :param control: 0 for weight (default), 1 for constriction </span>
+<span class="sd">        :param control: 0 for weight (default), 1 for constriction</span>
 <span class="sd">        :param c_0: value of the control parameter (default 0.7298)</span>
 <span class="sd">        :param c_1: value of the cognitive parameter (default 2.05)</span>
 <span class="sd">        :param c_2: value of the social parameter (default 2.05)</span>
@@ -355,7 +358,6 @@
                                                 <span class="o">*</span> <span class="p">(</span><span class="n">gbest</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span><span class="o">-</span><span class="n">current</span><span class="p">)</span>
 
                     <span class="c1"># Check particle velocity</span>
-                    <span class="c1"># vvv = particles[ibest][&#39;history&#39;][ipts,ipar]</span>
                     <span class="k">if</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">])</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> \
                             <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">])</span>\
