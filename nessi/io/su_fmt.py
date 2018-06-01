@@ -25,6 +25,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
+from scipy.signal import resample
 
 from nessi.signal import time_window
 from nessi.signal import space_window
@@ -399,3 +400,41 @@ class SUdata():
             disp[iv,:] += np.abs(tmp[:])
 
         return disp
+    def resamp(self, nso, dto):
+        """
+        Resample data in time.
+
+        :param nso: number of time samples in output
+        :param dto: time sampling in output
+        """
+
+        # Create a copy of the input SU data
+        dobsresamp = copy.deepcopy(self)
+
+        # Get values from header
+        ns = self.header[0]['ns']
+        dt = self.header[0]['dt']/1000000.
+
+        # Calculate time lenght for the old data
+        t_old = float(ns-1)*dt
+
+        # Calculate time lenght for the resampled data
+        t_resamp = float(nso-1)*dto
+
+        # Calculate the number of time samples of the old trace to resample
+        nsamp = int(t_resamp/dt)+1
+
+        # Resampling
+        if nsamp > ns:
+            print('Impossible to resample \n')
+        else:
+            if np.ndim(self.trace) == 1:
+                dobsresamp.trace = resample(self.trace[:,:nsamp], num=nso)
+            else:
+                dobsresamp.trace = resample(self.trace[:,:nsamp], num=nso, axis=1 )
+
+        # Edit header
+        dobsresamp.header[:]['ns'] = nso
+        dobsresamp.header[:]['dt'] = int(dto*1000000.)
+        
+        return dobsresamp

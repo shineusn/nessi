@@ -84,7 +84,10 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SU/CWP references</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SU/CWP references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sudata-methods">SUdata methods</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
@@ -173,8 +176,22 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="su-cwp-references">
-<h1>SU/CWP references<a class="headerlink" href="#su-cwp-references" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-nessi.io">
+<span id="su-cwp-references"></span><h1>SU/CWP references<a class="headerlink" href="#module-nessi.io" title="Permalink to this headline">¶</a></h1>
+<p>Initialization file for nessi.io.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body">Damien Pageot (<a class="reference external" href="mailto:nessi&#46;develop&#37;&#52;&#48;protonmail&#46;com">nessi<span>&#46;</span>develop<span>&#64;</span>protonmail<span>&#46;</span>com</a>)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body">GNU Lesser General Public License, Version 3
+(<a class="reference external" href="https://www.gnu.org/copyleft/lesser.html">https://www.gnu.org/copyleft/lesser.html</a>)</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="sudata-methods">
+<h2>SUdata methods<a class="headerlink" href="#sudata-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="nessi.io.SUdata">
 <em class="property">class </em><code class="descname">SUdata</code><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata" title="Permalink to this definition">¶</a></dt>
@@ -252,6 +269,24 @@ sufilter command - Seismic Unix 44R1).</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="nessi.io.SUdata.resamp">
+<code class="descname">resamp</code><span class="sig-paren">(</span><em>nso</em>, <em>dto</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.resamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.resamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample data in time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nso</strong> – number of time samples in output</li>
+<li><strong>dto</strong> – time sampling in output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="nessi.io.SUdata.taper">
 <code class="descname">taper</code><span class="sig-paren">(</span><em>tr1=0</em>, <em>tr2=0</em>, <em>min=0.0</em>, <em>tbeg=0.0</em>, <em>tend=0.0</em>, <em>type='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.taper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.taper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Taper the edge traces of a data panel to zero.</p>
@@ -303,6 +338,7 @@ sufilter command - Seismic Unix 44R1).</p>
 
 </dd></dl>
 
+</div>
 </div>
 
 

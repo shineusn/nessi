@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.2] - YYYY-MM-DD
 
+### Added
+- resampling function (+doc) for SU/CWP data
+
 ### Modified
 - add __ZENODO__ DOI in the README.md
 

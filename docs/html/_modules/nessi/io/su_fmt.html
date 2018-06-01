@@ -178,6 +178,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">resample</span>
 
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">time_window</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">space_window</span>
@@ -551,7 +552,45 @@
                     <span class="n">tmp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gobs</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">iw</span><span class="o">+</span><span class="n">iwmin</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
             <span class="n">disp</span><span class="p">[</span><span class="n">iv</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tmp</span><span class="p">[:])</span>
 
-        <span class="k">return</span> <span class="n">disp</span></div>
+        <span class="k">return</span> <span class="n">disp</span>
+<div class="viewcode-block" id="SUdata.resamp"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.resamp">[docs]</a>    <span class="k">def</span> <span class="nf">resamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nso</span><span class="p">,</span> <span class="n">dto</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resample data in time.</span>
+
+<span class="sd">        :param nso: number of time samples in output</span>
+<span class="sd">        :param dto: time sampling in output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create a copy of the input SU data</span>
+        <span class="n">dobsresamp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Get values from header</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;ns&#39;</span><span class="p">]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000000.</span>
+
+        <span class="c1"># Calculate time lenght for the old data</span>
+        <span class="n">t_old</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ns</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span>
+
+        <span class="c1"># Calculate time lenght for the resampled data</span>
+        <span class="n">t_resamp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">nso</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dto</span>
+
+        <span class="c1"># Calculate the number of time samples of the old trace to resample</span>
+        <span class="n">nsamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t_resamp</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="c1"># Resampling</span>
+        <span class="k">if</span> <span class="n">nsamp</span> <span class="o">&gt;</span> <span class="n">ns</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Impossible to resample </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">dobsresamp</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">[:,:</span><span class="n">nsamp</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">nso</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dobsresamp</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">[:,:</span><span class="n">nsamp</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">nso</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span> <span class="p">)</span>
+
+        <span class="c1"># Edit header</span>
+        <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nso</span>
+        <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dto</span><span class="o">*</span><span class="mf">1000000.</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">dobsresamp</span></div></div>
 </pre></div>
 
            </div>
