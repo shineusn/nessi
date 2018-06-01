@@ -52,6 +52,9 @@
           
 
           
+            
+            <img src="_static/nessi_logo_white.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
@@ -78,9 +81,10 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sucwp_references.html">SU/CWP references</a></li>
@@ -174,6 +178,72 @@
 </style>
 <div class="section" id="nessi-modeling-interfaces-references">
 <h1>nessi.modeling.interfaces references<a class="headerlink" href="#nessi-modeling-interfaces-references" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nessi.modeling.interfaces.dispersion_curve_init">
+<code class="descname">dispersion_curve_init</code><span class="sig-paren">(</span><em>verbose</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/modeling/interfaces/gpdcwrap.html#dispersion_curve_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.modeling.interfaces.dispersion_curve_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the dispersion curve calculation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> – integer, 0 minimal ouput, 1 verbose output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.interfaces.dispersion_curve_rayleigh">
+<code class="descname">dispersion_curve_rayleigh</code><span class="sig-paren">(</span><em>nLayers</em>, <em>h</em>, <em>vp</em>, <em>vs</em>, <em>rho</em>, <em>nSamples</em>, <em>omega</em>, <em>nModes</em>, <em>slowness</em>, <em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/modeling/interfaces/gpdcwrap.html#dispersion_curve_rayleigh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.modeling.interfaces.dispersion_curve_rayleigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Rayleigh theoretical dispersion curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nLayers</strong> – integer, number of layers</li>
+<li><strong>h</strong> – double, thickness of layers (m)</li>
+<li><strong>vp</strong> – double, P-wave velocity in each layer (m/s)</li>
+<li><strong>vs</strong> – double, S-wave velocity in each layer (m/s)</li>
+<li><strong>rho</strong> – double, density in each layer (kg/m3)</li>
+<li><strong>nSamples</strong> – integer, number of frequency samples</li>
+<li><strong>omega</strong> – double, angular frequencies (rad/s)</li>
+<li><strong>nModes</strong> – integer, number of modes including fundamental</li>
+<li><strong>slowness</strong> – double, output of slowness values</li>
+<li><strong>group</strong> – integer, 0 for phase, 1 for group</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.interfaces.dispersion_curve_love">
+<code class="descname">dispersion_curve_love</code><span class="sig-paren">(</span><em>nLayers</em>, <em>h</em>, <em>vp</em>, <em>vs</em>, <em>rho</em>, <em>nSamples</em>, <em>omega</em>, <em>nModes</em>, <em>slowness</em>, <em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/modeling/interfaces/gpdcwrap.html#dispersion_curve_love"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.modeling.interfaces.dispersion_curve_love" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Love theoretical dispersion curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nLayers</strong> – integer, number of layers</li>
+<li><strong>h</strong> – double, thickness of layers (m)</li>
+<li><strong>vp</strong> – double, P-wave velocity in each layer (m/s)</li>
+<li><strong>vs</strong> – double, S-wave velocity in each layer (m/s)</li>
+<li><strong>rho</strong> – double, density in each layer (kg/m3)</li>
+<li><strong>nSamples</strong> – integer, number of frequency samples</li>
+<li><strong>omega</strong> – double, angular frequencies (rad/s)</li>
+<li><strong>nModes</strong> – integer, number of modes including fundamental</li>
+<li><strong>slowness</strong> – double, output of slowness values</li>
+<li><strong>group</strong> – integer, 0 for phase, 1 for group</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

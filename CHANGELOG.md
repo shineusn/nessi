@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Modified
 - add __ZENODO__ DOI in the README.md
+- interfaces references documentation
 
 ## [0.1.1] - 2018-06-01
 
