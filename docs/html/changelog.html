@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Interfaces &mdash; NeSSI  documentation</title>
+  <title>Changelog &mdash; NeSSI  documentation</title>
   
 
   
@@ -29,8 +29,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="NeSSI global optimization module" href="nessi_globopt.html" />
-    <link rel="prev" title="Particle Swarm Optimization: basics" href="notebooks/PSO_basics/PSO_basics.html" /> 
+    <link rel="prev" title="Interface with Geopsy-gpdc" href="gpdc_interface.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,22 +84,21 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 </ul>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sucwp_references.html">SU/CWP references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Interfaces</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#geopsy-gpdc">Geopsy-gpdc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#gprmax">gprMax</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nessi_globopt.html">NeSSI global optimization module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
 </ul>
 
             
@@ -146,13 +144,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Interfaces</li>
+      <li>Changelog</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/interfaces.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -184,17 +182,85 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="interfaces">
-<h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="geopsy-gpdc">
-<h2>Geopsy-gpdc<a class="headerlink" href="#geopsy-gpdc" title="Permalink to this headline">¶</a></h2>
-<p><em>gpdc is a command line tool for computing phase or group velocity dispersion curve for either Rayleigh or Love waves given a layered 1D earth model in simple ascii format</em> (<a class="reference external" href="http://www.geopsy.org/wiki/index.php/Gpdc">Geopsy-gpdc wiki page</a>).</p>
-<p>NeSSI uses <em>gpdc</em> from <a class="reference external" href="http://www.geopsy.org/download.php">geopsypack 2.10.1</a>.</p>
-</div>
-<div class="section" id="gprmax">
-<h2>gprMax<a class="headerlink" href="#gprmax" title="Permalink to this headline">¶</a></h2>
-<p><strong>coming soon</strong></p>
-<p><em>gprMax is open source software that simulates electromagnetic wave propagation. It uses Yee’s algorithm to solve Maxwell’s equations in 3D using the Finite-Difference Time-Domain (FDTD) method</em> (<a class="reference external" href="http://www.gprmax.com/about.shtml">gprMax website</a>).</p>
+<div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span># Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [0.1.2] - YYYY-MM-DD
+
+### Added
+- *CHANGELOG.md* in docs/
+- *Interface with Geopsy-gpdc* in docs/
+
+### Modified
+- add __ZENODO__ DOI in the README.md
+- interfaces references documentation
+
+## [0.1.1] - 2018-06-01
+
+### Added
+- *test_windowing.py* in nessi/signal/tests
+- *test_tapering.py* in nessi/signal/tests
+- *test_filtering.py* in nessi/signal/tests
+
+### Modified
+- README.md
+
+### Fixed
+- remake html documentation
+- *signal.time_window* issue for 1D signal
+- *signal.taper1d* issue for 1D signal
+
+## [0.1.0] - 2018-05-31
+
+### Added
+- CONTRIBUTE.md
+- *getting started* chapter in docs/
+- *interfaces* chapter in docs/
+- *gprMax* paragraph in *interfaces* (docs/)
+- *interfaces references* chapter in docs
+- *geopsy-gpdc* paragraph in *interfaces* (docs/)
+- geopsy-gpdc interface in nessi.modeling.interfaces
+- *test_gpdcwrap.py* in nessi/modeling/tests
+- *NeSSI Global Optimization* references (docs/)
+- *test_swarm.py* in nessi/globopt/tests
+- *SU/CWP references* (docs/)
+- time_window function in nessi.signal windowing.py
+- space_window function in nessi.signal windowing.py
+- taper1d function in nessi.signal tapering.py
+- sine and cosine taper types
+- sin2filter polynomial filter nessi.signal filtering.py
+- pfilter method in nessi.io for SU data format
+- adding taper method in nessi.io for SU data format
+- adding kill method (zero out traces) in nessi.io for SU data format
+- add *modbuilder* module (perspectives)
+
+### Modified
+- README.md
+- nessi.swm functions are now located at nessi.modeling.swm
+- nessi.pso.Swarm class is now callable from nessi.globopt.Swarm
+- adding window in space to suwind method in nessi.io for SU data format
+- wind method (SU format) now depends nessi.signal.time_window and nessi.signal.space_window
+- all *__init__.py headers*
+- all python file headers (docstrings...)
+- all Fortran source code headers (infos)
+- rename *grd* module in *interp2d* and move it in *modbuilder* module
+
+### Fixed
+- *get_gbest* method of the Swarm class (nessi.globopt), option *ring*
+
+## [0.0.0] - 2018-05-21
+- starting point for development of the true first version (0.1.0); not a valid version.
+
+## [X.X.X] - YYYY-MM-DD
+### Added
+### Fixed
+### Removed
+</pre></div>
 </div>
 </div>
 
@@ -206,10 +272,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="nessi_globopt.html" class="btn btn-neutral float-right" title="NeSSI global optimization module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="notebooks/PSO_basics/PSO_basics.html" class="btn btn-neutral" title="Particle Swarm Optimization: basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="gpdc_interface.html" class="btn btn-neutral" title="Interface with Geopsy-gpdc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

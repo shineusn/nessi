@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.2] - YYYY-MM-DD
 
+### Added
+- *CHANGELOG.md* in docs/
+- *Interface with Geopsy-gpdc* in docs/
+- *Particle Swarm Optimization: basics* in docs/
+
 ### Modified
 - add __ZENODO__ DOI in the README.md
 - interfaces references documentation

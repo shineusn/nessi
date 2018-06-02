@@ -4,10 +4,12 @@
    contain the root `toctree` directive.
 
 ******************
-NeSSI Docs - 0.1.2
+NeSSI Docs - 0.1.x
 ******************
 
-NeSSI (Near-Surface Seismic Imaging) aims to provide python modules for the rapid development of seismic inversion codes based on the particle swarm optimization method.
+NeSSI (Near-Surface Seismic Imaging) aims to provide python modules for seismic signal processing and rapid development of seismic inversion codes based on the particle swarm optimization method.
+
+NeSSI is a open-source project licensed under the terms of the `GNU LPGL v3 license <https://www.gnu.org/licenses/lgpl-3.0.fr.html>`_.
 
 ===============
 Getting started
@@ -29,7 +31,6 @@ Getting started
     seismic_modeling_examples
     sucwp_references
     particle_swarm
-    notebooks/PSO_basics/PSO_basics
     interfaces
     nessi_globopt
     nessi_modeling_interfaces
@@ -40,10 +41,18 @@ Tutorials
 
 .. toctree::
     :maxdepth: 1
-    
+
+    gpdc_interface
+    PSO_basics
+
 =========
 NeSSI API
 =========
+
+.. toctree::
+    :maxdepth: 1
+
+    changelog
 
 * :ref:`genindex`
 * :ref:`modindex`
