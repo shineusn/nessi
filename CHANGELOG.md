@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *CHANGELOG.md* in docs/
 - *Interface with Geopsy-gpdc* in docs/
 - *Particle Swarm Optimization: basics* in docs/
+- *Read, write and create SU data* tutorial in docs/
+- **lib** folder for future C/Fortran libraries
 
 ### Modified
 - add __ZENODO__ DOI in the README.md

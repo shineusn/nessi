@@ -42,6 +42,7 @@ Tutorials
 .. toctree::
     :maxdepth: 1
 
+    read_write_and_create_SU_data
     gpdc_interface
     PSO_basics
 
