@@ -251,7 +251,7 @@ class SUdata():
         # Create a copy of the input SU data
         dobsw = copy.deepcopy(self)
 
-        if key != ' ': # Window traces in space
+        if key != ' ' and (min != max): # Window traces in space
             # Get traces indices from key
             imin = np.argmin(np.abs(dobsw.header[:][key]-min))
             imax = np.argmin(np.abs(dobsw.header[:][key]-max))
@@ -264,7 +264,7 @@ class SUdata():
             for ir in range(0, len(dobsw.header)):
                 dobsw.header[ir]['cdpt'] = ir+1
 
-        else: # Window traces in time
+        if tmax != tmin: # Window traces in time
             # Get parameters from SU header
             dt = dobsw.header[0]['dt']/1000000.
             delrt = float(dobsw.header[0]['delrt'])/1000.
@@ -278,14 +278,13 @@ class SUdata():
 
         return dobsw
 
-    def pfilter(self, freq, amps, dt, axis=0):
+    def pfilter(self, freq, amps):
         """
         Applies a zero-phase, sine-squared tapered filter (adapted from the
         sufilter command - Seismic Unix 44R1).
 
         :param freq: array of filter frequencies (Hz)
         :param amps: array of filter amplitudes
-        :param dt: time sampling
         :param axis: time axis if dobs is a 2D array
         """
         # Create a copy of the input SU data
@@ -367,9 +366,12 @@ class SUdata():
         # Get offset
         scalco = self.header[0]['scalco']
         if scalco < 0:
-            scale = -1./scalco
+            scale = -1./float(scalco)
         if scalco == 0:
             scale = 1.
+        if scalco > 0:
+            scale = float(scalco)
+
         x = self.header[:]['sx']*scale-self.header[:]['gx']*scale
         y = self.header[:]['sy']*scale-self.header[:]['gy']*scale
         offset = np.sqrt(x**2+y**2)
@@ -398,4 +400,4 @@ class SUdata():
                     tmp[iw] += gobs[ir, iw+iwmin]*np.exp(phase)
             disp[iv,:] += np.abs(tmp[:])
 
-        return disp
+        return disp, vel, freq[iwmin:iwmin+nw]

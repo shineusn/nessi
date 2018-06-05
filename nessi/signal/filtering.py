@@ -62,7 +62,10 @@ def sin2filter(dobs, freq, amps, dt, axis=0):
     if np.ndim(dobs) == 1:
         gobsfilter = np.zeros(nfft, dtype=np.complex64)
     else:
-        gobsfilter = np.zeros((nfft, ntrac), dtype=np.complex64)
+        if axis == 0:
+            gobsfilter = np.zeros((nfft, ntrac), dtype=np.complex64)
+        if axis == 1:
+            gobsfilter = np.zeros((ntrac, nfft), dtype=np.complex64)
 
     # Get the number of filter frequencies
     npoly = len(freq)

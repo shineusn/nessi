@@ -51,6 +51,9 @@
           
 
           
+            
+            <img src="../../../../_static/nessi_logo_white.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
@@ -79,15 +82,24 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../seismic_modeling.html">2D elastic seismic modeling</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dispersion_curve_inversion.html">Dispersion curve inversion using GPDC and PSO</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_modeling_swm.html">nessi.modeling.swm references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../sucwp_references.html">SU/CWP references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../particle_swarm.html">Particle Swarm Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../interfaces.html">Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_globopt.html">NeSSI global optimization module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_globopt_references.html">nessi.globopt references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -151,7 +163,30 @@
            <div itemprop="articleBody">
             
   <h1>Source code for nessi.modeling.interfaces.gpdcwrap</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># -------------------------------------------------------------------</span>
+<span class="c1"># Filename: gpdcwrap.py</span>
+<span class="c1">#   Author: Damien Pageot</span>
+<span class="c1">#    Email: nessi.develop@protonmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2018 Damien Pageot</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions to use the Geopsy-gpdc engine.</span>
+
+<span class="sd">:copyright:</span>
+<span class="sd">    Damien Pageot (nessi.develop@protonmail.com)</span>
+<span class="sd">:license:</span>
+<span class="sd">    GNU Lesser General Public License, Version 3</span>
+<span class="sd">    (https://www.gnu.org/copyleft/lesser.html)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">CDLL</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_float</span><span class="p">,</span> <span class="n">byref</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">,</span> <span class="n">c_double</span>
 <span class="kn">from</span> <span class="nn">numpy.ctypeslib</span> <span class="k">import</span> <span class="n">ndpointer</span><span class="p">,</span> <span class="n">load_library</span>
 <span class="kn">from</span> <span class="nn">nessi</span> <span class="k">import</span> <span class="n">QGPCOREWAVE_PATH</span>
@@ -164,7 +199,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the dispersion curve calculation.</span>
 
-<span class="sd">    :param verbose: integer, 0 minimal ouput, 1 verbose output </span>
+<span class="sd">    :param verbose: integer, 0 minimal ouput, 1 verbose output</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">libCoreWave</span><span class="o">.</span><span class="n">dispersion_curve_init_</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
     <span class="n">libCoreWave</span><span class="o">.</span><span class="n">dispersion_curve_init_</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">verbose</span><span class="p">)))</span>
@@ -195,7 +230,7 @@
                                                         <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span>
                                                         <span class="n">ndpointer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s1">&#39;C_CONTIGUOUS&#39;</span><span class="p">),</span>
                                                         <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
-    
+
     <span class="n">libCoreWave</span><span class="o">.</span><span class="n">dispersion_curve_rayleigh_</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">nLayers</span><span class="p">)),</span>
                                            <span class="n">h</span><span class="p">,</span>
                                            <span class="n">vp</span><span class="p">,</span>
@@ -233,7 +268,7 @@
                                                     <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">),</span>
                                                     <span class="n">ndpointer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s1">&#39;C_CONTIGUOUS&#39;</span><span class="p">),</span>
                                                     <span class="n">POINTER</span><span class="p">(</span><span class="n">c_int</span><span class="p">)]</span>
-    
+
     <span class="n">libCoreWave</span><span class="o">.</span><span class="n">dispersion_curve_love_</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">c_int</span><span class="p">(</span><span class="n">nLayers</span><span class="p">)),</span>
                                        <span class="n">h</span><span class="p">,</span>
                                        <span class="n">vp</span><span class="p">,</span>

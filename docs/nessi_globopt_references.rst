@@ -1,5 +1,5 @@
 ********************************
-NeSSI global optimization module
+nessi.globopt references
 ********************************
 
 .. automodule:: nessi.globopt
@@ -11,4 +11,4 @@ Particle Swarm optimization class
 =================================
 
 .. autoclass:: nessi.globopt.Swarm
-	       :members: init_pspace, init_particles, update
+	       :members: init_pspace, init_particles, get_gbest, update
