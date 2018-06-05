@@ -10,14 +10,10 @@ NeSSI is an open-source project licensed under the [LGPLv3](http://www.gnu.org/l
 
 ## Documentation
 
-The [NeSSI documentation](https://pageotd.github.io/nessi/) provides informations about:
-* [How to install the NeSSI package](https://pageotd.github.io/nessi/html/getting_started.html)
-* Methods and data format:
-  * [the 2D PSv modeling engine](https://pageotd.github.io/nessi/html/seismic_modeling.html)
-  * [the particle swarm optimization method](https://pageotd.github.io/nessi/html/particle_swarm.html)
-  * [the SU/CWP format]()
-  * [the interfaces with external softwares]()
-* NeSSI's [feature descriptions]()
+The [NeSSI documentation](https://pageotd.github.io/nessi/) provides:
+* Getting started informations
+* Tutorials
+* NeSSI API
 
 The [NeSSI wiki]() provides informations about:
 * [How to contribute](https://github.com/PageotD/nessi/blob/master/CONTRIBUTE.md)
