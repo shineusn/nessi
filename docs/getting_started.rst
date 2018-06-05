@@ -25,8 +25,18 @@ Installation
 
 The installation of NeSSI is not automatized yet (with a setup.py for example) but it is quite simple.
 
-In a terminal, go to the nessi/nessi folder and type:  ``make`` .
+In a terminal, in the nessi folder, type to compile C and Fortran libraries:  ``make`` .
 
 Then, you have to add the path of the nessi package to ``PYTHONPATH``. In your ``.bashrc`` file, add:
 
 ``export PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package``
+
+Regenerate all pathes: ``source ~/.bashrc``.
+
+NeSSI package is now available from python.
+
+-----------
+Geopsy-gpdc
+-----------
+
+If you want to use the Geopsy-gpdc interfaces, you must have ``gpdc`` installed on your computer and you have to edit the path to QGpCore library (provided during the Geopsy compilation) in ``nessi/__init__.py``.

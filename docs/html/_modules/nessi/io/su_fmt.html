@@ -51,6 +51,9 @@
           
 
           
+            
+            <img src="../../../_static/nessi_logo_white.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
@@ -79,15 +82,24 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../seismic_modeling.html">2D elastic seismic modeling</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dispersion_curve_inversion.html">Dispersion curve inversion using GPDC and PSO</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nessi_modeling_swm.html">nessi.modeling.swm references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sucwp_references.html">SU/CWP references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../particle_swarm.html">Particle Swarm Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/PSO_basics/PSO_basics.html">Particle Swarm Optimization: basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../interfaces.html">Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nessi_globopt.html">NeSSI global optimization module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nessi_globopt_references.html">nessi.globopt references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -413,7 +425,7 @@
         <span class="c1"># Create a copy of the input SU data</span>
         <span class="n">dobsw</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39; &#39;</span><span class="p">:</span> <span class="c1"># Window traces in space</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39; &#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">min</span> <span class="o">!=</span> <span class="nb">max</span><span class="p">):</span> <span class="c1"># Window traces in space</span>
             <span class="c1"># Get traces indices from key</span>
             <span class="n">imin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="n">key</span><span class="p">]</span><span class="o">-</span><span class="nb">min</span><span class="p">))</span>
             <span class="n">imax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="n">key</span><span class="p">]</span><span class="o">-</span><span class="nb">max</span><span class="p">))</span>
@@ -426,7 +438,7 @@
             <span class="k">for</span> <span class="n">ir</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">)):</span>
                 <span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">ir</span><span class="p">][</span><span class="s1">&#39;cdpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ir</span><span class="o">+</span><span class="mi">1</span>
 
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># Window traces in time</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="o">!=</span> <span class="n">tmin</span><span class="p">:</span> <span class="c1"># Window traces in time</span>
             <span class="c1"># Get parameters from SU header</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000000.</span>
             <span class="n">delrt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dobsw</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;delrt&#39;</span><span class="p">])</span><span class="o">/</span><span class="mf">1000.</span>
@@ -440,14 +452,13 @@
 
         <span class="k">return</span> <span class="n">dobsw</span></div>
 
-<div class="viewcode-block" id="SUdata.pfilter"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.pfilter">[docs]</a>    <span class="k">def</span> <span class="nf">pfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">amps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="SUdata.pfilter"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.pfilter">[docs]</a>    <span class="k">def</span> <span class="nf">pfilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">amps</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies a zero-phase, sine-squared tapered filter (adapted from the</span>
 <span class="sd">        sufilter command - Seismic Unix 44R1).</span>
 
 <span class="sd">        :param freq: array of filter frequencies (Hz)</span>
 <span class="sd">        :param amps: array of filter amplitudes</span>
-<span class="sd">        :param dt: time sampling</span>
 <span class="sd">        :param axis: time axis if dobs is a 2D array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Create a copy of the input SU data</span>
@@ -521,7 +532,7 @@
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">ir</span><span class="p">,:])</span>
         <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">masw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">dv</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mf">100.</span><span class="p">):</span>
+<div class="viewcode-block" id="SUdata.masw"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.masw">[docs]</a>    <span class="k">def</span> <span class="nf">masw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">dv</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mf">100.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the dispersion diagram using MASW method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -529,9 +540,12 @@
         <span class="c1"># Get offset</span>
         <span class="n">scalco</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;scalco&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">scalco</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="n">scalco</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">scalco</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scalco</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="k">if</span> <span class="n">scalco</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scalco</span><span class="p">)</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;sx&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;gx&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;sy&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;gy&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">scale</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -560,6 +574,7 @@
                     <span class="n">tmp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gobs</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">iw</span><span class="o">+</span><span class="n">iwmin</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
             <span class="n">disp</span><span class="p">[</span><span class="n">iv</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tmp</span><span class="p">[:])</span>
 
+<<<<<<< HEAD
         <span class="k">return</span> <span class="n">disp</span>
 <div class="viewcode-block" id="SUdata.resamp"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.resamp">[docs]</a>    <span class="k">def</span> <span class="nf">resamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nso</span><span class="p">,</span> <span class="n">dto</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -599,6 +614,9 @@
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dto</span><span class="o">*</span><span class="mf">1000000.</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dobsresamp</span></div></div>
+=======
+        <span class="k">return</span> <span class="n">disp</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="n">iwmin</span><span class="p">:</span><span class="n">iwmin</span><span class="o">+</span><span class="n">nw</span><span class="p">]</span></div></div>
+>>>>>>> develop
 </pre></div>
 
            </div>
