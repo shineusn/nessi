@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *pfilter* method of SUdata() can now handle axis 0 and 1
 - *masw* method of SUdata() can now return freq and vel arrays as expected
 - *masw* method of SUdata() now handles correctly the *scalco* keyword
+- obselete dependencies
 
 ## Removed
 - *2D seismic modeling* part in docs/ (temporary)
