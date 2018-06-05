@@ -6,16 +6,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.2] - YYYY-MM-DD
 
-### Added
+### Added
 - *CHANGELOG.md* in docs/
 - *Interface with Geopsy-gpdc* in docs/
 - *Particle Swarm Optimization: basics* in docs/
 - *Read, write and create SU data* tutorial in docs/
+- *Windowing SU data* tutorial in docs/
+- *Tapering SU data* tutorial in docs/
 - **lib** folder for future C/Fortran libraries
+- *nessi.modeling.swm references* in docs/
+- *nessi.globopt references* in docs
+- *MASW from SU data* tutorial in docs/
+- *masw* method in *SU/CWP references* chapter in docs/
 
 ### Modified
 - add __ZENODO__ DOI in the README.md
 - interfaces references documentation
+- *Seismic modeling example* now in tutorials
+- *SU/CWP references* now in *NeSSI API* chapter
+- *Getting started* chapter in docs/
+
+### Fixed
+- *wind* method of SUdata() can now apply a window in time and space at the same time.
+- *pfilter* method of SUdata() can now handle axis 0 and 1
+- *masw* method of SUdata() can now return freq and vel arrays as expected
+- *masw* method of SUdata() now handles correctly the *scalco* keyword
+
+## Removed
+- *2D seismic modeling* part in docs/ (temporary)
 
 ## [0.1.1] - 2018-06-01
 

@@ -29,8 +29,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Particle Swarm Optimization" href="particle_swarm.html" />
-    <link rel="prev" title="Seismic modeling examples" href="seismic_modeling_examples.html" /> 
+    <link rel="next" title="nessi.modeling.interfaces references" href="nessi_modeling_interfaces.html" />
+    <link rel="prev" title="nessi.modeling.swm references" href="nessi_modeling_swm.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,21 +85,22 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 </ul>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SU/CWP references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nessi_globopt.html">NeSSI global optimization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
-</ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html#normalize-the-dispersion-diagram">Normalize the dispersion diagram</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
 </ul>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_swm.html">nessi.modeling.swm references</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SU/CWP references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_globopt_references.html">nessi.globopt references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
@@ -224,8 +225,14 @@ If min= is set it overrides selecting traces by header.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="nessi.io.SUdata.masw">
+<code class="descname">masw</code><span class="sig-paren">(</span><em>vmin=0.0</em>, <em>vmax=1000.0</em>, <em>dv=5.0</em>, <em>fmin=1.0</em>, <em>fmax=100.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.masw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.masw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the dispersion diagram using MASW method</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="nessi.io.SUdata.pfilter">
-<code class="descname">pfilter</code><span class="sig-paren">(</span><em>freq</em>, <em>amps</em>, <em>dt</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.pfilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.pfilter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pfilter</code><span class="sig-paren">(</span><em>freq</em>, <em>amps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.pfilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.pfilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies a zero-phase, sine-squared tapered filter (adapted from the
 sufilter command - Seismic Unix 44R1).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -235,7 +242,6 @@ sufilter command - Seismic Unix 44R1).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>freq</strong> – array of filter frequencies (Hz)</li>
 <li><strong>amps</strong> – array of filter amplitudes</li>
-<li><strong>dt</strong> – time sampling</li>
 <li><strong>axis</strong> – time axis if dobs is a 2D array</li>
 </ul>
 </td>
@@ -324,10 +330,10 @@ sufilter command - Seismic Unix 44R1).</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="particle_swarm.html" class="btn btn-neutral float-right" title="Particle Swarm Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="nessi_modeling_interfaces.html" class="btn btn-neutral float-right" title="nessi.modeling.interfaces references" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="seismic_modeling_examples.html" class="btn btn-neutral" title="Seismic modeling examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="nessi_modeling_swm.html" class="btn btn-neutral" title="nessi.modeling.swm references" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

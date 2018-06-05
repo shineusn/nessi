@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Particle Swarm Optimization: basics" href="PSO_basics.html" /> 
+    <link rel="prev" title="nessi.globopt references" href="nessi_globopt_references.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,20 +85,21 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="seismic_modeling.html">2D elastic seismic modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sucwp_references.html">SU/CWP references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="particle_swarm.html">Particle Swarm Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nessi_globopt.html">NeSSI global optimization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html#normalize-the-dispersion-diagram">Normalize the dispersion diagram</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
 </ul>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_swm.html">nessi.modeling.swm references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sucwp_references.html">SU/CWP references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_globopt_references.html">nessi.globopt references</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
 </ul>
 
@@ -193,15 +194,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.2] - YYYY-MM-DD
 
-### Added
+### Added
 - *CHANGELOG.md* in docs/
 - *Interface with Geopsy-gpdc* in docs/
 - *Particle Swarm Optimization: basics* in docs/
+- *Read, write and create SU data* tutorial in docs/
+- *Windowing SU data* tutorial in docs/
+- *Tapering SU data* tutorial in docs/
 - **lib** folder for future C/Fortran libraries
+- *nessi.modeling.swm references* in docs/
+- *nessi.globopt references* in docs
 
 ### Modified
 - add __ZENODO__ DOI in the README.md
 - interfaces references documentation
+- *Seismic modeling example* now in tutorials
+- *SU/CWP references* now in *NeSSI API* chapter
+- *Getting started* chapter in docs/
+
+### Fixed
+- *wind* method of SUdata() can now apply a window in time and space at the same time.
+- *pfilter* method of SUdata() can now handle axis 0 and 1
+- *masw* method of SUdata() can now return freq and vel arrays as expected
+- *masw* method of SUdata() now handles correctly the *scalco* keyword
+
+## Removed
+- *2D seismic modeling* part in docs/ (temporary)
 
 ## [0.1.1] - 2018-06-01
 
@@ -276,7 +294,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="PSO_basics.html" class="btn btn-neutral" title="Particle Swarm Optimization: basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="nessi_globopt_references.html" class="btn btn-neutral" title="nessi.globopt references" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

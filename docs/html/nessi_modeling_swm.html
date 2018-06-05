@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nessi.modeling.swm references &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SU/CWP references" href="sucwp_references.html" />
+    <link rel="prev" title="Particle Swarm Optimization: basics" href="PSO_basics.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NeSSI
+          
+
+          
+            
+            <img src="_static/nessi_logo_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html#normalize-the-dispersion-diagram">Normalize the dispersion diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">nessi.modeling.swm references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sucwp_references.html">SU/CWP references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nessi_globopt_references.html">nessi.globopt references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>nessi.modeling.swm references</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/nessi_modeling_swm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="nessi-modeling-swm-references">
+<h1>nessi.modeling.swm references<a class="headerlink" href="#nessi-modeling-swm-references" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nessi.modeling.swm.acqpos">
+<code class="descname">acqpos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.acqpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>recpos = acqpos(n1,n2,npml,dh,acq,[nrec])</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">acqpos</span></code>.</p>
+<p>n1 : input int
+n2 : input int
+npml : input int
+dh : input float
+acq : input rank-2 array(‘f’) with bounds (nrec,2)</p>
+<dl class="docutils">
+<dt>nrec <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(acq,0)</dd>
+</dl>
+<p>recpos : rank-2 array(‘i’) with bounds (nrec,2)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.evolution">
+<code class="descname">evolution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.evolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>recx,recz,recp = evolution(n1,n2,h,npml,nts,ntsnap,dt,srctype,tsrc,gsrc,recpos,isurf,isnap,bux,buz,lb0,lbmu,mue,pmlx0,pmlx1,pmlz0,pmlz1,[nt,nrec])</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">evolution</span></code>.</p>
+<p>n1 : input int
+n2 : input int
+h : input float
+npml : input int
+nts : input int
+ntsnap : input int
+dt : input float
+srctype : input int
+tsrc : input rank-1 array(‘f’) with bounds (nt)
+gsrc : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+recpos : input rank-2 array(‘i’) with bounds (nrec,2)
+isurf : input int
+isnap : input int
+bux : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+buz : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+lb0 : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+lbmu : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+mue : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlx0 : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlx1 : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlz0 : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlz1 : input rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)</p>
+<dl class="docutils">
+<dt>nt <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: len(tsrc)</dd>
+<dt>nrec <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(recpos,0)</dd>
+</dl>
+<p>recx : rank-2 array(‘f’) with bounds (nts,nrec)
+recz : rank-2 array(‘f’) with bounds (nts,nrec)
+recp : rank-2 array(‘f’) with bounds (nts,nrec)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.modbuo">
+<code class="descname">modbuo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.modbuo" title="Permalink to this definition">¶</a></dt>
+<dd><p>bux,buz = modbuo(roe,[n1e,n2e])</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">modbuo</span></code>.</p>
+<p>roe : input rank-2 array(‘f’) with bounds (n1e,n2e)</p>
+<dl class="docutils">
+<dt>n1e <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(roe,0)</dd>
+<dt>n2e <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(roe,1)</dd>
+</dl>
+<p>bux : rank-2 array(‘f’) with bounds (n1e,n2e)
+buz : rank-2 array(‘f’) with bounds (n1e,n2e)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.modext">
+<code class="descname">modext</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.modext" title="Permalink to this definition">¶</a></dt>
+<dd><p>ve = modext(npml,v,[n1,n2])</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">modext</span></code>.</p>
+<p>npml : input int
+v : input rank-2 array(‘f’) with bounds (n1,n2)</p>
+<dl class="docutils">
+<dt>n1 <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(v,0)</dd>
+<dt>n2 <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(v,1)</dd>
+</dl>
+<p>ve : rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.modlame">
+<code class="descname">modlame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.modlame" title="Permalink to this definition">¶</a></dt>
+<dd><p>mu,lbd,lbdmu = modlame(vpe,vse,roe,[n1e,n2e])</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">modlame</span></code>.</p>
+<p>vpe : input rank-2 array(‘f’) with bounds (n1e,n2e)
+vse : input rank-2 array(‘f’) with bounds (n1e,n2e)
+roe : input rank-2 array(‘f’) with bounds (n1e,n2e)</p>
+<dl class="docutils">
+<dt>n1e <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(vpe,0)</dd>
+<dt>n2e <span class="classifier-delimiter">:</span> <span class="classifier">input int, optional</span></dt>
+<dd>Default: shape(vpe,1)</dd>
+</dl>
+<p>mu : rank-2 array(‘f’) with bounds (n1e,n2e)
+lbd : rank-2 array(‘f’) with bounds (n1e,n2e)
+lbdmu : rank-2 array(‘f’) with bounds (n1e,n2e)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.pmlmod">
+<code class="descname">pmlmod</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.pmlmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>pmlx0,pmlx1,pmlz0,pmlz1 = pmlmod(n1,n2,h,isurf,npml,apml,ppml)</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">pmlmod</span></code>.</p>
+<p>n1 : input int
+n2 : input int
+h : input float
+isurf : input int
+npml : input int
+apml : input float
+ppml : input int</p>
+<p>pmlx0 : rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlx1 : rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlz0 : rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)
+pmlz1 : rank-2 array(‘f’) with bounds (n1+2*npml,n2+2*npml)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.ricker">
+<code class="descname">ricker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.ricker" title="Permalink to this definition">¶</a></dt>
+<dd><p>tsrc = ricker(nt,dt,f0,t0)</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">ricker</span></code>.</p>
+<p>nt : input int
+dt : input float
+f0 : input float
+t0 : input float</p>
+<p>tsrc : rank-1 array(‘f’) with bounds (nt)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nessi.modeling.swm.srcspread">
+<code class="descname">srcspread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nessi.modeling.swm.srcspread" title="Permalink to this definition">¶</a></dt>
+<dd><p>gsrc = srcspread(n1,n2,nsp,xs,zs,h,sigma)</p>
+<p>Wrapper for <code class="docutils literal notranslate"><span class="pre">srcspread</span></code>.</p>
+<p>n1 : input int
+n2 : input int
+nsp : input int
+xs : input float
+zs : input float
+h : input float
+sigma : input float</p>
+<p>gsrc : rank-2 array(‘f’) with bounds (n1+2*nsp,n2+2*nsp)</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sucwp_references.html" class="btn btn-neutral float-right" title="SU/CWP references" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PSO_basics.html" class="btn btn-neutral" title="Particle Swarm Optimization: basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

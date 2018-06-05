@@ -20,20 +20,15 @@ Getting started
 
     getting_started
 
-===================
-2D seismic modeling
-===================
+.. ===================
+.. 2D seismic modeling
+.. ===================
 
-.. toctree::
-    :maxdepth: 1
 
-    seismic_modeling
-    seismic_modeling_examples
-    sucwp_references
-    particle_swarm
-    interfaces
-    nessi_globopt
-    nessi_modeling_interfaces
+..    seismic_modeling
+..    particle_swarm
+..    interfaces
+..    nessi_globopt
 
 =========
 Tutorials
@@ -42,7 +37,12 @@ Tutorials
 .. toctree::
     :maxdepth: 1
 
+    seismic_modeling_examples
     read_write_and_create_SU_data
+    windowing_SU_data
+    filtering_SU_data
+    tapering_SU_data
+    masw_SU_data
     gpdc_interface
     PSO_basics
 
@@ -53,6 +53,10 @@ NeSSI API
 .. toctree::
     :maxdepth: 1
 
+    nessi_modeling_swm
+    sucwp_references
+    nessi_modeling_interfaces
+    nessi_globopt_references
     changelog
 
 * :ref:`genindex`
