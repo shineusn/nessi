@@ -45,7 +45,8 @@ Tutorials
     masw_SU_data
     gpdc_interface
     PSO_basics
-
+    dispersion_curve_inversion
+    
 =========
 NeSSI API
 =========

@@ -33,4 +33,10 @@ Then, you have to add the path of the nessi package to ``PYTHONPATH``. In your `
 
 Regenerate all pathes: ``source ~/.bashrc``.
 
-NeSSI package is now available from python. 
+NeSSI package is now available from python.
+
+-----------
+Geopsy-gpdc
+-----------
+
+If you want to use the Geopsy-gpdc interfaces, you must have ``gpdc`` installed on your computer and you have to edit the path to QGpCore library (provided during the Geopsy compilation) in ``nessi/__init__.py``.

@@ -52,7 +52,7 @@ From SU data to MASW dispersion diagram
 
 
 Normalize the dispersion diagram
-================================
+--------------------------------
 
 The resulting dispersion diagram is store in a numpy array and can be
 easily modified.

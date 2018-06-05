@@ -85,7 +85,10 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#geopsy-gpdc">Geopsy-gpdc</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -95,6 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html#normalize-the-dispersion-diagram">Normalize the dispersion diagram</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
 </ul>
@@ -210,6 +215,10 @@
 <p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYTHONPATH=$PYTHONPATH:/path/to/the/nessi/package</span></code></p>
 <p>Regenerate all pathes: <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code>.</p>
 <p>NeSSI package is now available from python.</p>
+<div class="section" id="geopsy-gpdc">
+<h3>Geopsy-gpdc<a class="headerlink" href="#geopsy-gpdc" title="Permalink to this headline">¶</a></h3>
+<p>If you want to use the Geopsy-gpdc interfaces, you must have <code class="docutils literal notranslate"><span class="pre">gpdc</span></code> installed on your computer and you have to edit the path to QGpCore library (provided during the Geopsy compilation) in <code class="docutils literal notranslate"><span class="pre">nessi/__init__.py</span></code>.</p>
+</div>
 </div>
 </div>
 
