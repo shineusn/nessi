@@ -573,9 +573,8 @@
                     <span class="n">phase</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">offset</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">*</span><span class="n">freq</span><span class="p">[</span><span class="n">iw</span><span class="o">+</span><span class="n">iwmin</span><span class="p">]</span><span class="o">/</span><span class="n">vel</span><span class="p">[</span><span class="n">iv</span><span class="p">]</span>
                     <span class="n">tmp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gobs</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">iw</span><span class="o">+</span><span class="n">iwmin</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
             <span class="n">disp</span><span class="p">[</span><span class="n">iv</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tmp</span><span class="p">[:])</span>
+        <span class="k">return</span> <span class="n">disp</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="n">iwmin</span><span class="p">:</span><span class="n">iwmin</span><span class="o">+</span><span class="n">nw</span><span class="p">]</span></div>
 
-<<<<<<< HEAD
-        <span class="k">return</span> <span class="n">disp</span>
 <div class="viewcode-block" id="SUdata.resamp"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.resamp">[docs]</a>    <span class="k">def</span> <span class="nf">resamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nso</span><span class="p">,</span> <span class="n">dto</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resample data in time.</span>
@@ -614,9 +613,6 @@
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dto</span><span class="o">*</span><span class="mf">1000000.</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dobsresamp</span></div></div>
-=======
-        <span class="k">return</span> <span class="n">disp</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">freq</span><span class="p">[</span><span class="n">iwmin</span><span class="p">:</span><span class="n">iwmin</span><span class="o">+</span><span class="n">nw</span><span class="p">]</span></div></div>
->>>>>>> develop
 </pre></div>
 
            </div>

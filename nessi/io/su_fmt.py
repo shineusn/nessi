@@ -408,9 +408,8 @@ class SUdata():
                     phase = complex(0., 1.)*2.*np.pi*offset[ir]*freq[iw+iwmin]/vel[iv]
                     tmp[iw] += gobs[ir, iw+iwmin]*np.exp(phase)
             disp[iv,:] += np.abs(tmp[:])
+        return disp, vel, freq[iwmin:iwmin+nw]
 
-<<<<<<< HEAD
-        return disp
     def resamp(self, nso, dto):
         """
         Resample data in time.
@@ -449,6 +448,68 @@ class SUdata():
         dobsresamp.header[:]['dt'] = int(dto*1000000.)
 
         return dobsresamp
-=======
-        return disp, vel, freq[iwmin:iwmin+nw]
->>>>>>> develop
+
+    def mute(self, xmute, tmute, key='tracl', ntaper=0, mode=0):
+        """
+        Mute above or below a user-defined polygonal lineself.
+
+        :param xmute:
+        :param tmute:
+        :param ntaper:
+        :param mode:
+        """
+
+        # Create a copy of the input SU data
+        dobsmute = copy.deepcopy(self)
+
+        # Get values from header
+        ns = self.header[0]['ns']
+        dt = self.header[0]['dt']/1000000.
+        delrt = self.header[0]['delrt']/1000.
+        ntrac = len(self.header)
+
+        # Get the number of points
+        npts = len(xmute)
+
+        # Get the keyword values
+        keyval = self.header[:][key]
+
+        # Get trace number for each point
+        keytracn = np.zeros(npts, dtype=np.int)
+        for ipts in range(0, npts):
+            keytracn[ipts] = np.argmin(np.abs(xmute[ipts]-keyval[:]))
+
+        # Build the sine squared taper
+        taper = np.zeros(ntaper, dtype=np.float32)
+        for itaper in range(0, ntaper):
+            ftap = np.sin(float(itaper+1)*np.pi/(float(2*ntaper)))
+            taper[itaper] = ftap**2
+
+        # Build the polygonal line
+        polyline = np.zeros(ntrac, dtype=np.int)
+        ## First point
+        if keytracn[0] > 0:
+            polyline[:keytracn[0]] = int(tmute[0]/dt)
+        ## Last point
+        if keytracn[-1] < ntrac:
+            polyline[keytracn[-1]:] = int(tmute[-1]/dt)
+        ## Middle points
+        for ipts in range(1, npts):
+            slope = (tmute[ipts]-tmute[ipts-1])/(xmute[ipts]-xmute[ipts-1])
+            origin = tmute[ipts-1]
+            i = 0
+            for itrac in range(keytracn[ipts-1], keytracn[ipts]):
+                polyline[itrac] = int((slope*float(i)+tmute[ipts-1])/dt)
+                i += 1
+                
+        # Mute
+        if mode == 0: # Mute above
+            for itrac in range(0, ntrac):
+                imute = polyline[itrac]
+                dobsmute.trace[itrac,:imute] = 0.
+        if mode == 1: # Mute below
+            for itrac in range(0, ntrac):
+                imute = polyline[itrac]
+                dobsmute.trace[itrac,imute:] = 0.
+
+        return dobsmute

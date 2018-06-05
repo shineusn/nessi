@@ -3,13 +3,7 @@ nessi.modeling.interfaces references
 ************************************
 
 .. automodule:: nessi.modeling.interfaces
-<<<<<<< HEAD
 		:members:
-=======
-   ::members::
-     
-.. autofunction:: nessi.modeling.interfaces.dispersion_curve_init
->>>>>>> develop
 
 .. autofunction:: nessi.modeling.interfaces.dispersion_curve_init
 		  
