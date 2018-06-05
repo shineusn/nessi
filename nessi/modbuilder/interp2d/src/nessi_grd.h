@@ -22,12 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_rng.h>
 #include <sys/time.h>
-
-#include <complex.h>
-#include <fftw3.h>
 
 /*
    - nessi_grd_vrn()
