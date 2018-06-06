@@ -79,7 +79,7 @@ class SUdata():
             ('timebas', np.int16), ('trwf', np.int16), \
             ('grnors', np.int16), ('grnofr', np.int16), \
             ('grnlof', np.int16), ('gaps', np.int16), \
-            ('otrav', np.int16), ('d1', np.float32), \
+            ('otrav', np.int16), ('d1', np.float32),\
             ('f1', np.float32), ('d2', np.float32), \
             ('f2', np.float32), ('ungpow', np.float32), \
             ('unscale', np.float32), ('ntr', np.int32), \
@@ -166,7 +166,7 @@ class SUdata():
 
 
     def image(self, bclip=None, wclip=None, clip=None, legend=0, label1=' ',
-              label2=' ', title=' '):
+              label2=' ', title=' ', cmap='gray'):
         """
         matplotlib.pyplot.imshow adapted for SU files
 
@@ -186,14 +186,23 @@ class SUdata():
                 bclip = -1.*clip
                 wclip = clip
 
-        t0 = float(self.header[0]['delrt'])/1000.
-        t1 = float(self.header[0]['ns']-1)*float(self.header[0]['dt'])/1000000.+t0
+        # Get ns and dt from header
+        ns = self.header[0]['ns']
+        dt = float(self.header[0]['dt']/1000000.)
+        if dt != 0:
+            y0 = float(self.header[0]['delrt'])/1000.
+            y1 = float(ns-1)*dt+y0
+        else:
+            # Get d1
+            d1 = float(self.header[0]['d1'])
+            y0 = 0.
+            y1 = float(ns-1)*d1
 
         plt.xlabel(label2)
         plt.ylabel(label1)
         plt.title(title)
-        plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap='gray',
-                   extent=[0., len(self.trace), t1, t0],
+        plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
+                   extent=[0., len(self.trace), y1, y0],
                    vmin=bclip, vmax=wclip)
         if legend == 1:
             plt.colorbar()
@@ -513,7 +522,18 @@ class SUdata():
         # Create a copy of the input SU data
         dobsspecfx = copy.deepcopy(self)
 
-        # Real Fourier transform
-        dobsspecfx.trace = np.fft.rfft(self, axis=1)
+        # Amplitude of the real Fourier transform
+        dobsspecfx.trace = np.absolute(np.fft.rfft(self.trace, axis=1))
+
+        # Get the frequency vector
+        ns = dobsspecfx.header[0]['ns']
+        dt = dobsspecfx.header[0]['dt']/1000000.
+        frqv = np.fft.rfftfreq(ns, dt)
+
+        # Update the SU header
+        dobsspecfx.header[:]['ns'] = len(frqv)
+        dobsspecfx.header[:]['d1'] = frqv[1]-frqv[0]
+        dobsspecfx.header[:]['dt'] = 0
+        dobsspecfx.header[:]['trid'] = 118 # Amplitude of complex trace from 0 to Nyquist
 
         return dobsspecfx

@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - *resamp* method for SUdata()
 - *mute* method for SUdata()
+- *specfx* method for SUdata()
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
 - remove useless SUdata variables
+- *image* method of SUdata() to handle *specfx* method output
 
 ## [0.1.2] - 2018-06-05
 
