@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="muting_SU_data.html">&nbsp;Muting SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
@@ -262,6 +263,26 @@ If min= is set it overrides selecting traces by header.</p>
 <dt id="nessi.io.SUdata.masw">
 <code class="descname">masw</code><span class="sig-paren">(</span><em>vmin=0.0</em>, <em>vmax=1000.0</em>, <em>dv=5.0</em>, <em>fmin=1.0</em>, <em>fmax=100.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.masw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.masw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the dispersion diagram using MASW method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.mute">
+<code class="descname">mute</code><span class="sig-paren">(</span><em>xmute</em>, <em>tmute</em>, <em>key='tracl'</em>, <em>ntaper=0</em>, <em>mode=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.mute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.mute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mute above or below a user-defined polygonal lineself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xmute</strong> – </li>
+<li><strong>tmute</strong> – </li>
+<li><strong>ntaper</strong> – </li>
+<li><strong>mode</strong> – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

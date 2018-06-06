@@ -11,4 +11,4 @@ SUdata methods
 ==============
 
 .. autoclass:: nessi.io.SUdata
-	       :members: read, write, create, image, wind, taper, kill, pfilter, masw, resamp
+	       :members: read, write, create, image, wind, taper, kill, pfilter, masw, resamp, mute

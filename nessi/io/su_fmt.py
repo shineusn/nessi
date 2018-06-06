@@ -79,39 +79,20 @@ class SUdata():
             ('timebas', np.int16), ('trwf', np.int16), \
             ('grnors', np.int16), ('grnofr', np.int16), \
             ('grnlof', np.int16), ('gaps', np.int16), \
-            ('otrav', np.int16), ('cdpx', np.int32), \
-            ('cdpy', np.int32), ('Inline3D', np.int32), \
-            ('Crossline3D', np.int32), ('ShotPoint', np.int32), \
-            ('ShotPointScalar', np.int16), \
-            ('TraceValueMeasurementUnit', np.int16), \
-            ('TransductionConstantMantissa', np.int32), \
-            ('TransductionConstantPower', np.int16), \
-            ('TransductionUnit', np.int16), \
-            ('TraceIdentifier', np.int16), ('ScalarTraceHeader', np.int16), \
-            ('SourceType', np.int16), \
-            ('SourceEnergyDirectionMantissa', np.int32), \
-            ('SourceEnergyDirectionExponent', np.int16), \
-            ('SourceMeasurementMantissa', np.int32), \
-            ('SourceMeasurementExponent', np.int16), \
-            ('SourceMeasurementUnit', np.int16), \
-            ('UnassignedInt1', np.int32), \
-            ('UnassignedInt2', np.int32)])
-
+            ('otrav', np.int16), ('d1', np.float32), \
+            ('f1', np.float32), ('d2', np.float32), \
+            ('f2', np.float32), ('ungpow', np.float32), \
+            ('unscale', np.float32), ('ntr', np.int32), \
+            ('mark', np.int16), ('shortpad', np.int16), \
+            ('unassignedInt1', np.int32), ('unassignedInt2', np.int32), \
+            ('unassignedInt3', np.int32), ('unassignedInt4', np.int32), \
+            ('unassignedFloat1', np.float32), ('unassignedFloat2', np.float32), \
+            ('unassignedFloat3', np.float32)])
 
         self.filename = ' '
         self.header = []
         self.trace = []
         self.endian = 'l'
-
-        # For FFT and MASW
-        self.nw = 0.
-        self.dw = 0.
-        self.fmin = 0.
-
-        # For MASW only
-        self.nv = 0.
-        self.dv = 0.
-        self.vmin = 0.
 
     def _check_endian(self):
         """
@@ -489,27 +470,50 @@ class SUdata():
         polyline = np.zeros(ntrac, dtype=np.int)
         ## First point
         if keytracn[0] > 0:
-            polyline[:keytracn[0]] = int(tmute[0]/dt)
+            polyline[:keytracn[0]] = int((tmute[0]-delrt)/dt)
         ## Last point
         if keytracn[-1] < ntrac:
-            polyline[keytracn[-1]:] = int(tmute[-1]/dt)
+            polyline[keytracn[-1]:] = int((tmute[-1]-delrt)/dt)
         ## Middle points
         for ipts in range(1, npts):
             slope = (tmute[ipts]-tmute[ipts-1])/(xmute[ipts]-xmute[ipts-1])
             origin = tmute[ipts-1]
             i = 0
             for itrac in range(keytracn[ipts-1], keytracn[ipts]):
-                polyline[itrac] = int((slope*float(i)+tmute[ipts-1])/dt)
+                polyline[itrac] = int((slope*float(i)+tmute[ipts-1]-delrt)/dt)
                 i += 1
-                
+
         # Mute
         if mode == 0: # Mute above
             for itrac in range(0, ntrac):
                 imute = polyline[itrac]
-                dobsmute.trace[itrac,:imute] = 0.
+                # Apply taper
+                for j in range(0, ntaper):
+                    if imute-j >= 0:
+                        dobsmute.trace[itrac, imute-j] *= taper[ntaper-j-1]
+                if imute-ntaper >= 0:
+                    dobsmute.trace[itrac,:imute-ntaper] = 0.
         if mode == 1: # Mute below
             for itrac in range(0, ntrac):
                 imute = polyline[itrac]
-                dobsmute.trace[itrac,imute:] = 0.
+                # Apply taper
+                for j in range(0, ntaper):
+                    if imute+j < ns:
+                        dobsmute.trace[itrac, imute+j] *= taper[j]
+                if imute+ntaper < ns:
+                    dobsmute.trace[itrac,imute+ntaper:] = 0.
 
         return dobsmute
+
+    def specfx(self):
+        """
+        Fourier spectrum (time to frequency) of traces using the numpy.fft functions.
+        """
+
+        # Create a copy of the input SU data
+        dobsspecfx = copy.deepcopy(self)
+
+        # Real Fourier transform
+        dobsspecfx.trace = np.fft.rfft(self, axis=1)
+
+        return dobsspecfx

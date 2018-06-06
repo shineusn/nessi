@@ -89,6 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../windowing_SU_data.html">Windowing SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../filtering_SU_data.html">Filtering SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../muting_SU_data.html">&nbsp;Muting SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../masw_SU_data.html">&nbsp;MASW from SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../PSO_basics.html">Particle Swarm Optimization: basics</a></li>
@@ -612,7 +613,82 @@
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nso</span>
         <span class="n">dobsresamp</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dto</span><span class="o">*</span><span class="mf">1000000.</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">dobsresamp</span></div></div>
+        <span class="k">return</span> <span class="n">dobsresamp</span></div>
+
+<div class="viewcode-block" id="SUdata.mute"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.mute">[docs]</a>    <span class="k">def</span> <span class="nf">mute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmute</span><span class="p">,</span> <span class="n">tmute</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;tracl&#39;</span><span class="p">,</span> <span class="n">ntaper</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mute above or below a user-defined polygonal lineself.</span>
+
+<span class="sd">        :param xmute:</span>
+<span class="sd">        :param tmute:</span>
+<span class="sd">        :param ntaper:</span>
+<span class="sd">        :param mode:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create a copy of the input SU data</span>
+        <span class="n">dobsmute</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Get values from header</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;ns&#39;</span><span class="p">]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dt&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000000.</span>
+        <span class="n">delrt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;delrt&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000.</span>
+        <span class="n">ntrac</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+
+        <span class="c1"># Get the number of points</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xmute</span><span class="p">)</span>
+
+        <span class="c1"># Get the keyword values</span>
+        <span class="n">keyval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="c1"># Get trace number for each point</span>
+        <span class="n">keytracn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+            <span class="n">keytracn</span><span class="p">[</span><span class="n">ipts</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xmute</span><span class="p">[</span><span class="n">ipts</span><span class="p">]</span><span class="o">-</span><span class="n">keyval</span><span class="p">[:]))</span>
+
+        <span class="c1"># Build the sine squared taper</span>
+        <span class="n">taper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ntaper</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">itaper</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntaper</span><span class="p">):</span>
+            <span class="n">ftap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">itaper</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">ntaper</span><span class="p">)))</span>
+            <span class="n">taper</span><span class="p">[</span><span class="n">itaper</span><span class="p">]</span> <span class="o">=</span> <span class="n">ftap</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="c1"># Build the polygonal line</span>
+        <span class="n">polyline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ntrac</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="c1">## First point</span>
+        <span class="k">if</span> <span class="n">keytracn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">polyline</span><span class="p">[:</span><span class="n">keytracn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tmute</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">delrt</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span>
+        <span class="c1">## Last point</span>
+        <span class="k">if</span> <span class="n">keytracn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ntrac</span><span class="p">:</span>
+            <span class="n">polyline</span><span class="p">[</span><span class="n">keytracn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tmute</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">delrt</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span>
+        <span class="c1">## Middle points</span>
+        <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmute</span><span class="p">[</span><span class="n">ipts</span><span class="p">]</span><span class="o">-</span><span class="n">tmute</span><span class="p">[</span><span class="n">ipts</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">xmute</span><span class="p">[</span><span class="n">ipts</span><span class="p">]</span><span class="o">-</span><span class="n">xmute</span><span class="p">[</span><span class="n">ipts</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">origin</span> <span class="o">=</span> <span class="n">tmute</span><span class="p">[</span><span class="n">ipts</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">itrac</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">keytracn</span><span class="p">[</span><span class="n">ipts</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">keytracn</span><span class="p">[</span><span class="n">ipts</span><span class="p">]):</span>
+                <span class="n">polyline</span><span class="p">[</span><span class="n">itrac</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">slope</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="n">tmute</span><span class="p">[</span><span class="n">ipts</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">delrt</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Mute</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Mute above</span>
+            <span class="k">for</span> <span class="n">itrac</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntrac</span><span class="p">):</span>
+                <span class="n">imute</span> <span class="o">=</span> <span class="n">polyline</span><span class="p">[</span><span class="n">itrac</span><span class="p">]</span>
+                <span class="c1"># Apply taper</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntaper</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">imute</span><span class="o">-</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">dobsmute</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">itrac</span><span class="p">,</span> <span class="n">imute</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="n">taper</span><span class="p">[</span><span class="n">ntaper</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">imute</span><span class="o">-</span><span class="n">ntaper</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">dobsmute</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">itrac</span><span class="p">,:</span><span class="n">imute</span><span class="o">-</span><span class="n">ntaper</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># Mute below</span>
+            <span class="k">for</span> <span class="n">itrac</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntrac</span><span class="p">):</span>
+                <span class="n">imute</span> <span class="o">=</span> <span class="n">polyline</span><span class="p">[</span><span class="n">itrac</span><span class="p">]</span>
+                <span class="c1"># Apply taper</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ntaper</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">imute</span><span class="o">+</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">ns</span><span class="p">:</span>
+                        <span class="n">dobsmute</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">itrac</span><span class="p">,</span> <span class="n">imute</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="n">taper</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">imute</span><span class="o">+</span><span class="n">ntaper</span> <span class="o">&lt;</span> <span class="n">ns</span><span class="p">:</span>
+                    <span class="n">dobsmute</span><span class="o">.</span><span class="n">trace</span><span class="p">[</span><span class="n">itrac</span><span class="p">,</span><span class="n">imute</span><span class="o">+</span><span class="n">ntaper</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="k">return</span> <span class="n">dobsmute</span></div></div>
 </pre></div>
 
            </div>
