@@ -217,7 +217,7 @@
 
 <dl class="method">
 <dt id="nessi.io.SUdata.image">
-<code class="descname">image</code><span class="sig-paren">(</span><em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
+<code class="descname">image</code><span class="sig-paren">(</span><em>key='tracl'</em>, <em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>cmap='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
 <dd><p>matplotlib.pyplot.imshow adapted for SU files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -339,6 +339,18 @@ sufilter command - Seismic Unix 44R1).</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.specfk">
+<code class="descname">specfk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.specfk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.specfk" title="Permalink to this definition">¶</a></dt>
+<dd><p>FK spectrum of traces using the numpy.fft functions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.io.SUdata.specfx">
+<code class="descname">specfx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.specfx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.specfx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fourier spectrum (time to frequency) of traces using the numpy.fft functions.</p>
 </dd></dl>
 
 <dl class="method">

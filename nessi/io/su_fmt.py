@@ -165,7 +165,7 @@ class SUdata():
             self.trace = np.array(self.trace)
 
 
-    def image(self, bclip=None, wclip=None, clip=None, legend=0, label1=' ',
+    def image(self, key='tracl', bclip=None, wclip=None, clip=None, legend=0, label1=' ',
               label2=' ', title=' ', cmap='gray'):
         """
         matplotlib.pyplot.imshow adapted for SU files
@@ -192,17 +192,32 @@ class SUdata():
         if dt != 0:
             y0 = float(self.header[0]['delrt'])/1000.
             y1 = float(ns-1)*dt+y0
-        else:
+            x0 = self.header[0][key]
+            x1 = self.header[-1][key]
+
+        if self.header[0]['trid'] == 118:
             # Get d1
             d1 = float(self.header[0]['d1'])
             y0 = 0.
             y1 = float(ns-1)*d1
+            x0 = self.header[0][key]
+            x1 = self.header[-1][key]
+
+        if self.header[0]['trid'] == 122:
+            # Get d1
+            d1 = float(self.header[0]['d1'])
+            y0 = 0.
+            y1 = float(ns-1)*d1
+            # Get d2
+            d2 = float(self.header[0]['d2'])
+            x0 = float(self.header[0]['f2'])
+            x1 = x0+float(len(self.header)-1)*d2
 
         plt.xlabel(label2)
         plt.ylabel(label1)
         plt.title(title)
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
-                   extent=[0., len(self.trace), y1, y0],
+                   extent=[x0, x1, y1, y0],
                    vmin=bclip, vmax=wclip)
         if legend == 1:
             plt.colorbar()
@@ -537,3 +552,42 @@ class SUdata():
         dobsspecfx.header[:]['trid'] = 118 # Amplitude of complex trace from 0 to Nyquist
 
         return dobsspecfx
+
+    def specfk(self):
+        """
+        FK spectrum of traces using the numpy.fft functions.
+        """
+
+        # Create a copy of the input SU data
+        dobsspecfk = copy.deepcopy(self)
+
+        # Get dx from header, if not set dx=1.0
+        d2 = dobsspecfk.header[0]['d2']
+        if d2 == 0:
+            d2 = 1.0
+        ntrac = len(dobsspecfk.header)
+
+        # Amplitude of the real Fourier transform
+        dobsspecfk.trace = np.fft.rfft(self.trace, axis=1)
+        dobsspecfk.trace = np.fft.fft(dobsspecfk.trace, axis=0)
+        dobsspecfk.trace = np.flip(np.fft.fftshift(dobsspecfk.trace, axes=0), axis=0)
+        dobsspecfk.trace = np.absolute(dobsspecfk.trace)
+
+        # Get the frequency and K vectors
+        ns = dobsspecfk.header[0]['ns']
+        dt = dobsspecfk.header[0]['dt']/1000000.
+        frqv = np.fft.rfftfreq(ns, dt)
+        wavv = np.fft.fftfreq(ntrac, d2)
+        # Centering
+        wavv = np.fft.fftshift(wavv)
+
+        # Update the SU header
+        dobsspecfk.header[:]['ns'] = len(frqv)
+        dobsspecfk.header[:]['d1'] = frqv[1]-frqv[0]
+        dobsspecfk.header[:]['d2'] = np.abs(wavv[1]-wavv[0])
+        dobsspecfk.header[:]['dt'] = 0
+        dobsspecfk.header[:]['f1'] = frqv[1]-frqv[0]
+        dobsspecfk.header[:]['f2'] = wavv[0]
+        dobsspecfk.header[:]['trid'] = 122 # Amplitude of complex trace from 0 to Nyquist
+
+        return dobsspecfk

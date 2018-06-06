@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="muting_SU_data.html">&nbsp;Muting SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
@@ -196,6 +197,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - *resamp* method for SUdata()
+- *mute* method for SUdata()
+- *specfx* method for SUdata()
+- *specfk* method for SUdata()
+
+### Modified
+- SU header structure now fits SU/CWP format (before SEG-Y rev 1)
+- remove useless SUdata variables
+- *image* method of SUdata() to handle *specfx* and *specfk* method outputs
 
 ## [0.1.2] - 2018-06-05
 
