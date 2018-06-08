@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *mute* method for SUdata()
 - *specfx* method for SUdata()
 - *specfk* method for SUdata()
+- *wiggle* method for SUdata()
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)

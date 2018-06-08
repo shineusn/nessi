@@ -222,6 +222,55 @@ class SUdata():
         if legend == 1:
             plt.colorbar()
 
+    def wiggle(self, key='tracl', label1=' ', label2=' ', title=' ', tracecolor='black', skip=1, xcur=1):
+        """
+        Wiggle for SU files
+
+        :param label1: x-axis label
+        :param label2: y-axis label
+        :param title: title of the image
+        :param tracecolor: color of the traces
+        """
+
+        # Get ns and dt from header
+        ns = self.header[0]['ns']
+        dt = float(self.header[0]['dt']/1000000.)
+        ntrac = len(self.header)
+        if dt != 0:
+            y0 = float(self.header[0]['delrt'])/1000.
+            y1 = float(ns-1)*dt+y0
+            x0 = self.header[0][key]
+            x1 = self.header[-1][key]
+            d2 = 1
+
+        if self.header[0]['trid'] == 118:
+            # Get d1
+            d1 = float(self.header[0]['d1'])
+            y0 = 0.
+            y1 = float(ns-1)*d1
+            x0 = self.header[0][key]
+            x1 = self.header[-1][key]
+
+        if self.header[0]['trid'] == 122:
+            # Get d1
+            d1 = float(self.header[0]['d1'])
+            y0 = 0.
+            y1 = float(ns-1)*d1
+            # Get d2
+            d2 = float(self.header[0]['d2'])
+            x0 = float(self.header[0]['f2'])
+            x1 = x0+float(len(self.header)-1)*d2
+
+        plt.xlabel(label2)
+        plt.ylabel(label1)
+        plt.title(title)
+
+        plt.gca().invert_yaxis()
+        y = np.linspace(y0, y1, ns)
+        for itrac in range(0, ntrac, skip):
+            wig = self.trace[itrac]/np.amax(np.abs(self.trace))*d2*float(skip-1)*xcur
+            plt.plot(wig+x0+float(itrac)*d2, y, color=tracecolor)
+
     def kill(self, key=' ', a=1, min=-1, count=1):
         """
         Zero out traces.
