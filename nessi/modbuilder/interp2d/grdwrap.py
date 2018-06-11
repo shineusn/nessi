@@ -34,7 +34,7 @@ def voronoi(npts, xp, zp, val, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/grd/')
+    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_vrn.argtypes = [c_int,
@@ -66,7 +66,7 @@ def idweight(npts, xp, zp, val, pw, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/grd/')
+    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_idw.argtypes = [c_int,
@@ -97,7 +97,7 @@ def sibson1(npts, xp, zp, val, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/grd/')
+    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_ds1.argtypes = [c_int,
@@ -128,7 +128,7 @@ def sibson2(npts, xp, zp, val, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/grd/')
+    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_ds2.argtypes = [c_int,

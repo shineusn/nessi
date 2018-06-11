@@ -20,10 +20,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from nessi.swm import modext, modbuo, modlame
-from nessi.swm import acqpos, pmlmod
-from nessi.swm import ricker, srcspread
-from nessi.swm import evolution
+from nessi.modeling.swm import modext, modbuo, modlame
+from nessi.modeling.swm import acqpos, pmlmod
+from nessi.modeling.swm import ricker, srcspread
+from nessi.modeling.swm import evolution
 
 from nessi.io import SUdata
 

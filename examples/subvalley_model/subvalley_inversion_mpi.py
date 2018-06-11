@@ -127,8 +127,8 @@ comm.Barrier()
 
 # Initialize the number of generations and particles on master
 # and slaves.
-ngen = 10
-nindv = 9 #49
+ngen = 200
+nindv = 49
 
 # Initialize the swarm on the master only.
 if rank == 0:
