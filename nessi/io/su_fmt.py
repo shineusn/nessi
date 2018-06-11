@@ -222,7 +222,7 @@ class SUdata():
         if legend == 1:
             plt.colorbar()
 
-    def wiggle(self, key='tracl', label1=' ', label2=' ', title=' ', tracecolor='black', skip=1, xcur=1):
+    def wiggle(self, key='tracl', label1=' ', label2=' ', title=' ', tracecolor='black', tracestyle='-', skip=1, xcur=1):
         """
         Wiggle for SU files
 
@@ -241,7 +241,7 @@ class SUdata():
             y1 = float(ns-1)*dt+y0
             x0 = self.header[0][key]
             x1 = self.header[-1][key]
-            d2 = 1
+            d2 = 1.
 
         if self.header[0]['trid'] == 118:
             # Get d1
@@ -265,11 +265,11 @@ class SUdata():
         plt.ylabel(label1)
         plt.title(title)
 
-        plt.gca().invert_yaxis()
+        #plt.gca().invert_yaxis()
         y = np.linspace(y0, y1, ns)
         for itrac in range(0, ntrac, skip):
             wig = self.trace[itrac]/np.amax(np.abs(self.trace))*d2*float(skip-1)*xcur
-            plt.plot(wig+x0+float(itrac)*d2, y, color=tracecolor)
+            plt.plot(wig+x0+float(itrac)*d2, y, color=tracecolor, linestyle=tracestyle)
 
     def kill(self, key=' ', a=1, min=-1, count=1):
         """
@@ -286,7 +286,7 @@ class SUdata():
         dobskill = copy.deepcopy(self)
 
         # Get the number of traces
-        ntrac = self.traces.shape[0]
+        ntrac = self.trace.shape[0]
 
         # Kill traces
         if min > 0:
