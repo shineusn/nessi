@@ -115,52 +115,74 @@ class SUdata():
     def read(self, filename, endian=' '):
         """Read Seismic Unix file.
 
-        :param filename: name of the SU file
-        :param endian: byte order: little endian (default) 'l', big endian 'b'.
+        :param filename: name of the SU file to read
+        :param endian: byte order: little endian 'l', big endian 'b'.
         """
+
+        # This method can be easily simplified... for [0.3.0] version ?
         self.filename = filename
+
         if endian == ' ':
+            # Automatic checking of endianess
             self._check_endian()
 
+        # Open the file to read
         file = open(filename, 'rb')
+
+        # Get the header of the first trace (240 bytes)
         bhdr = file.read(240)
+
         if self.endian == 'b':
+            # Read the header of the first trace
             hdr = np.frombuffer(bhdr, dtype=self.sutype.newbyteorder(), count=1)[0]
+            # Get the  the first trace data values
             btrc = file.read(hdr['ns']*4)
             trc = np.frombuffer(btrc, dtype=('>f4', hdr['ns']), count=1)[0]
+            # Save the header and the trace
             self.header.append(hdr)
             self.trace.append(trc)
+            # Loop over traces until end of file
             EOF = False
             while EOF == False:
                 try:
+                    # Get header and trace
                     bhdr = file.read(240)
                     btrc = file.read(hdr['ns']*4)
                     hdr = np.frombuffer(bhdr, dtype=self.sutype.newbyteorder(), count=1)[0]
                     trc = np.frombuffer(btrc, dtype=('>f4', hdr['ns']), count=1)[0]
+                    # Save
                     self.header.append(hdr)
                     self.trace.append(trc)
                 except:
                     EOF = True
+            # Convert in numpy array format
             self.trace = np.array(self.trace)
             self.header = np.array(self.header)
 
         if self.endian == 'l':
+            # Read the header of the first trace
             hdr = np.frombuffer(bhdr, dtype=self.sutype, count=1)[0]
+            # Get the  the first trace data values
             btrc = file.read(hdr['ns']*4)
             trc = np.frombuffer(btrc, dtype=('<f4', hdr['ns']), count=1)[0]
+            # Save the header and the trace
             self.header.append(hdr)
             self.trace.append(trc)
+            # Loop over traces until end of file
             EOF = False
             while EOF == False:
                 try:
+                    # Get header and trace
                     bhdr = file.read(240)
                     btrc = file.read(hdr['ns']*4)
                     hdr = np.frombuffer(bhdr, dtype=self.sutype, count=1)[0]
                     trc = np.frombuffer(btrc, dtype=('<f4', hdr['ns']), count=1)[0]
+                    # Save the header and the trace
                     self.header.append(hdr)
                     self.trace.append(trc)
                 except:
                     EOF = True
+            # Convert in numpy array format
             self.header = np.array(self.header)
             self.trace = np.array(self.trace)
 
@@ -168,8 +190,9 @@ class SUdata():
     def image(self, key='tracl', bclip=None, wclip=None, clip=None, legend=0, label1=' ',
               label2=' ', title=' ', cmap='gray'):
         """
-        matplotlib.pyplot.imshow adapted for SU files
+        matplotlib.pyplot.imshow adapted to plot SU files
 
+        :param key: header keyword (default tracl)
         :param bclip: data values outside of [bclip,wclip] are clipped
         :param wclip: data values outside of [bclip,wclip] are clipped
         :param clip: clip used to determine bclip and wclip
@@ -177,7 +200,10 @@ class SUdata():
         :param label1: x-axis label
         :param label2: y-axis label
         :param title: title of the image
+        :param cmap: color map (defautl 'gray'): gray, jet, ...
         """
+
+        # Check clip, bclip and wclip
         if(clip == None and bclip == None and clip == None):
             bclip = np.amin(self.trace)
             wclip = np.amax(self.trace)
@@ -213,23 +239,35 @@ class SUdata():
             x0 = float(self.header[0]['f2'])
             x1 = x0+float(len(self.header)-1)*d2
 
-        plt.xlabel(label2)
-        plt.ylabel(label1)
+        # Add labels to axes
+        plt.xlabel(label1)
+        plt.ylabel(label2)
+
+        # Add title to axis
         plt.title(title)
+
+        # Plot surface
         plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
                    extent=[x0, x1, y1, y0],
                    vmin=bclip, vmax=wclip)
+
+        # Add legend
         if legend == 1:
             plt.colorbar()
 
-    def wiggle(self, key='tracl', label1=' ', label2=' ', title=' ', tracecolor='black', tracestyle='-', skip=1, xcur=1):
+    def wiggle(self, clip=-1., key='tracl', label1=' ', label2=' ', title=' ', tracecolor='black', tracestyle='-', skip=1, xcur=1):
         """
         Wiggle for SU files
 
+        :param clip: clip used to determine outside values to be clipped [-clip, clip]
+        :param key: header keyword (default tracl)
         :param label1: x-axis label
         :param label2: y-axis label
         :param title: title of the image
         :param tracecolor: color of the traces
+        :param tracestyle: style of the traces ('--', ':', ...)
+        :param skip: number of traces to skip for each plotted trace
+        :param xcur: factor to increase trace amplitudes on output
         """
 
         # Get ns and dt from header
@@ -261,17 +299,26 @@ class SUdata():
             x0 = float(self.header[0]['f2'])
             x1 = x0+float(len(self.header)-1)*d2
 
-        plt.xlabel(label2)
-        plt.ylabel(label1)
+        # Add labels
+        plt.xlabel(label1)
+        plt.ylabel(label2)
+
+        # Add axes
         plt.title(title)
 
-        #plt.gca().invert_yaxis()
+        # Get the normalization parameter (for output)
         y = np.linspace(y0, y1, ns)
+        if clip >= 0. :
+            norm = clip
+        else:
+            norm = np.amax(np.abs(self.trace))
+
+        # Plot the traces
         for itrac in range(0, ntrac, skip):
-            wig = self.trace[itrac]/np.amax(np.abs(self.trace))*d2*float(skip-1)*xcur
+            wig = self.trace[itrac]/norm*d2*float(skip-1)*xcur
             plt.plot(wig+x0+float(itrac)*d2, y, color=tracecolor, linestyle=tracestyle)
 
-    def kill(self, key=' ', a=1, min=-1, count=1):
+    def kill(self, key=' ', a=1, min=0, count=1):
         """
         Zero out traces.
         If min= is set it overrides selecting traces by header.
@@ -288,11 +335,12 @@ class SUdata():
         # Get the number of traces
         ntrac = self.trace.shape[0]
 
-        # Kill traces
-        if min > 0:
+        # Kill traces from min to min+icount
+        if key == ' ':
             for icount in range(0, count):
                 if min+icount < ntrac:
                     dobskill.trace[min+icount, :] = 0.
+        # Kill traces with the given header value
         else:
             if key != ' ':
                 for itrac in range(0, ntrac):
@@ -311,6 +359,7 @@ class SUdata():
         :param tmin: minimum time to pass (=0)
         :param tmax: maximum time to pass (=0)
         """
+
         # Create a copy of the input SU data
         dobsw = copy.deepcopy(self)
 
@@ -415,18 +464,35 @@ class SUdata():
         """
         Write SU file on disk
         """
+
+        # Open binary file
         file = open(filename, 'wb')
+
+        # Loop over traces
         for ir in range(0, len(self.header)):
+            # Write header
             file.write(self.header[ir])
+            # Write data
             file.write(self.trace[ir,:])
+
+        # Close the binary file
         file.close()
 
     def masw(self, vmin=0., vmax=1000., dv=5., fmin=1., fmax=100.):
         """
-        Calculate the dispersion diagram using MASW method
+        Calculate the dispersion diagram using MASW method.
+        Return the dispersion diagram, the velocity vector and the frequency vector.
+
+        :param vmin: minimum value to consider for the dispersion diagram
+        :param vmax: maximum value to consider for the dispersion diagram
+        :param dv: velocity sampling
+        :param fmin: minimum frequency to consider
+        :param fmax: maximum frequency to consider
         """
 
-        # Get offset
+        # Conversion to cython for performance (?)
+
+        # Get potential scaling factor on coordinates from header
         scalco = self.header[0]['scalco']
         if scalco < 0:
             scale = -1./float(scalco)
@@ -435,38 +501,52 @@ class SUdata():
         if scalco > 0:
             scale = float(scalco)
 
+        # Calculate offsets
         x = self.header[:]['sx']*scale-self.header[:]['gx']*scale
         y = self.header[:]['sy']*scale-self.header[:]['gy']*scale
         offset = np.sqrt(x**2+y**2)
-        # Velocity vector
+
+        # Create the velocity vector
         nv = int((vmax-vmin)/dv)+1
         vel = np.linspace(vmin, vmax, nv, dtype=np.float32)
 
-        # FFT
+        # Get the number of samples and the time sampling from header
         ns = int(self.header[0]['ns'])
         dt = self.header[0]['dt']/1000000.
+
+        # Apply Real Fourier transform to data
         gobs = np.fft.rfft(self.trace, axis=1)
+
+        # Get the corresponding frequency vector
         freq = np.fft.rfftfreq(ns, d=dt)
         dw = freq[1]
         iwmin = int(fmin/dw)
         nw = int((fmax-fmin)/dw)+1
 
-        #disp = cy.cmasw(gobs, iwmin, nw, offset, vel, freq)
-        # MASW
+        # Initialize temporary and dispersion diagram arrays
         tmp = np.zeros(nw, dtype=np.complex64)
         disp = np.zeros((nv, nw), dtype=np.float32)
+
+        # Loop over velocities
         for iv in range(0, nv):
             tmp[:] = complex(0., 0.)
+            # Loop over traces
             for ir in range(0, len(offset)):
+                # Loop over frequencies
                 for iw in range(0, nw):
+                    # Calculate the phase
                     phase = complex(0., 1.)*2.*np.pi*offset[ir]*freq[iw+iwmin]/vel[iv]
+                    # Stack over frequencies and receivers
                     tmp[iw] += gobs[ir, iw+iwmin]*np.exp(phase)
+            # Stack over velocities
             disp[iv,:] += np.abs(tmp[:])
+
         return disp, vel, freq[iwmin:iwmin+nw]
 
     def resamp(self, nso, dto):
         """
         Resample data in time.
+        Based on scipy.signal.resample
 
         :param nso: number of time samples in output
         :param dto: time sampling in output
@@ -507,10 +587,11 @@ class SUdata():
         """
         Mute above or below a user-defined polygonal lineself.
 
-        :param xmute:
-        :param tmute:
-        :param ntaper:
-        :param mode:
+        :param key: SU header key
+        :param xmute: array of position values
+        :param tmute: array of time values
+        :param ntaper: number of points to taper before mute
+        :param mode: mute below (0) or above (1)
         """
 
         # Create a copy of the input SU data
