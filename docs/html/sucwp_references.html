@@ -218,12 +218,13 @@
 <dl class="method">
 <dt id="nessi.io.SUdata.image">
 <code class="descname">image</code><span class="sig-paren">(</span><em>key='tracl'</em>, <em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>cmap='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
-<dd><p>matplotlib.pyplot.imshow adapted for SU files</p>
+<dd><p>matplotlib.pyplot.imshow adapted to&nbsp;plot SU files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – header keyword (default tracl)</li>
 <li><strong>bclip</strong> – data values outside of [bclip,wclip] are clipped</li>
 <li><strong>wclip</strong> – data values outside of [bclip,wclip] are clipped</li>
 <li><strong>clip</strong> – clip used to determine bclip and wclip</li>
@@ -231,6 +232,7 @@
 <li><strong>label1</strong> – x-axis label</li>
 <li><strong>label2</strong> – y-axis label</li>
 <li><strong>title</strong> – title of the image</li>
+<li><strong>cmap</strong> – color map (defautl ‘gray’): gray, jet, …</li>
 </ul>
 </td>
 </tr>
@@ -240,7 +242,7 @@
 
 <dl class="method">
 <dt id="nessi.io.SUdata.kill">
-<code class="descname">kill</code><span class="sig-paren">(</span><em>key=' '</em>, <em>a=1</em>, <em>min=-1</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.kill" title="Permalink to this definition">¶</a></dt>
+<code class="descname">kill</code><span class="sig-paren">(</span><em>key=' '</em>, <em>a=1</em>, <em>min=0</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.kill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zero out traces.
 If min= is set it overrides selecting traces by header.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -262,7 +264,23 @@ If min= is set it overrides selecting traces by header.</p>
 <dl class="method">
 <dt id="nessi.io.SUdata.masw">
 <code class="descname">masw</code><span class="sig-paren">(</span><em>vmin=0.0</em>, <em>vmax=1000.0</em>, <em>dv=5.0</em>, <em>fmin=1.0</em>, <em>fmax=100.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.masw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.masw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the dispersion diagram using MASW method</p>
+<dd><p>Calculate the dispersion diagram using MASW method.
+Return the dispersion diagram, the velocity vector and the frequency vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vmin</strong> – minimum value to consider for the dispersion diagram</li>
+<li><strong>vmax</strong> – maximum value to consider for the dispersion diagram</li>
+<li><strong>dv</strong> – velocity sampling</li>
+<li><strong>fmin</strong> – minimum frequency to consider</li>
+<li><strong>fmax</strong> – maximum frequency to consider</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -274,10 +292,11 @@ If min= is set it overrides selecting traces by header.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xmute</strong> – </li>
-<li><strong>tmute</strong> – </li>
-<li><strong>ntaper</strong> – </li>
-<li><strong>mode</strong> – </li>
+<li><strong>key</strong> – SU header key</li>
+<li><strong>xmute</strong> – array of position values</li>
+<li><strong>tmute</strong> – array of time values</li>
+<li><strong>ntaper</strong> – number of points to taper before mute</li>
+<li><strong>mode</strong> – mute below (0) or above (1)</li>
 </ul>
 </td>
 </tr>
@@ -314,8 +333,8 @@ sufilter command - Seismic Unix 44R1).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filename</strong> – name of the SU file</li>
-<li><strong>endian</strong> – byte order: little endian (default) ‘l’, big endian ‘b’.</li>
+<li><strong>filename</strong> – name of the SU file to read</li>
+<li><strong>endian</strong> – byte order: little endian ‘l’, big endian ‘b’.</li>
 </ul>
 </td>
 </tr>
@@ -326,7 +345,8 @@ sufilter command - Seismic Unix 44R1).</p>
 <dl class="method">
 <dt id="nessi.io.SUdata.resamp">
 <code class="descname">resamp</code><span class="sig-paren">(</span><em>nso</em>, <em>dto</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.resamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.resamp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resample data in time.</p>
+<dd><p>Resample data in time.
+Based on scipy.signal.resample</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -378,17 +398,22 @@ sufilter command - Seismic Unix 44R1).</p>
 
 <dl class="method">
 <dt id="nessi.io.SUdata.wiggle">
-<code class="descname">wiggle</code><span class="sig-paren">(</span><em>key='tracl'</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>tracecolor='black'</em>, <em>skip=1</em>, <em>xcur=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.wiggle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.wiggle" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wiggle</code><span class="sig-paren">(</span><em>clip=-1.0</em>, <em>key='tracl'</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>tracecolor='black'</em>, <em>tracestyle='-'</em>, <em>skip=1</em>, <em>xcur=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.wiggle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.wiggle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wiggle for SU files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clip</strong> – clip used to determine outside values to be clipped [-clip, clip]</li>
+<li><strong>key</strong> – header keyword (default tracl)</li>
 <li><strong>label1</strong> – x-axis label</li>
 <li><strong>label2</strong> – y-axis label</li>
 <li><strong>title</strong> – title of the image</li>
 <li><strong>tracecolor</strong> – color of the traces</li>
+<li><strong>tracestyle</strong> – style of the traces (‘–’, ‘:’, …)</li>
+<li><strong>skip</strong> – number of traces to skip for each plotted trace</li>
+<li><strong>xcur</strong> – factor to increase trace amplitudes on output</li>
 </ul>
 </td>
 </tr>
