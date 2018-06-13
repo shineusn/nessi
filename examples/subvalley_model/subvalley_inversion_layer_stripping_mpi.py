@@ -125,7 +125,8 @@ if rank == 0:
     swarm.init_pspace('input/random_models.ascii')
 
     # save original pspace
-    pspace_save = swarm.pspace
+    pspace_save = np.zeros(np.shape(swarm.pspace), dtype=np.float32)
+    pspace_save[:, :, :] = swarm.pspace[:, :, :]
 
 # ------------------------------------------------------------------
 # >> Layer-stripping approach
@@ -161,7 +162,6 @@ for istrip in range(0, nstrip):
     if rank != 0:
         disp, dvel, dfrq = dobsz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[0], fmax=50.)
         disp /= np.amax(disp)
-        print( len(disp), len(disp[0]))
                
     # Block until all processes have reached this point.
     comm.Barrier()
@@ -195,7 +195,7 @@ for istrip in range(0, nstrip):
         comm.Bcast([vsmod, MPI.FLOAT], root=0)
         comm.Bcast([romod, MPI.FLOAT], root=0)
 
-        # Calculate observed data and evaluate
+        # Calculate data and evaluate
         if rank != 0:
             # Seismic modeling
             dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
@@ -217,7 +217,7 @@ for istrip in range(0, nstrip):
         if rank == 0:
             # L2 results
             L2 = 0.
-            for ip in range(1, 3):
+            for ip in range(1, 4):
                 L2 += comm.recv(source=ip)
             L2 = np.sqrt(L2)
             # PSO update on master
@@ -272,7 +272,7 @@ for istrip in range(0, nstrip):
                 # Seismic modeling
                 dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
                 # Rayleigh dispersion
-                disp1 = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
+                disp1, dvel, dfrq = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
                 disp1 /= np.amax(disp1)
                 # L2-norm
                 L2 = 0.
@@ -289,7 +289,7 @@ for istrip in range(0, nstrip):
             if rank == 0:
                 # L2 results
                 L2 = 0.
-                for ip in range(1, 3):
+                for ip in range(1, 4):
                     L2 += comm.recv(source=ip)
                 L2 = np.sqrt(L2)
                 # PSO update on master
@@ -306,37 +306,37 @@ for istrip in range(0, nstrip):
             swarm.update(control=1, topology='toroidal', ndim=7)
             print('*PSO evaluation done. igen/istrip', igen, istrip, '\n', flush=True)
 
-    # Fit
-    if rank == 0:
-        fit = np.zeros(nindv, dtype=np.float32)
-        fit[:] = 1./swarm.misfit[:]
+        # Fit
+        if rank == 0:
+            fit = np.zeros(nindv, dtype=np.float32)
+            fit[:] = 1./swarm.misfit[:]
     
-    # Last generation / Update parameter space
-    if rank == 0:
-        for ipts in range(0, npts):
-            par = 0.
-            if pspace_save[ipts, 1, 1] <= lbdtab[istrip]/2. :
+        # Last generation / Update parameter space
+        if rank == 0:
+            for ipts in range(0, npts):
                 par = 0.
-                for indv in range(0, nindv):
-                    par += fit[indv]*swarm.history[indv, ipts, 2]
-                par /= np.sum(fit)
-                swarm.pspace[ipts, 2, 0] = 0.9*par
-                swarm.pspace[ipts, 2, 1] = 1.1*par
-                swarm.pspace[ipts, 2, 0] = 0.2*np.abs(1.1*par-0.9*par)
-                if swarm.pspace[ipts, 2, 0] < pspace_save[ipts, 2, 0]:
-                    swarm.pspace[ipts, 2, 0] = pspace_save[ipts, 2, 0]
-                if swarm.pspace[ipts, 2, 1] > pspace_save[ipts, 2, 1]:
-                    swarm.pspace[ipts, 2, 1] = pspace_save[ipts, 2, 1]
-    
-    # Save
-    if rank == 0:
-        h5file = h5py.File('swarm_'+str(istrip).zfill(2)+'_'+str(igen).zfill(3)+'.hdf5', 'a')
-        group = h5file['/'+str(istrip).zfill(2)+'_'+str(igen).zfill(3)]
-        # Save misfit
-        datamisfit = group.create_dataset(name='misfit', data=swarm.misfit)
-        # Save particle history
-        for indv in range(0, nindv):
-            dataparticle= group.create_dataset(name=str(indv).zfill(3),
+                if pspace_save[ipts, 1, 1] <= lbdtab[istrip]/2. :
+                    par = 0.
+                    for indv in range(0, nindv):
+                        par += fit[indv]*swarm.history[indv, ipts, 2]
+                    par /= np.sum(fit)
+                    swarm.pspace[ipts, 2, 0] = 0.8*par
+                    swarm.pspace[ipts, 2, 1] = 1.2*par
+                    swarm.pspace[ipts, 2, 2] = 0.2*np.abs(1.2*par-0.8*par)
+                    if swarm.pspace[ipts, 2, 0] < pspace_save[ipts, 2, 0]:
+                        swarm.pspace[ipts, 2, 0] = pspace_save[ipts, 2, 0]
+                    if swarm.pspace[ipts, 2, 1] > pspace_save[ipts, 2, 1]:
+                        swarm.pspace[ipts, 2, 1] = pspace_save[ipts, 2, 1]
+                        
+        # Save
+        if rank == 0:
+            h5file = h5py.File('swarm_'+str(istrip).zfill(2)+'_'+str(igen).zfill(3)+'.hdf5', 'w')
+            group = h5file.create_group('/'+str(istrip).zfill(2)+'_'+str(igen).zfill(3))
+            # Save misfit
+            datamisfit = group.create_dataset(name='misfit', data=swarm.misfit)
+            # Save particle history
+            for indv in range(0, nindv):
+                dataparticle= group.create_dataset(name=str(indv).zfill(3),
                                                data=swarm.history[indv,:,:])
-        h5file.flush()
-        h5file.close()
+            h5file.flush()
+            h5file.close()
