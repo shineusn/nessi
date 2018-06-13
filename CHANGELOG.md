@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [0.2.0] _ YYYY-MM-DD
-- using gprMax as a forward modeling engine
+
+### Added
+- example of inversion of GRP data using gprMax as modeling engine and PSO
 
 ## [0.1.2] - 2018-06-05
 

@@ -119,8 +119,8 @@ plt.show()
 # ------------------------------------------------------------------
 
 # Initialize the number of generations and particles
-ngen = 100
-nindv = 20
+ngen = 50
+nindv = 9
 
 # Initialize the swarm
 swarm = Swarm()
