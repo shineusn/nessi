@@ -9,28 +9,27 @@
 # ------------------------------------------------------------------
 """
 Support of Seismic Unix format and some commands.
-
-:copyright:
-    Damien Pageot (nessi.develop@protonmail.com)
-:license:
-    GNU Lesser General Public License, Version 3
-    (https://www.gnu.org/copyleft/lesser.html)
 """
 
+# Import __future__ for python2/3 compatibility
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os, sys
-import numpy as np
-import matplotlib.pyplot as plt
+# Import python modules
+import os
+import sys
 import copy
+import numpy as np
 from scipy.signal import resample
+import matplotlib.pyplot as plt
 
+# Import fonctions from NeSSI package
 from nessi.signal import time_window
 from nessi.signal import space_window
 from nessi.signal import taper1d
 from nessi.signal import sin2filter
+
 
 class SUdata():
     """
@@ -38,10 +37,8 @@ class SUdata():
     """
 
     def __init__(self):
-        """Define the Seismic Unix header.
-
-        Args:
-            None
+        """
+        Define the Seismic Unix header.
         """
         self.sutype = np.dtype([
             ('tracl', np.int32), ('tracr', np.int32), \
@@ -113,7 +110,8 @@ class SUdata():
 
 
     def read(self, filename, endian=' '):
-        """Read Seismic Unix file.
+        """
+        Read Seismic Unix file.
 
         :param filename: name of the SU file to read
         :param endian: byte order: little endian 'l', big endian 'b'.
