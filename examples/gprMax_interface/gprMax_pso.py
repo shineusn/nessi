@@ -120,7 +120,8 @@ plt.show()
 
 # Initialize the number of generations and particles
 ngen = 50
-nindv = 9
+nindv = 16
+ndim = 4
 
 # Initialize the swarm
 swarm = Swarm()
@@ -144,7 +145,7 @@ for indv in range(0, nindv):
     L2 = 0.
     for j in range(0, len(Ezcal[0])):
         for i in range(0, len(Ezcal)):
-            L2 = (Ezobs[i,j]-Ezcal[i,j])**2+(Hxobs[i,j]-Hxcal[i,j])**2+(Hyobs[i,j]-Hycal[i,j])**2
+            L2 += (Ezobs[i,j]-Ezcal[i,j])**2+(Hxobs[i,j]-Hxcal[i,j])**2+(Hyobs[i,j]-Hycal[i,j])**2
     L2 = np.sqrt(L2)
     swarm.misfit[indv] = L2
     swarm.history[indv, :, :] = swarm.current[indv, :, :]
@@ -159,7 +160,7 @@ for igen in range(0, ngen):
     print('\n\n gen=',igen, ' misfit=', np.mean(swarm.misfit[:]), ' best=', np.amin(swarm.misfit[:]), '\n\n')
 
     # Update the Swarm
-    swarm.update(control=1, topology='toroidal', ndim=4)
+    swarm.update(control=1, topology='toroidal', ndim=ndim)
 
     # Evaluation
     for indv in range(0, nindv):
@@ -172,15 +173,31 @@ for igen in range(0, ngen):
         Ezcal, Hxcal, Hycal = gprmax_modeling()
         # Misfit
         L2 = 0.
+        L2Ez_num = 0.
+        L2Ez_den = 0.
+        L2Hx_num = 0.
+        L2Hx_den = 0.
+        L2Hy_num = 0.
+        L2Hy_den = 0.
+        
         for j in range(0, len(Ezcal[0])):
             for i in range(0, len(Ezcal)):
-                L2 = (Ezobs[i,j]-Ezcal[i,j])**2+(Hxobs[i,j]-Hxcal[i,j])**2+(Hyobs[i,j]-Hycal[i,j])**2
+                L2 += (Ezobs[i,j]-Ezcal[i,j])**2+(Hxobs[i,j]-Hxcal[i,j])**2+(Hyobs[i,j]-Hycal[i,j])**2
         L2 = np.sqrt(L2)
         # Test
         if L2 < swarm.misfit[indv]:
             swarm.misfit[indv] = L2
             swarm.history[indv, :, :] = swarm.current[indv, :, :]
-
+            
+    fgen = open('fgen'+str(igen).zfill(3)+'.txt', 'w')
+    for indv in range(0, nindv):
+        fgen.write(str(swarm.misfit[indv])+' ')
+        fgen.write(str(swarm.history[indv, 0, 0])+' ')
+        fgen.write(str(swarm.history[indv, 0, 1])+' ')
+        fgen.write(str(swarm.history[indv, 0, 2])+' ')
+        fgen.write('\n')
+        
+    fgen.close()
 # Get best
 ibest = np.argmin(swarm.misfit[:])
 print(swarm.history[ibest,:,:])
