@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - YYYY-MM-DD
+
+### Added
+- *resamp* method for SUdata()
+- *mute* method for SUdata()
+- *specfx* method for SUdata()
+- *specfk* method for SUdata()
+- *wiggle* method for SUdata()
+
+### Modified
+- SU header structure now fits SU/CWP format (before SEG-Y rev 1)
+- remove useless SUdata variables
+- *image* method of SUdata() to handle *specfx* and *specfk* method outputs
+- docstrings for SUdata methods
+
+### Fixed
+- *kill* method for SUdata()
+
 ## [0.1.2] - 2018-06-05
 
 ### Added

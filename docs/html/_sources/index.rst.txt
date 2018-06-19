@@ -42,11 +42,12 @@ Tutorials
     windowing_SU_data
     filtering_SU_data
     tapering_SU_data
+    muting_SU_data
     masw_SU_data
     gpdc_interface
     PSO_basics
     dispersion_curve_inversion
-    
+
 =========
 NeSSI API
 =========
