@@ -254,6 +254,7 @@ class Genalg():
 
         # Initialize population
         self.current = np.zeros((nindv, lenght), dtype=np.int16)
+        self.misfit = np.zeros(nindv, dtype=np.float32)
 
         # Initiliaze random model
         rmod = np.zeros((npts, npar), dtype=np.float32)
@@ -275,3 +276,134 @@ class Genalg():
                         rmod[ipts, ipar] = vmin
             # Write genes in chromosomes
             self.current[indv, :] = self.chromowrite(rmod)
+
+    def tournament(self, k, nelit):
+        """
+        K-way tournament selection.
+        """
+
+        # Get the number of chromosomes and the lenght of chromosomes
+        nindv = self.current.shape[0]
+        lenght = self.current.shape[1]
+
+        # Initialize selected parents array
+        selected = np.zeros((nindv, lenght), dtype=np.int16)
+
+        # If elits
+        if nelit > 0:
+            # Copy misfit array
+            misfit = np.zeros(nindv, dtype=np.float32)
+            misfit[:] = self.misfit[:]
+            # Loop over nelit
+            for indv in range(0, nelit):
+                ibest = np.argmin(misfit)
+                selected[indv, :] = self.current[ibest, :]
+                misfit[ibest] = np.amax(misfit)*10.
+
+        # Loop over individuals
+        for indv in range(nelit, nindv):
+            # Loop over K
+            for i in range(0, k):
+                # Select competitor
+                itest = np.random.randint(0, high=nindv)
+                # Test competitor
+                if i == 0:
+                    ibest = itest
+                    fbest = self.misfit[ibest]
+                else:
+                    if self.misfit[itest] < fbest:
+                        ibest = itest
+                        fbest = self.misfit[ibest]
+            selected[indv, :] = self.current[ibest, :]
+
+        return selected
+
+    def crossover(self, selected, xtype, pc, nelit):
+        """
+        Cross-over operator.
+        """
+
+        # Get the number of chromosomes and the lenght of chromosomes
+        nindv = self.current.shape[0]
+        lenght = self.current.shape[1]
+
+        # Initialize crossed offspring array
+        crossed = np.zeros((nindv, lenght), dtype=np.int16)
+
+        # If elits
+        if nelit > 0:
+            for indv in range(0, nelit):
+                crossed[indv, :] = selected[indv, :]
+
+        # Loop over individuals
+        for indv in range(nelit, nindv, 2):
+            # Check if cross-over or not
+            if np.random.random_sample() < pc:
+                # Cross-over point
+                ic = np.random.randint(0, high=lenght)
+                crossed[indv, :ic] = selected[indv, :ic]
+                crossed[indv, ic:] = selected[indv+1, ic:]
+                crossed[indv+1, :ic] = selected[indv+1, :ic]
+                crossed[indv+1, ic:] = selected[indv, ic:]
+            else:
+                crossed[indv, :] = selected[indv, :]
+                crossed[indv+1, :] = selected[indv+1, :]
+
+        return crossed
+
+    def mutation(self, crossed, mtype, pm, nelit):
+        """
+        Mutation operator.
+        """
+
+        # Get the number of chromosomes and the lenght of chromosomes
+        nindv = self.current.shape[0]
+        lenght = self.current.shape[1]
+
+        # Get the number of genes
+        ngene = len(self.clenght)
+
+        # Initialize mutated offspring array
+        mutated = np.zeros((nindv, lenght), dtype=np.int16)
+
+        # If elits
+        for indv in range(0, nelit):
+            mutated[indv, :] = crossed[indv, :]
+
+        # Loop over individuals
+        for indv in range(nelit, nindv):
+            # Loop over genes
+            icount = 0
+            for igene in range(0, ngene):
+                # Loop over bits
+                for ibit in range(0, self.clenght[igene]):
+                    # Test Mutation
+                    if np.random.random_sample() < pm:
+                        if crossed[indv, icount] == 0:
+                            mutated[indv, icount] = 1
+                        else:
+                            mutated[indv, icount] = 0
+                    else:
+                        mutated[indv, icount] = crossed[indv, icount]
+                    icount += 1
+
+        return mutated
+
+    def update(self, stype='tournament', k=4, xtype='single', pc=0.5, mtype='simple', pm=0.2, nelit=0):
+        """
+        Update chromosomes using k-way tournament selection, single cross-over and simple mutation.
+        """
+
+        # Selection
+        if stype == 'tournament':
+            selected = self.tournament(k, nelit)
+
+        # Cross-over
+        if xtype == 'single':
+            crossed = self.crossover(selected, xtype, pc, nelit)
+
+        # Mutation
+        if mtype == 'simple':
+            mutated = self.mutation(crossed, mtype, pm, nelit)
+
+        self.current[:, :] = mutated[:, :]
