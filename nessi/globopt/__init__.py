@@ -23,6 +23,7 @@ from __future__ import print_function
 # Import nessi.globopt classes and functions
 
 from .pso import Swarm
+from .ga  import Genalg
 
 if __name__ == '__main__':
     import doctest
