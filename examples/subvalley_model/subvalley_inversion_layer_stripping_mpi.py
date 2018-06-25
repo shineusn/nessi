@@ -160,7 +160,7 @@ for istrip in range(0, nstrip):
 
     # Calculating the reference dispersion diagrams using the MASW method
     if rank != 0:
-        disp, dvel, dfrq = dobsz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[0], fmax=50.)
+        disp, dvel, dfrq = dobsz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
         disp /= np.amax(disp)
                
     # Block until all processes have reached this point.

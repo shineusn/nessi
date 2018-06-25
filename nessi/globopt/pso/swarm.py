@@ -61,11 +61,12 @@ class Swarm():
             self.pspace[:, ipar, :] = tmp[:, i:i+3]
             i += 3
 
-    def init_particles(self, nindv):
+    def init_particles(self, nindv, ncvt=0):
         """
         Initialize all the particles of the swarm.
 
         :param nindv: integer, number of particles
+        :param ncvt: integer, number of iteration for centroidal Voronoi tessellation (McQueen algorithm)
         """
 
         # Get npts and npar from pspace
@@ -83,6 +84,36 @@ class Swarm():
             p_random = np.random.random_sample((npts, npar))
             self.current[indv, :, :] = self.pspace[:, :, 0]\
                 + p_random*(self.pspace[:, :, 1]-self.pspace[:, :, 0])
+
+        # CVT
+        if ncvt > 0:
+            # Initialize
+            j = np.zeros(nindv, dtype=np.float32)
+            j[:] = 1.
+            # Create temporary particle array
+            qtmp = np.zeros((npts, npar), dtype=np.float32)
+            # Loop over iterations
+            for it in range(0, ncvt):
+                # Random individual
+                p_random = np.random.random_sample((npts, npar))
+                qtmp[:, :] = self.pspace[:, :, 0]\
+                    + p_random*(self.pspace[:, :, 1]-self.pspace[:, :, 0])
+                # Calculate distance
+                d = np.zeros(nindv, dtype=np.float32)
+                for indv in range(0, nindv):
+                    for ipts in range(0,npts):
+                        for ipar in range(0, npar):
+                            d[indv] += ((self.current[indv,ipts,ipar]-qtmp[ipts,ipar])/
+                                self.pspace[ipts,ipar,1])**2
+                d[:] = np.sqrt(d[:])
+                # Search closest individual
+                iclose = np.argmin(d)
+                # Correct position
+                for ipts in range(0, npts):
+                    for ipar in range(0, npar):
+                        self.current[iclose,ipts,ipar] = (j[iclose]*self.current[iclose,ipts,ipar]+qtmp[ipts,ipar])/(j[iclose]+1.)
+                j[iclose] += 1.
+
 
     def _get_grid(self, ndim):
         """

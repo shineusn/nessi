@@ -235,11 +235,12 @@ class Genalg():
 
         return model
 
-    def init_chromosome(self, nindv):
+    def init_chromosome(self, nindv, ncvt=0):
         """
         Initialize chromosome population.
 
         :param nindv: number of individuals/chromosomes in the pool.
+        :param ncvt: integer, number of iteration for centroidal Voronoi tessellation (McQueen algorithm)
         """
 
         # Get the number of points and the number of parameters per points
@@ -264,10 +265,9 @@ class Genalg():
             # Loop over points and parameters
             for ipts in range(0, npts):
                 for ipar in range(0, npar):
-                    # Get vmin, vmax and nv
                     vmin = self.pspace[ipts, ipar, 0]
                     vmax = self.pspace[ipts, ipar, 1]
-                    nv   = self.pspace[ipts, ipar, 2]
+                    nv = self.pspace[ipts, ipar, 2]
                     if nv > 1:
                         # Randomize
                         r = np.random.randint(0, high=nv)
@@ -276,6 +276,46 @@ class Genalg():
                         rmod[ipts, ipar] = vmin
             # Write genes in chromosomes
             self.current[indv, :] = self.chromowrite(rmod)
+
+        # CVT
+        if ncvt > 0:
+            # Initialize
+            j = np.zeros(nindv, dtype=np.float32)
+            j[:] = 1.
+            # Create temporary particle array
+            qtmp = np.zeros((npts, npar), dtype=np.float32)
+            # Loop over iterations
+            for it in range(0, ncvt):
+                # Random individual
+                for ipts in range(0, npts):
+                    for ipar in range(0, npar):
+                        vmin = self.pspace[ipts, ipar, 0]
+                        vmax = self.pspace[ipts, ipar, 1]
+                        nv = self.pspace[ipts, ipar, 2]
+                        if nv > 1:
+                            # Randomize
+                            r = np.random.randint(0, high=nv)
+                            qtmp[ipts, ipar] = vmin+r*(vmax-vmin)/float(nv-1)
+                        else:
+                            qtmp[ipts, ipar] = vmin
+                # Calculate distance
+                d = np.zeros(nindv, dtype=np.float32)
+                for indv in range(0, nindv):
+                    qpool = self.chromoread(self.current[indv,:])
+                    for ipts in range(0,npts):
+                        for ipar in range(0, npar):
+                            d[indv] += ((qpool[ipts,ipar]-qtmp[ipts,ipar])/
+                                self.pspace[ipts,ipar,1])**2
+                d[:] = np.sqrt(d[:])
+                # Search closest individual
+                iclose = np.argmin(d)
+                # Correct position
+                qpool = self.chromoread(self.current[iclose,:])
+                for ipts in range(0, npts):
+                    for ipar in range(0, npar):
+                        qpool[ipts,ipar] = (j[iclose]*qpool[ipts,ipar]+qtmp[ipts,ipar])/(j[iclose]+1.)
+                self.current[iclose, :] = self.chromowrite(qpool)
+                j[iclose] += 1.
 
     def tournament(self, k, nelit):
         """
