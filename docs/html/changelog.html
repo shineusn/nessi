@@ -201,11 +201,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *specfx* method for SUdata()
 - *specfk* method for SUdata()
 - *wiggle* method for SUdata()
+- Standard Genetic Algorithm implementation (mu, pc, pm)
+- Centroidal Voronoi tessellation option (McQueen algorithm) in *Swarm.init_particles*
+- Centroidal Voronoi tessellation option (McQueen algorithm) in *Genalg.init_chromosome*
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
 - remove useless SUdata variables
 - *image* method of SUdata() to handle *specfx* and *specfk* method outputs
+- docstrings for SUdata methods
 
 ### Fixed
 - *kill* method for SUdata()
@@ -238,6 +242,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *pfilter* method of SUdata() can now handle axis 0 and 1
 - *masw* method of SUdata() can now return freq and vel arrays as expected
 - *masw* method of SUdata() now handles correctly the *scalco* keyword
+- obselete dependencies
 
 ## Removed
 - *2D seismic modeling* part in docs/ (temporary)

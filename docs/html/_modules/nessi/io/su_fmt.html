@@ -175,28 +175,27 @@
 <span class="c1"># ------------------------------------------------------------------</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Support of Seismic Unix format and some commands.</span>
-
-<span class="sd">:copyright:</span>
-<span class="sd">    Damien Pageot (nessi.develop@protonmail.com)</span>
-<span class="sd">:license:</span>
-<span class="sd">    GNU Lesser General Public License, Version 3</span>
-<span class="sd">    (https://www.gnu.org/copyleft/lesser.html)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="c1"># Import __future__ for python2/3 compatibility</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># Import python modules</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">resample</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
+<span class="c1"># Import fonctions from NeSSI package</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">time_window</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">space_window</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">taper1d</span>
 <span class="kn">from</span> <span class="nn">nessi.signal</span> <span class="k">import</span> <span class="n">sin2filter</span>
+
 
 <div class="viewcode-block" id="SUdata"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata">[docs]</a><span class="k">class</span> <span class="nc">SUdata</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -204,10 +203,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Define the Seismic Unix header.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the Seismic Unix header.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sutype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([</span>
             <span class="p">(</span><span class="s1">&#39;tracl&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;tracr&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> \
@@ -279,7 +276,8 @@
 
 
 <div class="viewcode-block" id="SUdata.read"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">endian</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read Seismic Unix file.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read Seismic Unix file.</span>
 
 <span class="sd">        :param filename: name of the SU file to read</span>
 <span class="sd">        :param endian: byte order: little endian &#39;l&#39;, big endian &#39;b&#39;.</span>

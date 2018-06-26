@@ -1,0 +1,676 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nessi.globopt.ga.genalg &mdash; NeSSI  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> NeSSI
+          
+
+          
+            
+            <img src="../../../../_static/nessi_logo_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seismic_modeling_examples.html">Seismic modeling examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../read_write_and_create_SU_data.html">Read, write and create SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../windowing_SU_data.html">Windowing SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../filtering_SU_data.html">Filtering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../muting_SU_data.html">&nbsp;Muting SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../masw_SU_data.html">&nbsp;MASW from SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../PSO_basics.html">Particle Swarm Optimization: basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dispersion_curve_inversion.html">Dispersion curve inversion using GPDC and PSO</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_modeling_swm.html">nessi.modeling.swm references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sucwp_references.html">SU/CWP references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_modeling_interfaces.html">nessi.modeling.interfaces references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nessi_globopt_references.html">nessi.globopt references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeSSI</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>nessi.globopt.ga.genalg</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nessi.globopt.ga.genalg</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># -------------------------------------------------------------------</span>
+<span class="c1"># Filename: genalg.py</span>
+<span class="c1">#   Author: Damien Pageot</span>
+<span class="c1">#    Email: nessi.develop@protonmail.com</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2018 Damien Pageot</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class and methods for particle swarm optimization.</span>
+
+<span class="sd">:copyright:</span>
+<span class="sd">    Damien Pageot (nessi.develop@protonmail.com)</span>
+<span class="sd">:license:</span>
+<span class="sd">    GNU Lesser General Public License, Version 3</span>
+<span class="sd">    (https://www.gnu.org/copyleft/lesser.html)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Genalg"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg">[docs]</a><span class="k">class</span> <span class="nc">Genalg</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Genetic Algorithm class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize Genalg class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Array to store the lenght of each gene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+        <span class="c1"># Array to store chromosomes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+        <span class="c1"># Array to store the misfit for each chromosome</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="c1"># Array to store the parameter space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Genalg.init_pspace"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.init_pspace">[docs]</a>    <span class="k">def</span> <span class="nf">init_pspace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmod</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialiaze parameter space from file</span>
+
+<span class="sd">        :param fmod: input file containing the boundaries of the parameter space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Load pspace file in a temporary array</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fmod</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check the number of points per chromosome</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Check the number of parameter per points</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Resize pspace array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Fill pspace array</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[:,</span> <span class="n">ipar</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span></div>
+
+    <span class="k">def</span> <span class="nf">_power2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search the closest power of 2 of an integer value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">n2</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">n2</span> <span class="o">*=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n2</span>
+
+    <span class="k">def</span> <span class="nf">_binstrlen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the maximum lenght of a bit-string given n (power of 2).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">npw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power2</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">npw</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">,</span> <span class="n">nx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert real value in its binary representation given boundaries</span>
+<span class="sd">        and discretization (power of 2).</span>
+
+<span class="sd">        :param x: value between lb and ub</span>
+<span class="sd">        :param lb: lower bound value</span>
+<span class="sd">        :param ub: upper bound value</span>
+<span class="sd">        :param nx: number of discrete samples</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Convert x value to integer</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">lb</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ub</span><span class="o">-</span><span class="n">lb</span><span class="p">)))</span>
+
+        <span class="c1"># Get the gene length</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binstrlen</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+        <span class="c1"># Initialize the gene</span>
+        <span class="n">gene</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">l</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">ix</span>
+
+        <span class="c1"># Fill the gene with 0 and/or 1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+            <span class="n">gene</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">%</span><span class="mi">2</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">//</span><span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">gene</span>
+
+    <span class="k">def</span> <span class="nf">_decoding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">,</span> <span class="n">nx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert binary reprensentation in real value given boundaries</span>
+<span class="sd">        and discretization (power of 2).</span>
+
+<span class="sd">        :param b: binary code</span>
+<span class="sd">        :param lb: lower bound</span>
+<span class="sd">        :param ub: upper bound</span>
+<span class="sd">        :param nx: number of discrete samples</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get sampling</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">ub</span><span class="o">-</span><span class="n">lb</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Get the gene&#39;s lenght</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binstrlen</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+        <span class="c1"># Loop over bytes</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+            <span class="n">ix</span> <span class="o">+=</span> <span class="n">b</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Calculate final value</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">lb</span><span class="o">+</span><span class="nb">float</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">chromolenght</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the lenght in byte of each gene of the chromosomes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the number of points and the number of parameters per point</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Initialize clenght array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npts</span><span class="o">*</span><span class="n">npar</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+        <span class="c1"># Loop over points and parameters</span>
+        <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                <span class="c1"># Check value</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">ipts</span><span class="o">*</span><span class="p">(</span><span class="n">npar</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binstrlen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">ipts</span><span class="o">*</span><span class="p">(</span><span class="n">npar</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="Genalg.chromowrite"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.chromowrite">[docs]</a>    <span class="k">def</span> <span class="nf">chromowrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmod</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write model parameters in binary form.</span>
+
+<span class="sd">        :param rmod: array (npts, npar) of random parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># length of chromosome</span>
+        <span class="n">nbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">)</span>
+
+        <span class="c1"># Number of points and parameters</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="n">rmod</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="n">rmod</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># population array</span>
+        <span class="n">chromo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbin</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Loop over points</span>
+        <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+            <span class="c1"># Loop over parameters</span>
+            <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">xsmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">xsmp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">chromo</span><span class="p">[</span><span class="n">l</span><span class="p">:</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">rmod</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span>
+                    <span class="n">chromo</span><span class="p">[</span><span class="n">l</span><span class="p">:</span><span class="n">l</span><span class="o">+</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">xsmp</span><span class="p">)</span>
+                    <span class="n">l</span> <span class="o">+=</span> <span class="n">a</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">chromo</span></div>
+
+<div class="viewcode-block" id="Genalg.chromoread"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.chromoread">[docs]</a>    <span class="k">def</span> <span class="nf">chromoread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bmod</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read binary representation and translate in term of real-value</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param bmod: chromosome</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the numner of points and the number of parameter per points</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Initialize output model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="c1"># Get the real value model from genes</span>
+        <span class="n">i</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="n">pmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">pmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">psmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">igmin</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">igmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">ipar</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">igmin</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">igmax</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">psmp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">model</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decoding</span><span class="p">(</span><span class="n">bmod</span><span class="p">[</span><span class="n">igmin</span><span class="p">:</span><span class="n">igmax</span><span class="p">],</span> <span class="n">pmin</span><span class="p">,</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">psmp</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">model</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmin</span>
+
+        <span class="k">return</span> <span class="n">model</span></div>
+
+<div class="viewcode-block" id="Genalg.init_chromosome"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.init_chromosome">[docs]</a>    <span class="k">def</span> <span class="nf">init_chromosome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nindv</span><span class="p">,</span> <span class="n">ncvt</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize chromosome population.</span>
+
+<span class="sd">        :param nindv: number of individuals/chromosomes in the pool.</span>
+<span class="sd">        :param ncvt: integer, number of iteration for centroidal Voronoi tessellation (McQueen algorithm)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the number of points and the number of parameters per points</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Get the gene lenghts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chromolenght</span><span class="p">()</span>
+
+        <span class="c1"># Get the total chromosome lenght</span>
+        <span class="n">lenght</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">)</span>
+
+        <span class="c1"># Initialize population</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nindv</span><span class="p">,</span> <span class="n">lenght</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="c1"># Initiliaze random model</span>
+        <span class="n">rmod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="c1"># Loop over individuals</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+            <span class="c1"># Loop over points and parameters</span>
+            <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                    <span class="n">vmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="n">vmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">nv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">nv</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="c1"># Randomize</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">nv</span><span class="p">)</span>
+                        <span class="n">rmod</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmin</span><span class="o">+</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">nv</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">rmod</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmin</span>
+            <span class="c1"># Write genes in chromosomes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chromowrite</span><span class="p">(</span><span class="n">rmod</span><span class="p">)</span>
+
+        <span class="c1"># CVT</span>
+        <span class="k">if</span> <span class="n">ncvt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Initialize</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">j</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="c1"># Create temporary particle array</span>
+            <span class="n">qtmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,</span> <span class="n">npar</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="c1"># Loop over iterations</span>
+            <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ncvt</span><span class="p">):</span>
+                <span class="c1"># Random individual</span>
+                <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                        <span class="n">vmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                        <span class="n">vmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="n">nv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">nv</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="c1"># Randomize</span>
+                            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">nv</span><span class="p">)</span>
+                            <span class="n">qtmp</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmin</span><span class="o">+</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">nv</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">qtmp</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span> <span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmin</span>
+                <span class="c1"># Calculate distance</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+                    <span class="n">qpool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chromoread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">indv</span><span class="p">,:])</span>
+                    <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">npts</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                            <span class="n">d</span><span class="p">[</span><span class="n">indv</span><span class="p">]</span> <span class="o">+=</span> <span class="p">((</span><span class="n">qpool</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">]</span><span class="o">-</span><span class="n">qtmp</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">])</span><span class="o">/</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">pspace</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+                <span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">[:])</span>
+                <span class="c1"># Search closest individual</span>
+                <span class="n">iclose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                <span class="c1"># Correct position</span>
+                <span class="n">qpool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chromoread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">iclose</span><span class="p">,:])</span>
+                <span class="k">for</span> <span class="n">ipts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">ipar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npar</span><span class="p">):</span>
+                        <span class="n">qpool</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="n">iclose</span><span class="p">]</span><span class="o">*</span><span class="n">qpool</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">]</span><span class="o">+</span><span class="n">qtmp</span><span class="p">[</span><span class="n">ipts</span><span class="p">,</span><span class="n">ipar</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="n">iclose</span><span class="p">]</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">iclose</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chromowrite</span><span class="p">(</span><span class="n">qpool</span><span class="p">)</span>
+                <span class="n">j</span><span class="p">[</span><span class="n">iclose</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span></div>
+
+<div class="viewcode-block" id="Genalg.tournament"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.tournament">[docs]</a>    <span class="k">def</span> <span class="nf">tournament</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        K-way tournament selection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the number of chromosomes and the lenght of chromosomes</span>
+        <span class="n">nindv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lenght</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Initialize selected parents array</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nindv</span><span class="p">,</span> <span class="n">lenght</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+        <span class="c1"># If elits</span>
+        <span class="k">if</span> <span class="n">nelit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Copy misfit array</span>
+            <span class="n">misfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nindv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">misfit</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[:]</span>
+            <span class="c1"># Loop over nelit</span>
+            <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+                <span class="n">ibest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span>
+                <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">ibest</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">misfit</span><span class="p">[</span><span class="n">ibest</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">misfit</span><span class="p">)</span><span class="o">*</span><span class="mf">10.</span>
+
+        <span class="c1"># Loop over individuals</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nelit</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+            <span class="c1"># Loop over K</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+                <span class="c1"># Select competitor</span>
+                <span class="n">itest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">nindv</span><span class="p">)</span>
+                <span class="c1"># Test competitor</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ibest</span> <span class="o">=</span> <span class="n">itest</span>
+                    <span class="n">fbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">ibest</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">itest</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fbest</span><span class="p">:</span>
+                        <span class="n">ibest</span> <span class="o">=</span> <span class="n">itest</span>
+                        <span class="n">fbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">misfit</span><span class="p">[</span><span class="n">ibest</span><span class="p">]</span>
+            <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">ibest</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">selected</span></div>
+
+<div class="viewcode-block" id="Genalg.crossover"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.crossover">[docs]</a>    <span class="k">def</span> <span class="nf">crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected</span><span class="p">,</span> <span class="n">xtype</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cross-over operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the number of chromosomes and the lenght of chromosomes</span>
+        <span class="n">nindv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lenght</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Initialize crossed offspring array</span>
+        <span class="n">crossed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nindv</span><span class="p">,</span> <span class="n">lenght</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+        <span class="c1"># If elits</span>
+        <span class="k">if</span> <span class="n">nelit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Loop over individuals</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nelit</span><span class="p">,</span> <span class="n">nindv</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># Check if cross-over or not</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">pc</span><span class="p">:</span>
+                <span class="c1"># Cross-over point</span>
+                <span class="n">ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">lenght</span><span class="p">)</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:</span><span class="n">ic</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:</span><span class="n">ic</span><span class="p">]</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ic</span><span class="p">:]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ic</span><span class="p">:]</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ic</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">ic</span><span class="p">]</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ic</span><span class="p">:]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">ic</span><span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">selected</span><span class="p">[</span><span class="n">indv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">crossed</span></div>
+
+<div class="viewcode-block" id="Genalg.mutation"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.mutation">[docs]</a>    <span class="k">def</span> <span class="nf">mutation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crossed</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">pm</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mutation operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the number of chromosomes and the lenght of chromosomes</span>
+        <span class="n">nindv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lenght</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Get the number of genes</span>
+        <span class="n">ngene</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">)</span>
+
+        <span class="c1"># Initialize mutated offspring array</span>
+        <span class="n">mutated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nindv</span><span class="p">,</span> <span class="n">lenght</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+        <span class="c1"># If elits</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nelit</span><span class="p">):</span>
+            <span class="n">mutated</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Loop over individuals</span>
+        <span class="k">for</span> <span class="n">indv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nelit</span><span class="p">,</span> <span class="n">nindv</span><span class="p">):</span>
+            <span class="c1"># Loop over genes</span>
+            <span class="n">icount</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">igene</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ngene</span><span class="p">):</span>
+                <span class="c1"># Loop over bits</span>
+                <span class="k">for</span> <span class="n">ibit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clenght</span><span class="p">[</span><span class="n">igene</span><span class="p">]):</span>
+                    <span class="c1"># Test Mutation</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">pm</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">icount</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">mutated</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">icount</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">mutated</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">icount</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">mutated</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">icount</span><span class="p">]</span> <span class="o">=</span> <span class="n">crossed</span><span class="p">[</span><span class="n">indv</span><span class="p">,</span> <span class="n">icount</span><span class="p">]</span>
+                    <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">mutated</span></div>
+
+<div class="viewcode-block" id="Genalg.update"><a class="viewcode-back" href="../../../../nessi_globopt_references.html#nessi.globopt.Genalg.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s1">&#39;tournament&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">xtype</span><span class="o">=</span><span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="n">pc</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mtype</span><span class="o">=</span><span class="s1">&#39;simple&#39;</span><span class="p">,</span> <span class="n">pm</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">nelit</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update chromosomes using k-way tournament selection, single cross-over and simple mutation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Selection</span>
+        <span class="k">if</span> <span class="n">stype</span> <span class="o">==</span> <span class="s1">&#39;tournament&#39;</span><span class="p">:</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">nelit</span><span class="p">)</span>
+
+        <span class="c1"># Cross-over</span>
+        <span class="k">if</span> <span class="n">xtype</span> <span class="o">==</span> <span class="s1">&#39;single&#39;</span><span class="p">:</span>
+            <span class="n">crossed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span><span class="n">selected</span><span class="p">,</span> <span class="n">xtype</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">nelit</span><span class="p">)</span>
+
+        <span class="c1"># Mutation</span>
+        <span class="k">if</span> <span class="n">mtype</span> <span class="o">==</span> <span class="s1">&#39;simple&#39;</span><span class="p">:</span>
+            <span class="n">mutated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutation</span><span class="p">(</span><span class="n">crossed</span><span class="p">,</span> <span class="n">mtype</span><span class="p">,</span> <span class="n">pm</span><span class="p">,</span> <span class="n">nelit</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mutated</span><span class="p">[:,</span> <span class="p">:]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Damien Pageot.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

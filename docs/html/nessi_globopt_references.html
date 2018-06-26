@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="windowing_SU_data.html">Windowing SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filtering_SU_data.html">Filtering SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tapering_SU_data.html">Tapering SU data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="muting_SU_data.html">&nbsp;Muting SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="masw_SU_data.html">&nbsp;MASW from SU data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpdc_interface.html">Interface with Geopsy-gpdc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PSO_basics.html">Particle Swarm Optimization: basics</a></li>
@@ -216,13 +217,17 @@ a given particle.</p>
 
 <dl class="method">
 <dt id="nessi.globopt.Swarm.init_particles">
-<code class="descname">init_particles</code><span class="sig-paren">(</span><em>nindv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm.init_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm.init_particles" title="Permalink to this definition">¶</a></dt>
+<code class="descname">init_particles</code><span class="sig-paren">(</span><em>nindv</em>, <em>ncvt=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/pso/swarm.html#Swarm.init_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Swarm.init_particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize all the particles of the swarm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nindv</strong> – integer, number of particles</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nindv</strong> – integer, number of particles</li>
+<li><strong>ncvt</strong> – integer, number of iteration for centroidal Voronoi tessellation (McQueen algorithm)</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -262,6 +267,97 @@ a given particle.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nessi.globopt.Genalg">
+<em class="property">class </em><code class="descname">Genalg</code><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Genetic Algorithm class</p>
+<dl class="method">
+<dt id="nessi.globopt.Genalg.chromoread">
+<code class="descname">chromoread</code><span class="sig-paren">(</span><em>bmod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.chromoread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.chromoread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read binary representation and translate in term of real-value
+parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bmod</strong> – chromosome</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.chromowrite">
+<code class="descname">chromowrite</code><span class="sig-paren">(</span><em>rmod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.chromowrite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.chromowrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write model parameters in binary form.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rmod</strong> – array (npts, npar) of random parameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.crossover">
+<code class="descname">crossover</code><span class="sig-paren">(</span><em>selected</em>, <em>xtype</em>, <em>pc</em>, <em>nelit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.crossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.crossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross-over operator.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.init_chromosome">
+<code class="descname">init_chromosome</code><span class="sig-paren">(</span><em>nindv</em>, <em>ncvt=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.init_chromosome"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.init_chromosome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize chromosome population.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nindv</strong> – number of individuals/chromosomes in the pool.</li>
+<li><strong>ncvt</strong> – integer, number of iteration for centroidal Voronoi tessellation (McQueen algorithm)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.init_pspace">
+<code class="descname">init_pspace</code><span class="sig-paren">(</span><em>fmod</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.init_pspace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.init_pspace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialiaze parameter space from file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fmod</strong> – input file containing the boundaries of the parameter space.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.mutation">
+<code class="descname">mutation</code><span class="sig-paren">(</span><em>crossed</em>, <em>mtype</em>, <em>pm</em>, <em>nelit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.mutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutation operator.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.tournament">
+<code class="descname">tournament</code><span class="sig-paren">(</span><em>k</em>, <em>nelit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.tournament"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.tournament" title="Permalink to this definition">¶</a></dt>
+<dd><p>K-way tournament selection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nessi.globopt.Genalg.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>stype='tournament'</em>, <em>k=4</em>, <em>xtype='single'</em>, <em>pc=0.5</em>, <em>mtype='simple'</em>, <em>pm=0.2</em>, <em>nelit=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/globopt/ga/genalg.html#Genalg.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.globopt.Genalg.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update chromosomes using k-way tournament selection, single cross-over and simple mutation.</p>
 </dd></dl>
 
 </dd></dl>
