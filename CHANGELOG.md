@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
 - remove useless SUdata variables
 - *image* method of SUdata() to handle *masw*, *specfx* and *specfk* method outputs
+- *image* has now 'normal' and 'masw' style options (style=)
 - docstrings for SUdata methods
 - *masw* method output is now a SU file
 

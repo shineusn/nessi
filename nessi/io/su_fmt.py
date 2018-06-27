@@ -186,7 +186,7 @@ class SUdata():
 
 
     def image(self, key='tracl', bclip=None, wclip=None, clip=None, legend=0, label1=' ',
-              label2=' ', title=' ', cmap='gray'):
+              label2=' ', title=' ', cmap='gray', style='normal'):
         """
         matplotlib.pyplot.imshow adapted to plot SU files
 
@@ -247,17 +247,30 @@ class SUdata():
             x0 = float(self.header[0]['f2'])
             x1 = x0+float(len(self.header)-1)*d2
 
-        # Add labels to axes
-        plt.xlabel(label1)
-        plt.ylabel(label2)
+        if style == 'normal':
+            # Add labels to axes
+            plt.xlabel(label1)
+            plt.ylabel(label2)
 
-        # Add title to axis
-        plt.title(title)
+            # Add title to axis
+            plt.title(title)
 
-        # Plot surface
-        plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
-                   extent=[x0, x1, y1, y0],
-                   vmin=bclip, vmax=wclip)
+            # Plot surface
+            plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
+                        extent=[x0, x1, y1, y0],
+                        vmin=bclip, vmax=wclip)
+        if style == 'masw':
+            # Add labels to axes
+            plt.xlabel(label1)
+            plt.ylabel(label2)
+
+            # Add title to axis
+            plt.title(title)
+
+            # Plot surface
+            plt.imshow(self.trace, origin='bottom-left', aspect='auto', cmap=cmap,
+                        extent=[y0, y1, x0, x1],
+                        vmin=bclip, vmax=wclip)
 
         # Add legend
         if legend == 1:
