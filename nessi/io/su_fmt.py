@@ -227,7 +227,7 @@ class SUdata():
             x0 = self.header[0][key]
             x1 = self.header[-1][key]
 
-        if self.header[0]['trid'] == 122:
+        if self.header[0]['trid'] == 122 or self.header[0]['trid'] == 132:
             # Get d1
             d1 = float(self.header[0]['d1'])
             y0 = 0.
@@ -452,16 +452,17 @@ class SUdata():
             self.header.append(np.zeros(1, dtype=self.sutype))
             self.header[ir]['tracl'] = int(ir+1)
             self.header[ir]['tracf'] = int(ir+1)
+            self.header[ir]['ns'] = ns
             self.header[ir]['dt'] = int(dt*1000000.)
-            self.trace.append(data[ir,:])
             self.header[ir]['sx'] = 0
             self.header[ir]['sy'] = 0
             self.header[ir]['selev'] = 0
-            self.header[ir]['sx'] = int(ir+1)
-            self.header[ir]['sy'] = 0
+            self.header[ir]['gx'] = int(ir+1)
+            self.header[ir]['gy'] = 0
             self.header[ir]['gelev'] = 0
             self.header[ir]['scalco'] = 1
             self.header[ir]['scalel'] = 1
+            self.trace.append(data[ir,:])
         self.header = np.array(self.header)
         self.trace = np.array(self.trace)
 
@@ -496,6 +497,9 @@ class SUdata():
         """
 
         # Conversion to cython for performance (?)
+
+        # Declare SU ouput
+        sumasw = SUdata()
 
         # Get scaling factor on coordinates from header
         scalco = self.header[0]['scalco']
@@ -560,7 +564,19 @@ class SUdata():
             # Stack over velocities
             disp[iv,:] += np.abs(tmp[:])
 
-        return disp, vel, freq[iwmin:iwmin+nw]
+        # Create SU file
+        sumasw.create(disp, dw)
+
+        # Update SU header
+        sumasw.header[:]['ns'] = len(frqv)
+        sumasw.header[:]['d1'] = freq[1]-freq[0]
+        sumasw.header[:]['d2'] = np.abs(vel[1]-vel[0])
+        sumasw.header[:]['dt'] = 0
+        sumasw.header[:]['f1'] = freq[0]
+        sumasw.header[:]['f2'] = vel[0]
+        sumasw.header[:]['trid'] = 132 # Like 122 but for MASW
+
+        return sumasw, vel, freq[iwmin:iwmin+nw]
 
     def resamp(self, nso, dto):
         """
@@ -735,7 +751,7 @@ class SUdata():
         dobsspecfk.header[:]['d1'] = frqv[1]-frqv[0]
         dobsspecfk.header[:]['d2'] = np.abs(wavv[1]-wavv[0])
         dobsspecfk.header[:]['dt'] = 0
-        dobsspecfk.header[:]['f1'] = frqv[1]-frqv[0]
+        dobsspecfk.header[:]['f1'] = frqv[0] #frqv[1]-frqv[0]
         dobsspecfk.header[:]['f2'] = wavv[0]
         dobsspecfk.header[:]['trid'] = 122 # Amplitude of complex trace from 0 to Nyquist
 
