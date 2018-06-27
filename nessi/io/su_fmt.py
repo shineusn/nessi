@@ -452,9 +452,16 @@ class SUdata():
             self.header.append(np.zeros(1, dtype=self.sutype))
             self.header[ir]['tracl'] = int(ir+1)
             self.header[ir]['tracf'] = int(ir+1)
-            self.header[ir]['ns'] = int(ns)
             self.header[ir]['dt'] = int(dt*1000000.)
             self.trace.append(data[ir,:])
+            self.header[ir]['sx'] = 0
+            self.header[ir]['sy'] = 0
+            self.header[ir]['selev'] = 0
+            self.header[ir]['sx'] = int(ir+1)
+            self.header[ir]['sy'] = 0
+            self.header[ir]['gelev'] = 0
+            self.header[ir]['scalco'] = 1
+            self.header[ir]['scalel'] = 1
         self.header = np.array(self.header)
         self.trace = np.array(self.trace)
 
@@ -490,19 +497,33 @@ class SUdata():
 
         # Conversion to cython for performance (?)
 
-        # Get potential scaling factor on coordinates from header
+        # Get scaling factor on coordinates from header
         scalco = self.header[0]['scalco']
         if scalco < 0:
-            scale = -1./float(scalco)
+            scale_coordinates = -1./float(scalco)
         if scalco == 0:
-            scale = 1.
+            scale_coordinates = 1.
         if scalco > 0:
-            scale = float(scalco)
+            scale_coordinates = float(scalco)
+
+        # Get (X, Y) coordinates
+        x = self.header[:]['sx']*scale_coordinates-self.header[:]['gx']*scale_coordinates
+        y = self.header[:]['sy']*scale_coordinates-self.header[:]['gy']*scale_coordinates
+
+        # Get Z coordinates
+        z = np.zeros(len(x), dtype=np.float32)
+        for irec in range(0, len(x)):
+            scalel = self.header[irec]['scalel']
+            if scalel < 0:
+                scale_elevation = -1./float(scalel)
+            if scalel == 0:
+                scale_elevation = 1.
+            if scalel > 0:
+                scale_elevation = float(scalel)
+        z = self.header[:]['selev']*scale_elevation-self.header[:]['gelev']*scale_elevation
 
         # Calculate offsets
-        x = self.header[:]['sx']*scale-self.header[:]['gx']*scale
-        y = self.header[:]['sy']*scale-self.header[:]['gy']*scale
-        offset = np.sqrt(x**2+y**2)
+        offset = np.sqrt(x**2+y**2+z**2)
 
         # Create the velocity vector
         nv = int((vmax-vmin)/dv)+1

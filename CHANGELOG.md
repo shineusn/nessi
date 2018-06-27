@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - *kill* method for SUdata()
+- use of header keywords in *masw* method for SUdata()
+- add some SU header keyword initializations in *create* for SUdata()
 
 ## [0.1.2] - 2018-06-05
 
