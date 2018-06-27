@@ -227,11 +227,21 @@ class SUdata():
             x0 = self.header[0][key]
             x1 = self.header[-1][key]
 
-        if self.header[0]['trid'] == 122 or self.header[0]['trid'] == 132:
+        if self.header[0]['trid'] == 122:
             # Get d1
             d1 = float(self.header[0]['d1'])
             y0 = 0.
             y1 = float(ns-1)*d1
+            # Get d2
+            d2 = float(self.header[0]['d2'])
+            x0 = float(self.header[0]['f2'])
+            x1 = x0+float(len(self.header)-1)*d2
+
+        if self.header[0]['trid'] == 132:
+            # Get d1
+            d1 = float(self.header[0]['d1'])
+            y0 = float(self.header[0]['f1'])
+            y1 = y0+float(ns-1)*d1
             # Get d2
             d2 = float(self.header[0]['d2'])
             x0 = float(self.header[0]['f2'])
@@ -568,15 +578,98 @@ class SUdata():
         sumasw.create(disp, dw)
 
         # Update SU header
-        sumasw.header[:]['ns'] = len(frqv)
-        sumasw.header[:]['d1'] = freq[1]-freq[0]
+        sumasw.header[:]['ns'] = len(freq[iwmin:iwmin+nw])
+        sumasw.header[:]['d1'] = dw
         sumasw.header[:]['d2'] = np.abs(vel[1]-vel[0])
         sumasw.header[:]['dt'] = 0
-        sumasw.header[:]['f1'] = freq[0]
+        sumasw.header[:]['f1'] = freq[iwmin]
         sumasw.header[:]['f2'] = vel[0]
         sumasw.header[:]['trid'] = 132 # Like 122 but for MASW
 
         return sumasw, vel, freq[iwmin:iwmin+nw]
+
+    def dispick(self, vpick, wpick, dltv=50.):
+        """
+        Pick the effective dispersion curve from a MASW dispersion diagram (SU structure).
+        Return a 2D numpy array containing the velocity picked (2nd column) for each frequency (1st column).
+
+        :param vpick: starting position in velocity for picking
+        :param wpick: starting position in frequency for picking
+        :param dltv: accepted velocity jump between two contiguous frequencies
+        """
+
+        # Get the frequency vector
+        nfrq = int(self.header[0]['ns'])
+        dfrq = float(self.header[0]['d1'])
+        frq_min = float(self.header[0]['f1'])
+        frq_max = frq_min+float(nfrq-1)*dfrq
+        frq = np.linspace(frq_min, frq_max, nfrq)
+
+        # Get the velocity vector
+        nvel = int(self.header.shape[0])
+        dvel = float(self.header[0]['d2'])
+        vel_min = float(self.header[0]['f2'])
+        vel_max = vel_min+float(nvel-1)*dvel
+        vel = np.linspace(vel_min, vel_max, nvel)
+
+        # Declare picking array
+        pick = np.zeros((nfrq, 2), dtype=np.float32)
+
+        # Determine Vmin and Vmax indices at starting velocity
+        if vpick-dltv > vel_min:
+            ivmin = int((vpick-dltv-vel_min)/dvel)
+        else:
+            ivmin = 0
+        if vpick+dltv < vel_max:
+            ivmax = int((vpick+dltv-vel_min)/dvel)
+        else:
+            ivmax = nvel-1
+
+        # Determine the point at the starting frequency
+        iwpick0 = int((wpick-frq_min)/dfrq)
+        ivpick0 = np.argmax(self.trace[ivmin:ivmax, iwpick0])
+        pick[iwpick0, 0] = frq[iwpick0]
+        pick[iwpick0, 1] = vel[ivmin+ivpick0]
+
+        # Left-side
+        for iw in range(0, iwpick0):
+            # Get frequency indicde
+            iwpick = iwpick0-iw-1
+            # Get velocity range
+            vpick = pick[iwpick+1, 1]
+            if vpick-dltv > vel_min:
+                ivmin = int((vpick-dltv-vel_min)/dvel)
+            else:
+                ivmin = 0
+            if vpick+dltv < vel_max:
+                ivmax = int((vpick+dltv-vel_min)/dvel)
+            else:
+                ivmax = nvel-1
+            # Pick
+            ivpick = np.argmax(self.trace[ivmin:ivmax,iwpick])
+            pick[iwpick, 0] = frq[iwpick]
+            pick[iwpick, 1] = vel[ivmin+ivpick]
+
+        # Right-side
+        for iw in range(iwpick0+1, nfrq):
+            # Get frequency indicde
+            iwpick = iw
+            # Get velocity range
+            vpick = pick[iwpick-1, 1]
+            if vpick-dltv > vel_min:
+                ivmin = int((vpick-dltv-vel_min)/dvel)
+            else:
+                ivmin = 0
+            if vpick+dltv < vel_max:
+                ivmax = int((vpick+dltv-vel_min)/dvel)
+            else:
+                ivmax = nvel-1
+            # Pick
+            ivpick = np.argmax(self.trace[ivmin:ivmax,iwpick])
+            pick[iwpick, 0] = frq[iwpick]
+            pick[iwpick, 1] = vel[ivmin+ivpick]
+
+        return pick
 
     def resamp(self, nso, dto):
         """

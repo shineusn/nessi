@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Standard Genetic Algorithm implementation (mu, pc, pm)
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Swarm.init_particles*
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Genalg.init_chromosome*
+- *dispick*: a simple dispersion diagram picking method to get the *effective* dispersion curve
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
