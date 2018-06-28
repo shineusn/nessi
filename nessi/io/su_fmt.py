@@ -186,7 +186,7 @@ class SUdata():
 
 
     def image(self, key='tracl', bclip=None, wclip=None, clip=None, legend=0, label1=' ',
-              label2=' ', title=' ', cmap='gray', style='normal'):
+              label2=' ', title=' ', cmap='gray', style='normal', interpolation=None):
         """
         matplotlib.pyplot.imshow adapted to plot SU files
 
@@ -258,7 +258,7 @@ class SUdata():
             # Plot surface
             plt.imshow(self.trace.swapaxes(1,0), aspect='auto', cmap=cmap,
                         extent=[x0, x1, y1, y0],
-                        vmin=bclip, vmax=wclip)
+                        vmin=bclip, vmax=wclip, interpolation=interpolation)
         if style == 'masw':
             # Add labels to axes
             plt.xlabel(label1)
@@ -270,7 +270,7 @@ class SUdata():
             # Plot surface
             plt.imshow(self.trace, origin='bottom-left', aspect='auto', cmap=cmap,
                         extent=[y0, y1, x0, x1],
-                        vmin=bclip, vmax=wclip)
+                        vmin=bclip, vmax=wclip, interpolation=interpolation)
 
         # Add legend
         if legend == 1:

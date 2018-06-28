@@ -216,8 +216,28 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="nessi.io.SUdata.dispick">
+<code class="descname">dispick</code><span class="sig-paren">(</span><em>vpick</em>, <em>wpick</em>, <em>dltv=50.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.dispick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.dispick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pick the effective dispersion curve from a MASW dispersion diagram (SU structure).
+Return a 2D numpy array containing the velocity picked (2nd column) for each frequency (1st column).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vpick</strong> – starting position in velocity for picking</li>
+<li><strong>wpick</strong> – starting position in frequency for picking</li>
+<li><strong>dltv</strong> – accepted velocity jump between two contiguous frequencies</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="nessi.io.SUdata.image">
-<code class="descname">image</code><span class="sig-paren">(</span><em>key='tracl'</em>, <em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>cmap='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
+<code class="descname">image</code><span class="sig-paren">(</span><em>key='tracl'</em>, <em>bclip=None</em>, <em>wclip=None</em>, <em>clip=None</em>, <em>legend=0</em>, <em>label1=' '</em>, <em>label2=' '</em>, <em>title=' '</em>, <em>cmap='gray'</em>, <em>style='normal'</em>, <em>interpolation=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nessi/io/su_fmt.html#SUdata.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nessi.io.SUdata.image" title="Permalink to this definition">¶</a></dt>
 <dd><p>matplotlib.pyplot.imshow adapted to&nbsp;plot SU files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

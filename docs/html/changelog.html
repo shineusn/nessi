@@ -204,15 +204,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Standard Genetic Algorithm implementation (mu, pc, pm)
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Swarm.init_particles*
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Genalg.init_chromosome*
+- *dispick*: a simple dispersion diagram picking method to get the *effective* dispersion curve
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
 - remove useless SUdata variables
-- *image* method of SUdata() to handle *specfx* and *specfk* method outputs
+- *image* method of SUdata() to handle *masw*, *specfx* and *specfk* method outputs
+- *image* has now &#39;normal&#39; and &#39;masw&#39; style options (style=)
+- *image* has now interpolation option (see matplotlib.pyplot.imshow)
 - docstrings for SUdata methods
+- *masw* method output is now a SU file
 
 ### Fixed
 - *kill* method for SUdata()
+- use of header keywords in *masw* method for SUdata()
+- add some SU header keyword initializations in *create* for SUdata()
 
 ## [0.1.2] - 2018-06-05
 

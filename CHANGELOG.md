@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - remove useless SUdata variables
 - *image* method of SUdata() to handle *masw*, *specfx* and *specfk* method outputs
 - *image* has now 'normal' and 'masw' style options (style=)
+- *image* has now interpolation option (see matplotlib.pyplot.imshow)
 - docstrings for SUdata methods
 - *masw* method output is now a SU file
 
