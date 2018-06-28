@@ -103,8 +103,8 @@ class Swarm():
                 for indv in range(0, nindv):
                     for ipts in range(0,npts):
                         for ipar in range(0, npar):
-                            d[indv] += ((self.current[indv,ipts,ipar]-qtmp[ipts,ipar])/
-                                self.pspace[ipts,ipar,1])**2
+                            if(self.pspace[ipts, ipar, 1] > 0.):
+                                d[indv] += ((self.current[indv,ipts,ipar]-qtmp[ipts,ipar])/self.pspace[ipts,ipar,1])**2
                 d[:] = np.sqrt(d[:])
                 # Search closest individual
                 iclose = np.argmin(d)
