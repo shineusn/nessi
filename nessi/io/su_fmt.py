@@ -184,7 +184,6 @@ class SUdata():
             self.header = np.array(self.header)
             self.trace = np.array(self.trace)
 
-
     def image(self, key='tracl', bclip=None, wclip=None, clip=None, legend=0, label1=' ',
               label2=' ', title=' ', cmap='gray', style='normal', interpolation=None):
         """
@@ -862,3 +861,34 @@ class SUdata():
         dobsspecfk.header[:]['trid'] = 122 # Amplitude of complex trace from 0 to Nyquist
 
         return dobsspecfk
+
+def suread(filename):
+    """
+    Create a SU object and read the SU file at the same time.
+
+    :param filename: name of the SU file.
+    """
+
+    # Declare SU object
+    suobject = SUdata()
+
+    # Read the SU file
+    suobject.read(filename)
+
+    return suobject
+
+def sucreate(data, dt):
+    """
+    Create a SU object from a numpy array with a minimal header info.
+
+    :param data: a numpy array containing the data
+    :param dt: the time sampling
+    """
+
+    # Declare SU object
+    suobject = SUdata()
+
+    # Create the SU file
+    suobject.create(data, dt)
+
+    return suobject

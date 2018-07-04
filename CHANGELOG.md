@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Swarm.init_particles*
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Genalg.init_chromosome*
 - *dispick*: a simple dispersion diagram picking method to get the *effective* dispersion curve
+- *suread* function (SUdata module) which declare SU object and read a SU file in the same time
+- *sucreate* function (SUdata module) which declare SU object and create a SU file in the same time
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
@@ -25,6 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *image* has now interpolation option (see matplotlib.pyplot.imshow)
 - docstrings for SUdata methods
 - *masw* method output is now a SU file
+- *ringx*: ring topology excluding the particle to update for Swarm.update()
+- *toroidalx*: toroidal topology excluding the particle to update for Swarm.update()
 
 ### Fixed
 - *kill* method for SUdata()

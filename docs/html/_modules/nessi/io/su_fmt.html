@@ -350,7 +350,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="SUdata.image"><a class="viewcode-back" href="../../../sucwp_references.html#nessi.io.SUdata.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;tracl&#39;</span><span class="p">,</span> <span class="n">bclip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wclip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
               <span class="n">label2</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1028,6 +1027,21 @@
         <span class="n">dobsspecfk</span><span class="o">.</span><span class="n">header</span><span class="p">[:][</span><span class="s1">&#39;trid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">122</span> <span class="c1"># Amplitude of complex trace from 0 to Nyquist</span>
 
         <span class="k">return</span> <span class="n">dobsspecfk</span></div></div>
+
+<span class="k">def</span> <span class="nf">suread</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a SU object and read the SU file at the same time.</span>
+
+<span class="sd">    :param filename: name of the SU file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Declare SU object</span>
+    <span class="n">suobject</span> <span class="o">=</span> <span class="n">SUdata</span><span class="p">()</span>
+
+    <span class="c1"># Read the SU file</span>
+    <span class="n">suobject</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">suobject</span>
 </pre></div>
 
            </div>

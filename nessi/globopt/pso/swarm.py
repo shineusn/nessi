@@ -103,7 +103,7 @@ class Swarm():
                 for indv in range(0, nindv):
                     for ipts in range(0,npts):
                         for ipar in range(0, npar):
-                            if(self.pspace[ipts, ipar, 1] > 0.):
+                            if(self.pspace[ipts, ipar, 2] > 0.):
                                 d[indv] += ((self.current[indv,ipts,ipar]-qtmp[ipts,ipar])/self.pspace[ipts,ipar,1])**2
                 d[:] = np.sqrt(d[:])
                 # Search closest individual
@@ -118,14 +118,24 @@ class Swarm():
     def _get_grid(self, ndim):
         """
         Define toroidal grid
+
+        :param ndim: number of particles in the first dimension of the toroidal grid.
         """
+
+        # Get the number of particles
         nindv = self.current.shape[0]
+
+        # If the number of particles is a multiple of ndim
         if nindv%ndim == 0:
+            # Initialize grid dimensions
             n1 = ndim
             n2 = int(nindv/ndim)
+            # Initialize neighbor array (4 neighbor per particle)
             vngrid = np.zeros((nindv, 4), dtype=np.int)
+            # Loop over toroidal grid dimensions
             for i2 in range(0, n2):
                 for i1 in range(0, n1):
+                    # Get the indice of the neighbors
                     k = (i2*n1)+i1
                     # top
                     if i1 == 0:
@@ -147,6 +157,8 @@ class Swarm():
                         vngrid[k, 3] = ((n2-1)*n1)+i1
                     else:
                         vngrid[k, 3] = (i2-1)*n1+i1
+
+        # The number of particles is not a multiple of ndim
         else:
             raise ValueError('ndim must be a multiple of nindv')
 
@@ -179,12 +191,33 @@ class Swarm():
                     ibest = ii
                     vbest = self.misfit[ii]
 
+        # Get the best particle in the neighborhood (1 left, 1 right)
+        # of the particle excluding itself.
+        if topology == 'ringx':
+            if self.misfit[indv-1] <= self.misfit[indv+1]:
+                ibest = indv-1
+            else:
+                ibest = indv+1
+
         # Get the best particle in the neighborhood (left, right, top, bottom)
         # of the particle including itself.
         if topology == 'toroidal':
             grid = self._get_grid(ndim)
             ibest = indv
             vbest = self.misfit[indv]
+            for i in range(0, 4):
+                if self.misfit[grid[indv, i]] < vbest:
+                    ibest = grid[indv, i]
+                    vbest = self.misfit[grid[indv, i]]
+
+        # Get the best particle in the neighborhood (left, right, top, bottom)
+        # of the particle excluding itself.
+        if topology == 'toroidalx':
+            # Get the grid
+            grid = self._get_grid(ndim)
+            # Initialize best particule to a virtual particle with a maximum misfit
+            ibest = -1
+            vbest = np.amax(self.misfit[:]*2.)
             for i in range(0, 4):
                 if self.misfit[grid[indv, i]] < vbest:
                     ibest = grid[indv, i]
@@ -200,7 +233,7 @@ class Swarm():
         :param c_0: value of the control parameter (default 0.7298)
         :param c_1: value of the cognitive parameter (default 2.05)
         :param c_2: value of the social parameter (default 2.05)
-        :param topology: used topology (default 'full'): full, ring, toroidal
+        :param topology: used topology (default 'full'): full, ring, ringx, toroidal, toroidalx
         :param ndim: number of particles in the first dimension if toroidal topology is used
         """
 
