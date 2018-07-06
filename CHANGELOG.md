@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *wiggle* method for SUdata()
 - Standard Genetic Algorithm implementation (mu, pc, pm)
 - Centroidal Voronoi tessellation option (McQueen algorithm) in *Swarm.init_particles*
-- Centroidal Voronoi tessellation option (McQueen algorithm) in *Genalg.init_chromosome*
 - *dispick*: a simple dispersion diagram picking method to get the *effective* dispersion curve
 - *suread* function (SUdata module) which declare SU object and read a SU file in the same time
 - *sucreate* function (SUdata module) which declare SU object and create a SU file in the same time
