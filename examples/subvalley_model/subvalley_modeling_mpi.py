@@ -171,16 +171,17 @@ recx,recz,recp = evolution(n1,n2,dh,npml,
 # Minimal SU file
 surecz = SUdata()
 surecz.create(recz.swapaxes(1,0), dts)
+surecz.header[:]['scalco'] = -10
+surecz.header[:]['scalel'] = -10
+surecz.header[:]['sx'] = xs*10
+surecz.header[:]['sy'] = 0
+surecz.header[:]['selev'] = zs*10
 
 # Fill headers
 for ir in range(0, nrec):
     surecz.header[ir]['gx'] = acq[ir, 0]*10
-    surecz.header[ir]['gy'] = acq[ir, 1]*10
-
-surecz.header[:]['sx'] = xs*10
-surecz.header[:]['gy'] = zs*10
-
-surecz.header['scalco'] = -10
+    surecz.header[ir]['gy'] = 0
+    surecz.header[ir]['gelev'] = acq[ir, 1]*10
 
 # Write on disk
 surecz.write('data/dobsz'+str(rank).zfill(2)+'.su')

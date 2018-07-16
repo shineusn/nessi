@@ -31,12 +31,45 @@ import h5py
 from nessi.io import SUdata
 from nessi.globopt import Swarm
 from nessi.modbuilder.interp2d import sibson2
+from cymasw import cmasw
 
 from seismod import seismod
 
 def vsnu2vp(vsmod, numod):
     vpmod = np.sqrt(vsmod*vsmod*2.*(1.-numod)/(1.-2.*numod))
     return vpmod
+
+def dmasw(dataz, vmin=200., vmax=1200., dv=5., fmin=5., fmax=50.):
+    scalco = dataz.header[0]['scalco']
+    if scalco < 0:
+        scale = -1./float(scalco)
+    if scalco == 0:
+        scale= 1.
+    if scalco > 0:
+        scale = float(scalco)
+    scalel = dataz.header[0]['scalel']
+    if scalel < 0:
+        scalelev = -1./float(scalel)
+    if scalel == 0:
+        scalelev= 1.
+    if scalel > 0:
+        scalelev = float(scalel)
+        
+    dt = dataz.header[0]['dt']/1000000.
+    sx = np.float32(dataz.header[0]['sx']*scale)
+    sy = np.float32(dataz.header[0]['sy']*scale)
+    sz = np.float32(dataz.header[0]['selev']*scalelev)
+    nr = len(dataz.trace)
+    gx = np.zeros(nr, dtype=np.float32)
+    gy = np.zeros(nr, dtype=np.float32)
+    gz = np.zeros(nr, dtype=np.float32)
+    for ir in range(0, nr):
+        gx[ir] = dataz.header[ir]['gx']*scale
+        gy[ir] = dataz.header[ir]['gy']*scale
+        gz[ir] = dataz.header[ir]['gelev']*scalelev
+    disp, vel, frq = cmasw(dataz.trace, dt, sx, sz, gx, gz, vmin=vmin, vmax=vmax, dv=dv, fmin=fmin, fmax=fmax)
+    
+    return disp, vel, frq
 
 # ------------------------------------------------------------------
 # >> Initialize MPI
@@ -70,17 +103,22 @@ if rank != 0:
         scale = -1./float(scalco)
     else:
         scale = float(scalco)
-
+    scalel = dobsz.header[0]['scalel']
+    if scalel < 0:
+        scalelev = -1./float(scalel)
+    else:
+        scalelev = float(scalel)
+        
     # Get the source position
     sx = dobsz.header[0]['sx']*scale
-    sz = dobsz.header[0]['sy']*scale
+    sz = dobsz.header[0]['selev']*scalelev
 
     # Get the receiver line
     nrec = len(dobsz.header)
     acq = np.zeros((nrec, 2), dtype=np.float32)
     for ir in range(0, nrec):
         acq[ir, 0] = dobsz.header[ir]['gx']*scale
-        acq[ir, 1] = dobsz.header[ir]['gy']*scale
+        acq[ir, 1] = dobsz.header[ir]['gelev']*scalelev
 
 
 # >> Get time sampling
@@ -117,12 +155,12 @@ if rank != 0:
 # Initialize the number of generations and particles on master
 # and slaves.
 ngen = 0 # ngen is incremented at each new frequency band for layer stripping
-nindv = 49
+nindv = 20
 
 # Initialize the swarm on the master only.
 if rank == 0:
     swarm = Swarm()
-    swarm.init_pspace('input/random_models.ascii')
+    swarm.init_pspace('input/pspace.ascii')
 
     # save original pspace
     pspace_save = np.zeros(np.shape(swarm.pspace), dtype=np.float32)
@@ -133,17 +171,15 @@ if rank == 0:
 # ------------------------------------------------------------------
 
 # Declare array of wavelenghts and frequencies
-nstrip = 5
+nstrip = 4
 lbdtab = np.zeros(nstrip, dtype=np.float32)
 frqtab = np.zeros(nstrip, dtype=np.float32)
 
 # Fill tables
-lbdtab[0] = 2.*6.13 ; frqtab[0] = 33.
-lbdtab[1] = 2.*10.36; frqtab[1] = 24.
-lbdtab[2] = 2.*16.43; frqtab[2] = 19.
-lbdtab[3] = 2.*25.  ; frqtab[3] = 14.
-lbdtab[4] = 2.*50.  ; frqtab[4] = 5.
-
+lbdtab[0] = 2.*8.00; frqtab[0] = 27.
+lbdtab[1] = 2.*15  ; frqtab[1] = 20.
+lbdtab[2] = 2.*25. ; frqtab[2] = 14.
+lbdtab[3] = 2.*50. ; frqtab[3] = 10.
 
 # ------------------------------------------------------------------
 # >> Process
@@ -160,7 +196,7 @@ for istrip in range(0, nstrip):
 
     # Calculating the reference dispersion diagrams using the MASW method
     if rank != 0:
-        disp, dvel, dfrq = dobsz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
+        disp, dvel, dfrq = dmasw(dobsz, vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
         disp /= np.amax(disp)
                
     # Block until all processes have reached this point.
@@ -168,7 +204,7 @@ for istrip in range(0, nstrip):
 
     # >> Initialize particles on master only
     if rank == 0:
-        swarm.init_particles(nindv)
+        swarm.init_particles(nindv, ncvt=500)
         
     # >> First evaluation
     for indv in range(0, nindv):
@@ -200,10 +236,11 @@ for istrip in range(0, nstrip):
             # Seismic modeling
             dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
             # Rayleigh dispersion
-            disp1, dvel, dfrq = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
+            disp1, dvel1, dfrq1 = dmasw(dcalz, vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
             disp1 /= np.amax(disp1)
             # L2-norm
             L2 = 0.
+            LH = 0.
             for iv in range(0, disp.shape[0]):
                 for iw in range(0, disp.shape[1]):
                     L2 += (disp[iv, iw]-disp1[iv, iw])**2
@@ -222,7 +259,7 @@ for istrip in range(0, nstrip):
             L2 = np.sqrt(L2)
             # PSO update on master
             if(np.isnan(L2)):
-                swarm.misfit[indv] = 1000.
+                swarm.misfit[indv] = 10000000.
             else:
                 swarm.misfit[indv] = L2
             swarm.history[indv, :, :] = swarm.current[indv, :, :]
@@ -233,7 +270,7 @@ for istrip in range(0, nstrip):
 
     # PSO update
     if rank == 0:
-        swarm.update(control=1, topology='toroidal', ndim=7)
+        swarm.update(control=1, topology='toroidal', ndim=4)
         print('*PSO first evaluation done\n', flush=True)
     
             
@@ -272,10 +309,11 @@ for istrip in range(0, nstrip):
                 # Seismic modeling
                 dcalz = seismod(runpar, modpar, acqpar, vpmod, vsmod, romod)
                 # Rayleigh dispersion
-                disp1, dvel, dfrq = dcalz.masw(vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
+                disp1, dvel1, dfrq1 = dmasw(dcalz, vmin=200., vmax=1200., dv=5., fmin=frqtab[istrip], fmax=50.)
                 disp1 /= np.amax(disp1)
                 # L2-norm
                 L2 = 0.
+                LH = 0.
                 for iv in range(0, disp.shape[0]):
                     for iw in range(0, disp.shape[1]):
                         L2 += (disp[iv, iw]-disp1[iv, iw])**2
@@ -303,31 +341,14 @@ for istrip in range(0, nstrip):
 
         # PSO update
         if rank == 0:
-            swarm.update(control=1, topology='toroidal', ndim=7)
+            swarm.update(control=1, topology='toroidal', ndim=4)
             print('*PSO evaluation done. igen/istrip', igen, istrip, '\n', flush=True)
 
         # Fit
         if rank == 0:
             fit = np.zeros(nindv, dtype=np.float32)
             fit[:] = 1./swarm.misfit[:]
-    
-        # Last generation / Update parameter space
-        if rank == 0:
-            for ipts in range(0, npts):
-                par = 0.
-                if pspace_save[ipts, 1, 1] <= lbdtab[istrip]/2. :
-                    par = 0.
-                    for indv in range(0, nindv):
-                        par += fit[indv]*swarm.history[indv, ipts, 2]
-                    par /= np.sum(fit)
-                    swarm.pspace[ipts, 2, 0] = 0.8*par
-                    swarm.pspace[ipts, 2, 1] = 1.2*par
-                    swarm.pspace[ipts, 2, 2] = 0.2*np.abs(1.2*par-0.8*par)
-                    if swarm.pspace[ipts, 2, 0] < pspace_save[ipts, 2, 0]:
-                        swarm.pspace[ipts, 2, 0] = pspace_save[ipts, 2, 0]
-                    if swarm.pspace[ipts, 2, 1] > pspace_save[ipts, 2, 1]:
-                        swarm.pspace[ipts, 2, 1] = pspace_save[ipts, 2, 1]
-                        
+
         # Save
         if rank == 0:
             h5file = h5py.File('swarm_'+str(istrip).zfill(2)+'_'+str(igen).zfill(3)+'.hdf5', 'w')
@@ -340,3 +361,13 @@ for istrip in range(0, nstrip):
                                                data=swarm.history[indv,:,:])
             h5file.flush()
             h5file.close()
+
+    if rank == 0:
+        npts = swarm.pspace.shape[0]
+        npar = swarm.pspace.shape[1]
+        for ipts in range(0, npts):
+            if pspace_save[ipts, 1, 1] <= lbdtab[istrip]/2. :
+                swarm.pspace[ipts, 2, 0] = np.mean(swarm.history[:, ipts, 2])-np.std(swarm.history[:, ipts, 2])
+                swarm.pspace[ipts, 2, 1] = np.mean(swarm.history[:, ipts, 2])+np.std(swarm.history[:, ipts, 2])
+                swarm.pspace[ipts, 2, 2] = 0.2*np.abs(swarm.pspace[ipts, 2, 1]-swarm.pspace[ipts, 2, 0])
+        print(swarm.pspace, flush=True)
