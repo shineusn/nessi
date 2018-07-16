@@ -155,7 +155,7 @@ if rank != 0:
 # Initialize the number of generations and particles on master
 # and slaves.
 ngen = 0 # ngen is incremented at each new frequency band for layer stripping
-nindv = 20
+nindv = 30
 
 # Initialize the swarm on the master only.
 if rank == 0:
@@ -270,7 +270,7 @@ for istrip in range(0, nstrip):
 
     # PSO update
     if rank == 0:
-        swarm.update(control=1, topology='toroidal', ndim=4)
+        swarm.update(control=1, topology='toroidal', ndim=5)
         print('*PSO first evaluation done\n', flush=True)
     
             
@@ -341,7 +341,7 @@ for istrip in range(0, nstrip):
 
         # PSO update
         if rank == 0:
-            swarm.update(control=1, topology='toroidal', ndim=4)
+            swarm.update(control=1, topology='toroidal', ndim=5)
             print('*PSO evaluation done. igen/istrip', igen, istrip, '\n', flush=True)
 
         # Fit

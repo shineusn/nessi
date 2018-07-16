@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *masw* method output is now a SU file
 - *ringx*: ring topology excluding the particle to update for Swarm.update()
 - *toroidalx*: toroidal topology excluding the particle to update for Swarm.update()
+- *init_particle*: force initialization to zero for arrays *current*, *velocity*, *history* and *misfit*
 
 ### Fixed
 - *kill* method for SUdata()

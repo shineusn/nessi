@@ -79,6 +79,12 @@ class Swarm():
         self.history.resize(nindv, npts, npar)
         self.misfit.resize(nindv)
 
+        # Initialize arrays
+        self.current[:, :, :] = 0.
+        self.velocity[:, :, :] = 0.
+        self.history[:, :, :] = 0.
+        self.misfit[:] = 0.
+
         # Random generation of particle position
         for indv in range(0, nindv):
             p_random = np.random.random_sample((npts, npar))
