@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *dispick*: a simple dispersion diagram picking method to get the *effective* dispersion curve
 - *suread* function (SUdata module) which declare SU object and read a SU file in the same time
 - *sucreate* function (SUdata module) which declare SU object and create a SU file in the same time
+- *grdinterp* functions for coarse to fine grid interpolation in modbuilder (cython reimplementation)
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)
@@ -29,11 +30,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *ringx*: ring topology excluding the particle to update for Swarm.update()
 - *toroidalx*: toroidal topology excluding the particle to update for Swarm.update()
 - *init_particle*: force initialization to zero for arrays *current*, *velocity*, *history* and *misfit*
+- *grd_ds1* was renamed *grd_sib* (interp2d) *sibson1* and *sibson2* removed and replaced by *sibson* function only
 
 ### Fixed
 - *kill* method for SUdata()
 - use of header keywords in *masw* method for SUdata()
 - add some SU header keyword initializations in *create* for SUdata()
+
+### Removed
+- *sibson2* (and *grd_ds2.c*) removed because useless (only *sibson1* now called *sibson* is kept)
 
 ## [0.1.2] - 2018-06-05
 

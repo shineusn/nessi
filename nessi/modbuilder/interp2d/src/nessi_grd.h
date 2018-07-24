@@ -1,7 +1,7 @@
 /* nessi_pso.h
- * 
+ *
  * Copyright (C) 2017, 2018 Damien Pageot
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -46,14 +46,7 @@ nessi_grd_idw(const int npts,
 	      const int pw, float model[n1][n2]);
 
 void
-nessi_grd_ds1(const int npts,
-	      const float xp[npts], const float zp[npts],
-	      const float val[npts],
-	      const int n1, const int n2, const float dh,
-	      float model[n1][n2]);
-
-void
-nessi_grd_ds2(const int npts,
+nessi_grd_sib(const int npts,
 	      const float xp[npts], const float zp[npts],
 	      const float val[npts],
 	      const int n1, const int n2, const float dh,

@@ -241,9 +241,11 @@ for istrip in range(0, nstrip):
             # L2-norm
             L2 = 0.
             LH = 0.
-            for iv in range(0, disp.shape[0]):
-                for iw in range(0, disp.shape[1]):
-                    L2 += (disp[iv, iw]-disp1[iv, iw])**2
+            A = (disp[:, :]-disp1[:, :]).flatten()
+            L2 = np.sum(np.dot(A.T, A))
+            #for iv in range(0, disp.shape[0]):
+            #    for iw in range(0, disp.shape[1]):
+            #        L2 += (disp[iv, iw]-disp1[iv, iw])**2
             # Send L2 values to master
             comm.send(L2, dest=0)
 
@@ -314,9 +316,11 @@ for istrip in range(0, nstrip):
                 # L2-norm
                 L2 = 0.
                 LH = 0.
-                for iv in range(0, disp.shape[0]):
-                    for iw in range(0, disp.shape[1]):
-                        L2 += (disp[iv, iw]-disp1[iv, iw])**2
+                A = (disp[:, :]-disp1[:, :]).flatten()
+                L2 = np.sum(np.dot(A.T, A))
+                #for iv in range(0, disp.shape[0]):
+                #    for iw in range(0, disp.shape[1]):
+                #        L2 += (disp[iv, iw]-disp1[iv, iw])**2
                 # Send L2 values to master
                 comm.send(L2, dest=0)
                 

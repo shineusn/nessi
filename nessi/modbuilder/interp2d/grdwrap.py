@@ -89,7 +89,7 @@ def idweight(npts, xp, zp, val, pw, n1, n2, dh):
 
     return model
 
-def sibson1(npts, xp, zp, val, n1, n2, dh):
+def sibson(npts, xp, zp, val, n1, n2, dh):
     """
     voronoi
     Coarse inversion gird to fine modelling grid using
@@ -116,37 +116,6 @@ def sibson1(npts, xp, zp, val, n1, n2, dh):
     val = ascontiguousarray(val, dtype=float32)
 
     # call nessi_grd_vrn
-    clibgrd.nessi_grd_ds1(npts, xp, zp, val, n1, n2, dh, model)
-
-    return model
-
-def sibson2(npts, xp, zp, val, n1, n2, dh):
-    """
-    voronoi
-    Coarse inversion gird to fine modelling grid using
-    Voronoi tesselation.
-    """
-
-    # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
-
-    # nessi_grd_vrn
-    clibgrd.nessi_grd_ds2.argtypes = [c_int,
-                                      ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
-                                      ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
-                                      ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
-                                      c_int, c_int, c_float,
-                                      ndpointer(dtype=float32, ndim=2, flags='C_CONTIGUOUS')]
-
-    # initalize models array
-    model = zeros((n1, n2), dtype=float32, order='C')
-
-    # convert to C order
-    xp = ascontiguousarray(xp, dtype=float32)
-    zp = ascontiguousarray(zp, dtype=float32)
-    val = ascontiguousarray(val, dtype=float32)
-
-    # call nessi_grd_vrn
-    clibgrd.nessi_grd_ds2(npts, xp, zp, val, n1, n2, dh, model)
+    clibgrd.nessi_grd_sib(npts, xp, zp, val, n1, n2, dh, model)
 
     return model

@@ -1,7 +1,7 @@
 /* pso/nessi_grd_vrn.c
- * 
+ *
  * Copyright (C) 2017, 2018 Damien Pageot
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +19,7 @@
 #include <nessi_grd.h>
 
 void
-nessi_grd_ds2(const int npts,
+nessi_grd_sib(const int npts,
 	      const float xp[npts], const float zp[npts],
 	      const float val[npts],
 	      const int n1, const int n2, const float dh,
@@ -30,7 +30,7 @@ nessi_grd_ds2(const int npts,
   float d, dmin, v0, v1, v2, v3, n;
   float vrn[n1][n2];
   float cp[n1][n2], np[n1][n2];
-  
+
   // VORONOI
   for(i2=0; i2<n2; i2++){
     for(i1=0; i1<n1; i1++){
@@ -60,11 +60,11 @@ nessi_grd_ds2(const int npts,
       za = (float)(i1a)*dh;
       dmin = 0.;
       for(ipts=0; ipts<npts; ipts++){
-	d = sqrt((xa-xp[ipts])*(xa-xp[ipts])+(za-zp[ipts])*(za-zp[ipts]));
-	if(ipts == 0){dmin = d; imin = ipts;}
-	else{if(d < dmin){dmin = d; imin=ipts;}}
+				d = sqrt((xa-xp[ipts])*(xa-xp[ipts])+(za-zp[ipts])*(za-zp[ipts]));
+				if(ipts == 0){dmin = d; imin = ipts;}
+				else{if(d < dmin){dmin = d; imin=ipts;}}
       }
-      ir = (int)(dmin/dh)+1;  
+      ir = (int)(dmin/dh)+1;
       i2min=i2a-ir;
       if(i2min < 0){i2min = 0;}
       i2max = i2a+ir;
@@ -74,21 +74,14 @@ nessi_grd_ds2(const int npts,
       i1max = i1a+ir;
       if(i1max > n1){i1max = n1;}
       for(i2b=i2min; i2b<i2max; i2b++){
-	xb = (float)(i2b)*dh;
-	for(i1b=i1min; i1b<i1max; i1b++){
-	  zb = (float)(i1b)*dh;
-	  d = sqrt((xa-xb)*(xa-xb)+(za-zb)*(za-zb));
+				xb = (float)(i2b)*dh;
+				for(i1b=i1min; i1b<i1max; i1b++){
+	  			zb = (float)(i1b)*dh;
+	  			d = sqrt((xa-xb)*(xa-xb)+(za-zb)*(za-zb));
 	  if(d <= dmin){
-	    if(d > 0.){
-	      cp[i1b][i2b] += (1./d)*vrn[i1a][i2a];
-	      np[i1b][i2b] += 1./d;
-	    }
-	    else{
-	      cp[i1b][i2b] += vrn[i1a][i2a];
-	      np[i1b][i2b] += 1;
-	    }
-	    
-	  }  
+	    cp[i1b][i2b] += vrn[i1a][i2a];
+	    np[i1b][i2b] += 1.;
+	  }
 	}
       }
     }
@@ -98,7 +91,7 @@ nessi_grd_ds2(const int npts,
       model[i1a][i2a] = cp[i1a][i2a]/np[i1a][i2a];
     }
   }
-  
+
   return;
-  
+
 }

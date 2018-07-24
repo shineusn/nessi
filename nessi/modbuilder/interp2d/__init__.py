@@ -26,6 +26,10 @@ from .grdwrap import idweight
 from .grdwrap import sibson1
 from .grdwrap import sibson2
 
+from .grdinterp import grdvoronoi 
+from .grdinterp import grdinvdist
+from .grdinterp import grdsibson
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod(exclude_empty=True)
