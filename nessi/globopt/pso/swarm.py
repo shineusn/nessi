@@ -120,6 +120,71 @@ class Swarm():
                         self.current[iclose,ipts,ipar] = (j[iclose]*self.current[iclose,ipts,ipar]+qtmp[ipts,ipar])/(j[iclose]+1.)
                 j[iclose] += 1.
 
+    def _get_neighbors(self, topology, indv, ndim):
+        """
+        Return an array containing the indices of the neighbors particles.
+
+        :param indv: indice of the particle to update
+        :param ndim: number of particles in the first dimension if toroidal grid is used
+        """
+
+        # Get the number of particles
+        nindv = self.current.shape[0]
+
+        # Full topology (including the particle itself)
+        if topology == 'full':
+            neighborhood = np.zeros(nindv, dtype=np.int)
+            for i in range(0, nindv):
+                neighborhood[i] = i
+
+        # Ring topology (including the particle itself)
+        if topology == 'ring':
+            neighborhood = np.zeros(3, dtype=np.int)
+            ineighbor = 0
+            for i in range(indv-1, indv+2):
+                neighborhood[ineighbor] = i
+                if i < 0:
+                    neighborhood[ineighbor] = nindv-1
+                if i == nindv:
+                    neighborhood[ineighbor] = 0
+                ineighbor += 1
+
+        # Toroidal topology (including the particle itself)
+        if topology == 'toroidal':
+            # If the number of particles is a multiple of ndim
+            if nindv%ndim == 0:
+                # Get grid size
+                n1 = ndim
+                n2 = int(nindv/ndim)
+                neighborhood = np.zeros(5, dtype=np.int)
+                # Get the indice of the particle on the grid
+                i2 = int(indv/ndim)
+                i1 = int(indv-i2*n1)
+                # Fill neighborhood
+                neighborhood[0] = indv
+                # Get the indice of the neighbors
+                # top
+                if i1 == 0:
+                    neighborhood[1] = i2*n1+(n1-1)
+                else:
+                    neighborhood[1] = i2*n1+(i1-1)
+                # right
+                if i2 == n2-1:
+                    neighborhood[2] = i1
+                else:
+                    neighborhood[2] = (i2+1)*n1+i1
+                # bottom
+                if i1 == n1-1:
+                    neighborhood[3] = i2*n1
+                else:
+                    neighborhood[3] = i2*n1+(i1+1)
+                # left
+                if i2 == 0:
+                    neighborhood[4] = ((n2-1)*n1)+i1
+                else:
+                    neighborhood[4] = (i2-1)*n1+i1
+
+        return neighborhood
 
     def _get_grid(self, ndim):
         """
@@ -273,6 +338,76 @@ class Swarm():
                                                 * (history-current)\
                                                 + soc*np.random.random_sample()\
                                                 * (gbest[ipts, ipar]-current)
+
+                    # Check particle velocity
+                    if(np.abs(self.velocity[indv, ipts, ipar]) > self.pspace[ipts, ipar, 2]):
+                        self.velocity[indv, ipts, ipar] = \
+                            np.sign(self.velocity[indv, ipts, ipar])\
+                            * self.pspace[ipts, ipar, 2]
+
+                    # Update particle position
+                    self.current[indv, ipts, ipar] += self.velocity[indv, ipts, ipar]
+
+                    # Check if particle is in parameter space
+                    if(self.current[indv, ipts, ipar] < self.pspace[ipts, ipar, 0]):
+                        self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 0]
+                    if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
+                        self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
+
+    def fiupdate(self, **kwargs):
+        """
+        Fully Informed PSO update.
+
+        :param control: 0 for weight (default), 1 for constriction
+        :param c_0: value of the control parameter (default 0.7298)
+        :param c_1: value of the acceleration parameter (default 4.1)
+        :param topology: used topology (default 'full'): full, ring, toroidal
+        :param ndim: number of particles in the first dimension if toroidal topology is used
+        :param weight: weight to apply to neighbors: flat, misfit
+        """
+
+        # Parse kwargs parameter list
+        ctrl = kwargs.get('control', 0)
+        omega = kwargs.get('c_0', 0.7298)
+        topology = kwargs.get('topology', 'full')
+        ndim = kwargs.get('ndim', 0)
+        weight = kwargs.get('weight', 'flat')
+
+        if ctrl == 0:
+            acc = kwargs.get('c_1', 4.10)
+        if ctrl == 1:
+            acc = omega*kwargs.get('c_1', 4.10)
+
+        # Update process
+        for indv in range(0, self.current.shape[0]):
+            # Get the neighbourhood of the particle
+            neighborhood = self._get_neighbors(topology, indv, ndim)
+            for ipts in range(0, self.pspace.shape[0]):
+                for ipar in range(0, self.pspace.shape[1]):
+
+                    # Get values
+                    current = self.current[indv, ipts, ipar]
+                    velocity = self.velocity[indv, ipts, ipar]
+                    history = self.history[indv, ipts, ipar]
+
+                    # Update velocity vector
+                    nneighbor = len(neighborhood)
+                    w = np.zeros(nneighbor, dtype=np.float32)
+                    if weight == 'flat':
+                        w[:] = 1.
+                    if weight == 'misfit':
+                        for ineighbor in range(0, nneighbor):
+                            ii = neighborhood[ineighbor]
+                            w[ineighbor] = 1./self.misfit[ii]
+                    pnum = 0.
+                    pden = 0.
+                    for ineighbor in range(0, nneighbor):
+                        ii = neighborhood[ineighbor]
+                        r = np.random.random_sample()/float(nneighbor)
+                        pnum += r*acc*w[ineighbor]*self.history[ii, ipts, ipar]
+                        pden += r*acc*w[ineighbor]
+
+                    self.velocity[indv, ipts, ipar] = omega*velocity+acc*((pnum/pden)-current)
 
                     # Check particle velocity
                     if(np.abs(self.velocity[indv, ipts, ipar]) > self.pspace[ipts, ipar, 2]):

@@ -21,10 +21,9 @@ from __future__ import division
 from __future__ import print_function
 
 # Import nessi.modbuilder.interp2d classes and functions
-from interp2d.grdwrap import voronoi
-from interp2d.grdwrap import idweight
-from interp2d.grdwrap import sibson
-#from interp2d.grdwrap import sibson2
+from .interp2d.grdwrap import voronoi
+from .interp2d.grdwrap import idweight
+from .interp2d.grdwrap import sibson
 
 if __name__ == '__main__':
     import doctest
