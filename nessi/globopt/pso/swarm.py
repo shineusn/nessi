@@ -384,15 +384,12 @@ class Swarm():
                     history = self.history[indv, ipts, ipar]
 
                     # Normal distribution parameters
-                    loc = (gbest[ipts, ipar]+current)/2.
-                    sca = np.abs(gbest[ipts, ipar]-current)
+                    loc = (gbest[ipts, ipar]+history)/2.
+                    sca = np.abs(gbest[ipts, ipar]-history)
 
                     # Update position vector
                     if sca > 0. :
                         self.current[indv, ipts, ipar] = np.random.normal(loc=loc, scale=sca)
-
-                    # Update particle position
-                    self.current[indv, ipts, ipar] += self.velocity[indv, ipts, ipar]
 
                     # Check if particle is in parameter space
                     if(self.current[indv, ipts, ipar] < self.pspace[ipts, ipar, 0]):
