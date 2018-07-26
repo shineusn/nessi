@@ -265,10 +265,16 @@ class Swarm():
         # Get the best particle in the neighborhood (1 left, 1 right)
         # of the particle excluding itself.
         if topology == 'ringx':
-            if self.misfit[indv-1] <= self.misfit[indv+1]:
-                ibest = indv-1
+            ileft = indv-1
+            iright = indv+1
+            if indv == 0:
+                ileft = nindv-1
+            if indv == nindv-1:
+                iright = 0
+            if self.misfit[ileft] <= self.misfit[iright]:
+                ibest = ileft
             else:
-                ibest = indv+1
+                ibest = iright
 
         # Get the best particle in the neighborhood (left, right, top, bottom)
         # of the particle including itself.
