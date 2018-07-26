@@ -18,8 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *suread* function (SUdata module) which declare SU object and read a SU file in the same time
 - *sucreate* function (SUdata module) which declare SU object and create a SU file in the same time
 - *grdinterp* functions for coarse to fine grid interpolation in modbuilder (cython reimplementation)
-- *fiupdate* in *Swarm()* for fully informed pso update
+- *fiupdate* in *Swarm()* for fully informed PSO update
 - *_get_neighbors* private function in *Swarm()* for the FIPS update
+- *bbupdate* in *Swarm()* for bare bone PSO update
 
 ### Modified
 - SU header structure now fits SU/CWP format (before SEG-Y rev 1)

@@ -360,6 +360,47 @@ class Swarm():
                     if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
                         self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
 
+    def bbupdate(self, **kwargs):
+        """
+        Bare bone PSO update.
+
+        :param topology: used topology (default 'full'): full, ring, ringx, toroidal, toroidalx
+        :param ndim: number of particles in the first dimension if toroidal topology is used
+        """
+
+        # Parse kwargs parameter list
+        topology = kwargs.get('topology', 'full')
+        ndim = kwargs.get('ndim', 0)
+
+        # Update process
+        for indv in range(0, self.current.shape[0]):
+            gbest = self.get_gbest(topology, indv, ndim)
+            for ipts in range(0, self.pspace.shape[0]):
+                for ipar in range(0, self.pspace.shape[1]):
+
+                    # Get values
+                    current = self.current[indv, ipts, ipar]
+                    velocity = self.velocity[indv, ipts, ipar]
+                    history = self.history[indv, ipts, ipar]
+
+                    # Normal distribution parameters
+                    loc = (gbest[ipts, ipar]+current)/2.
+                    sca = np.abs(gbest[ipts, ipar]-current)
+
+                    # Update position vector
+                    if sca > 0. :
+                        self.current[indv, ipts, ipar] = np.random.normal(loc=loc, scale=sca)
+
+                    # Update particle position
+                    self.current[indv, ipts, ipar] += self.velocity[indv, ipts, ipar]
+
+                    # Check if particle is in parameter space
+                    if(self.current[indv, ipts, ipar] < self.pspace[ipts, ipar, 0]):
+                        self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 0]
+                    if(self.current[indv, ipts, ipar] > self.pspace[ipts, ipar, 1]):
+                        self.current[indv, ipts, ipar] = self.pspace[ipts, ipar, 1]
+
+
     def fiupdate(self, **kwargs):
         """
         Fully Informed PSO update.
