@@ -100,7 +100,7 @@ def sibson(npts, xp, zp, val, n1, n2, dh):
     clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
 
     # nessi_grd_vrn
-    clibgrd.nessi_grd_ds1.argtypes = [c_int,
+    clibgrd.nessi_grd_sib.argtypes = [c_int,
                                       ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
                                       ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
                                       ndpointer(dtype=float32, ndim=1, flags='C_CONTIGUOUS'),
