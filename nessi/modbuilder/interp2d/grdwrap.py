@@ -21,6 +21,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
 from numpy import loadtxt, zeros, float32, ascontiguousarray
 from ctypes import CDLL, c_int, c_float
 from numpy.ctypeslib import ndpointer, load_library
@@ -34,7 +35,9 @@ def voronoi(npts, xp, zp, val, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
+    path = os.path.abspath(__file__)
+    dirpath = os.path.dirname(path)
+    clibgrd = load_library('libgrd', dirpath)
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_vrn.argtypes = [c_int,
@@ -66,7 +69,9 @@ def idweight(npts, xp, zp, val, pw, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
+    path = os.path.abspath(__file__)
+    dirpath = os.path.dirname(path)
+    clibgrd = load_library('libgrd', dirpath)
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_idw.argtypes = [c_int,
@@ -97,7 +102,9 @@ def sibson(npts, xp, zp, val, n1, n2, dh):
     """
 
     # GRD library
-    clibgrd = load_library('libgrd', '/home/pageotd/Work/nessi/nessi/modbuilder/interp2d/')
+    path = os.path.abspath(__file__)
+    dirpath = os.path.dirname(path)
+    clibgrd = load_library('libgrd', dirpath)
 
     # nessi_grd_vrn
     clibgrd.nessi_grd_sib.argtypes = [c_int,
