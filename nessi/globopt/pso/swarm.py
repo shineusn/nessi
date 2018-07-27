@@ -448,8 +448,8 @@ class Swarm():
                     for ineighbor in range(0, nneighbor):
                         ii = neighborhood[ineighbor]
                         r = np.random.random_sample()/float(nneighbor)
-                        pnum += r*acc*w[ineighbor]*self.history[ii, ipts, ipar]
-                        pden += r*acc*w[ineighbor]
+                        pnum += r*acc*w[ineighbor]*(self.history[ii, ipts, ipar])
+                        pden += r*acc*w[ineighbor] #r*acc*w[ineighbor]
 
                     self.velocity[indv, ipts, ipar] = omega*velocity+acc*((pnum/pden)-current)
 
